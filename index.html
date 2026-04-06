@@ -5,10 +5,11 @@
   <title>Registrera fångst</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
@@ -117,22 +118,59 @@
 </div>
 
 <script>
-document.getElementById("form").addEventListener("submit", function(e) {
-  e.preventDefault();
+  // 🔑 FYLL I DESSA
+  const supabaseUrl = "https://supabase.com/dashboard/project/rwfwlcqdacrplboditbw";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3ZndsY3FkYWNycGxib2RpdGJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDQ3MDIsImV4cCI6MjA5MTA4MDcwMn0.OKyxCiyaDdAMgMG0lBVyJ420Hu1yyF4pm0mV3RJUw3g";
 
-  const form = document.getElementById("form");
-  const data = new FormData(form);
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  fetch("DIN_FLOW_URL", {
-    method: "POST",
-    body: data
-  })
-  .then(() => {
+  document.getElementById("form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const form = document.getElementById("form");
+
+    const namn = form.namn.value;
+    const art = form.art.value;
+    const vikt = parseInt(form.vikt.value);
+    const datum = form.datum.value;
+    const bild = form.bild.files[0];
+
+    let bild_url = null;
+
+    // 📸 Ladda upp bild
+    if (bild) {
+      const filnamn = Date.now() + "_" + bild.name;
+
+      const { error: uploadError } = await supabaseClient.storage
+        .from("bilder")
+        .upload(filnamn, bild);
+
+      if (!uploadError) {
+        const { data } = supabaseClient.storage
+          .from("bilder")
+          .getPublicUrl(filnamn);
+
+        bild_url = data.publicUrl;
+      } else {
+        alert("Fel vid bilduppladdning");
+        return;
+      }
+    }
+
+    // 💾 Spara i databasen
+    const { error } = await supabaseClient
+      .from("fangster")
+      .insert([{ namn, art, vikt, datum, bild_url }]);
+
+    if (error) {
+      alert("Fel vid sparning");
+      return;
+    }
+
+    // ✅ Visa success
     document.getElementById("success").style.display = "block";
     form.reset();
-  })
-  .catch(() => alert("Något gick fel"));
-});
+  });
 </script>
 
 </body>
