@@ -1,177 +1,99 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <title>Registrera fångst</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+    background: linear-gradient(180deg, #dbeafe, #f8fafc);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
 
-  <style>
-    * { box-sizing: border-box; }
+  .container {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-      background: linear-gradient(180deg, #dbeafe, #f8fafc);
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  h1 {
+    margin-bottom: 15px;
+    font-size: 22px;
+    text-align: center;
+  }
 
+  input, select {
+    width: 100%;
+    padding: 16px;
+    margin: 8px 0;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background: #f9fafb;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border: 1px solid #2563eb;
+    background: white;
+  }
+
+  input[type="file"] {
+    padding: 12px;
+  }
+
+  button {
+    width: 100%;
+    padding: 18px;
+    margin-top: 12px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
+
+  .success {
+    display: none;
+    color: #16a34a;
+    font-weight: bold;
+    margin-top: 12px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  /* 📱 EXTRA MOBILFIX */
+  @media (max-width: 480px) {
     .container {
-      width: 100%;
-      max-width: 420px;
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      padding: 18px;
+      border-radius: 16px;
     }
 
     h1 {
-      margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 20px;
     }
 
     input, select {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      font-size: 18px;
-      background: #f9fafb;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border: 1px solid #2563eb;
-      background: white;
-    }
-
-    input[type="file"] {
-      padding: 12px;
+      font-size: 16px;
+      padding: 14px;
     }
 
     button {
-      width: 100%;
-      padding: 18px;
-      margin-top: 15px;
-      border-radius: 14px;
-      border: none;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      font-size: 17px;
+      padding: 16px;
     }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .success {
-      display: none;
-      color: #16a34a;
-      font-weight: bold;
-      margin-top: 15px;
-      font-size: 18px;
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="container">
-  <h1>Registrera fångst</h1>
-
-  <form id="form">
-
-    <input type="text" name="namn" placeholder="Namn" required>
-
-    <select name="art" required>
-      <option value="">Välj art</option>
-      <option>Björkna</option>
-      <option>Brax</option>
-      <option>Id</option>
-      <option>Mört</option>
-      <option>Ruda</option>
-      <option>Sarv</option>
-      <option>Sutare</option>
-      <option>Vimma</option>
-    </select>
-
-    <input type="number" name="vikt" placeholder="Vikt (gram)" required>
-
-    <input type="date" name="datum" required>
-
-    <input type="file" name="bild" accept="image/*">
-
-    <button type="submit">Spara</button>
-  </form>
-
-  <div class="success" id="success">
-    ✔ Sparat!
-  </div>
-</div>
-
-<script>
-  // 🔑 FYLL I DESSA
-  const supabaseUrl = "https://supabase.com/dashboard/project/rwfwlcqdacrplboditbw";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3ZndsY3FkYWNycGxib2RpdGJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MDQ3MDIsImV4cCI6MjA5MTA4MDcwMn0.OKyxCiyaDdAMgMG0lBVyJ420Hu1yyF4pm0mV3RJUw3g";
-
-  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-  document.getElementById("form").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const form = document.getElementById("form");
-
-    const namn = form.namn.value;
-    const art = form.art.value;
-    const vikt = parseInt(form.vikt.value);
-    const datum = form.datum.value;
-    const bild = form.bild.files[0];
-
-    let bild_url = null;
-
-    // 📸 Ladda upp bild
-    if (bild) {
-      const filnamn = Date.now() + "_" + bild.name;
-
-      const { error: uploadError } = await supabaseClient.storage
-        .from("bilder")
-        .upload(filnamn, bild);
-
-      if (!uploadError) {
-        const { data } = supabaseClient.storage
-          .from("bilder")
-          .getPublicUrl(filnamn);
-
-        bild_url = data.publicUrl;
-      } else {
-        alert("Fel vid bilduppladdning");
-        return;
-      }
-    }
-
-    // 💾 Spara i databasen
-    const { error } = await supabaseClient
-      .from("fangster")
-      .insert([{ namn, art, vikt, datum, bild_url }]);
-
-    if (error) {
-      alert("Fel vid sparning");
-      return;
-    }
-
-    // ✅ Visa success
-    document.getElementById("success").style.display = "block";
-    form.reset();
-  });
-</script>
-
-</body>
-</html>
+  }
+</style>
