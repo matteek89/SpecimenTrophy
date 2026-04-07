@@ -32,7 +32,7 @@
       padding: 20px;
       border-radius: 18px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      overflow: hidden; /* 🔥 stoppar iPhone overflow */
+      overflow: hidden;
     }
 
     h1 {
@@ -45,18 +45,25 @@
       width: 100%;
     }
 
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+    }
+
     input, select {
       width: 100%;
       max-width: 100%;
       display: block;
       padding: 14px;
-      margin: 8px 0;
+      margin: 6px 0 10px;
       border-radius: 12px;
       border: 1px solid #ddd;
       font-size: 16px;
       background: #f9fafb;
 
-      /* 🔥 iPhone fix */
       -webkit-appearance: none;
       appearance: none;
     }
@@ -67,7 +74,6 @@
       background: white;
     }
 
-    /* 🔥 EXTRA iPhone fix för datum */
     input[type="date"] {
       min-height: 48px;
     }
@@ -111,7 +117,6 @@
       margin-top: 10px;
     }
 
-    /* 📱 Mobil finjustering */
     @media (max-width: 480px) {
       body {
         align-items: flex-start;
@@ -137,8 +142,10 @@
 
   <form id="form">
 
-    <input type="text" name="namn" placeholder="Namn" required>
+    <label>Namn</label>
+    <input type="text" name="namn" required>
 
+    <label>Art</label>
     <select name="art" required>
       <option value="">Välj art</option>
       <option>Björkna</option>
@@ -151,10 +158,13 @@
       <option>Vimma</option>
     </select>
 
-    <input type="number" name="vikt" placeholder="Vikt (gram)" required>
+    <label>Vikt (gram)</label>
+    <input type="number" name="vikt" required>
 
-    <input type="date" name="datum" required>
+    <label for="datum">Datum</label>
+    <input type="date" name="datum" id="datum" required>
 
+    <label>Bild (valfri)</label>
     <input type="file" name="bild" accept="image/*" id="bildInput">
 
     <div class="preview" id="preview"></div>
@@ -173,7 +183,11 @@
 
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // Bild preview
+  // 📅 Sätt dagens datum automatiskt
+  const idag = new Date().toISOString().split("T")[0];
+  document.getElementById("datum").value = idag;
+
+  // 📸 Bild preview
   document.getElementById("bildInput").addEventListener("change", function(e) {
     const file = e.target.files[0];
     const preview = document.getElementById("preview");
@@ -187,7 +201,7 @@
     }
   });
 
-  // Submit
+  // 📤 Submit
   document.getElementById("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -232,6 +246,9 @@
     document.getElementById("success").style.display = "block";
     form.reset();
     document.getElementById("preview").innerHTML = "";
+
+    // sätt nytt datum igen
+    document.getElementById("datum").value = idag;
   });
 </script>
 
