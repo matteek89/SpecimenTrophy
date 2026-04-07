@@ -20,9 +20,9 @@
       margin: 0;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 10px;
+      align-items: center;
+      padding: 12px;
     }
 
     .container {
@@ -30,39 +30,55 @@
       max-width: 420px;
       background: white;
       padding: 20px;
-      border-radius: 20px;
+      border-radius: 18px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      overflow: hidden; /* 🔥 stoppar iPhone overflow */
     }
 
     h1 {
-      margin-bottom: 15px;
-      font-size: 22px;
       text-align: center;
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    form {
+      width: 100%;
     }
 
     input, select {
       width: 100%;
-      padding: 16px;
+      max-width: 100%;
+      display: block;
+      padding: 14px;
       margin: 8px 0;
       border-radius: 12px;
       border: 1px solid #ddd;
       font-size: 16px;
       background: #f9fafb;
+
+      /* 🔥 iPhone fix */
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     input:focus, select:focus {
       outline: none;
-      border: 1px solid #2563eb;
+      border-color: #2563eb;
       background: white;
     }
 
+    /* 🔥 EXTRA iPhone fix för datum */
+    input[type="date"] {
+      min-height: 48px;
+    }
+
     input[type="file"] {
-      padding: 12px;
+      padding: 10px;
     }
 
     button {
       width: 100%;
-      padding: 18px;
+      padding: 16px;
       margin-top: 12px;
       border-radius: 14px;
       border: none;
@@ -70,7 +86,6 @@
       color: white;
       font-size: 18px;
       font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     button:active {
@@ -79,16 +94,15 @@
 
     .success {
       display: none;
+      text-align: center;
       color: #16a34a;
       font-weight: bold;
       margin-top: 12px;
-      font-size: 16px;
-      text-align: center;
     }
 
     .preview {
-      margin-top: 10px;
       text-align: center;
+      margin-top: 10px;
     }
 
     .preview img {
@@ -97,24 +111,20 @@
       margin-top: 10px;
     }
 
+    /* 📱 Mobil finjustering */
     @media (max-width: 480px) {
+      body {
+        align-items: flex-start;
+        padding-top: 20px;
+      }
+
       .container {
-        padding: 18px;
-        border-radius: 16px;
+        border-radius: 14px;
+        padding: 16px;
       }
 
       h1 {
         font-size: 20px;
-      }
-
-      input, select {
-        font-size: 16px;
-        padding: 14px;
-      }
-
-      button {
-        font-size: 17px;
-        padding: 16px;
       }
     }
   </style>
@@ -158,13 +168,12 @@
 </div>
 
 <script>
-  // 🔑 FYLL I DESSA
   const supabaseUrl = "DIN_SUPABASE_URL";
   const supabaseKey = "DIN_SUPABASE_KEY";
 
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // 📸 Bildförhandsvisning
+  // Bild preview
   document.getElementById("bildInput").addEventListener("change", function(e) {
     const file = e.target.files[0];
     const preview = document.getElementById("preview");
@@ -178,7 +187,7 @@
     }
   });
 
-  // 📤 Form submit
+  // Submit
   document.getElementById("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -192,7 +201,6 @@
 
     let bild_url = null;
 
-    // 📸 Ladda upp bild
     if (bild) {
       const filnamn = Date.now() + "_" + bild.name;
 
@@ -212,7 +220,6 @@
       }
     }
 
-    // 💾 Spara data
     const { error } = await supabaseClient
       .from("fangster")
       .insert([{ namn, art, vikt, datum, bild_url }]);
