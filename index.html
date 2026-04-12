@@ -5,6 +5,8 @@
   <title>Registrera fångst</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -24,7 +26,7 @@
       max-width: 420px;
       background: white;
       padding: 20px;
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
@@ -82,46 +84,54 @@
 
   <form id="form">
 
-   <label>Deltagare</label>
-<select name="Deltagare" required>
-  <option value="">Välj deltagare</option>
-  <option>Lars Boström</option>
-  <option>Oliver Jansson</option>
-  <option>Anders Boström</option>
-  <option>Stefan Widh</option>
-  <option>Roger Norling</option>
-  <option>Micke Karlsson</option>
-  <option>Emil Larsson</option>
-  <option>Sonny Pettersson</option>
-  <option>Christian Rebello</option>
-  <option>Patrik Byström</option>
-  <option>Jonny Jansson</option>
-  <option>Kent Boström</option>
-  <option>Mattias Roming</option>
-  <option>Anton Lundholm</option>
-  <option>Robban Lager</option>
-  <option>Jonatan Boström</option>
-  <option>Anders Wimmerstedt</option>
-</select>
+    <!-- 👤 Deltagare -->
+    <label>Deltagare</label>
+    <select name="Deltagare" required>
+      <option value="">Välj deltagare</option>
+      <option>Lars Boström</option>
+      <option>Oliver Jansson</option>
+      <option>Anders Boström</option>
+      <option>Stefan Widh</option>
+      <option>Roger Norling</option>
+      <option>Micke Karlsson</option>
+      <option>Emil Larsson</option>
+      <option>Sonny Pettersson</option>
+      <option>Christian Rebello</option>
+      <option>Patrik Byström</option>
+      <option>Jonny Jansson</option>
+      <option>Kent Boström</option>
+      <option>Mattias Roming</option>
+      <option>Anton Lundholm</option>
+      <option>Robban Lager</option>
+      <option>Jonatan Boström</option>
+      <option>Anders Wimmerstedt</option>
+    </select>
 
+    <!-- 🐟 Art -->
     <label>Art</label>
-<select name="Art" required>
-  <option value="">Välj art</option>
-  <option>Björkna</option>
-  <option>Brax</option>
-  <option>Id</option>
-  <option>Mört</option>
-  <option>Ruda</option>
-  <option>Sarv</option>
-  <option>Sutare</option>
-  <option>Vimma</option>
-</select>
+    <select name="Art" required>
+      <option value="">Välj art</option>
+      <option>Björkna</option>
+      <option>Brax</option>
+      <option>Id</option>
+      <option>Mört</option>
+      <option>Ruda</option>
+      <option>Sarv</option>
+      <option>Sutare</option>
+      <option>Vimma</option>
+    </select>
 
+    <!-- ⚖️ Vikt -->
     <label>Vikt (gram)</label>
     <input type="number" name="Vikt" required>
 
+    <!-- 📅 Datum -->
     <label>Datum</label>
     <input type="date" name="datum" id="datum" required>
+
+    <!-- 📸 Bild -->
+    <label>Bild på fångst</label>
+    <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara</button>
   </form>
@@ -130,28 +140,59 @@
 </div>
 
 <script>
+/* 🔥 SUPABASE (bilder) */
+const supabase = window.supabase.createClient(
+  "ygilpwedyxbkvwupxngn",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
+);
+
+/* 📊 GOOGLE SHEETS */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwOQKDUbpEiBb-GRecv-aMKFJVN3TQFoGxog2DqBi3evtu_SvtTaYEh68ycTS5GsSvnrA/exec";
 
 const form = document.getElementById("form");
 const datumInput = document.getElementById("datum");
 
-// sätt dagens datum
 datumInput.value = new Date().toISOString().split("T")[0];
 
+/* 📸 upload bild */
+async function uploadImage(file) {
+  if (!file) return "";
+
+  const fileName = Date.now() + "-" + file.name;
+
+  const { error } = await supabase
+    .storage
+    .from("fishing-images")
+    .upload(fileName, file);
+
+  if (error) throw error;
+
+  const { data } = supabase
+    .storage
+    .from("fishing-images")
+    .getPublicUrl(fileName);
+
+  return data.publicUrl;
+}
+
+/* 🚀 submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = {
-    Deltagare: form.elements["Deltagare"].value,
-    Art: form.elements["Art"].value,
-    Vikt: form.elements["Vikt"].value,
-    datum: form.elements["datum"].value
-  };
+  const file = document.getElementById("image").files[0];
 
   try {
+    const imageUrl = await uploadImage(file);
+
     await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        Deltagare: form.elements["Deltagare"].value,
+        Art: form.elements["Art"].value,
+        Vikt: form.elements["Vikt"].value,
+        datum: form.elements["datum"].value,
+        image: imageUrl
+      })
     });
 
     document.getElementById("success").style.display = "block";
@@ -159,7 +200,7 @@ form.addEventListener("submit", async (e) => {
     datumInput.value = new Date().toISOString().split("T")[0];
 
   } catch (err) {
-    alert("Fel vid sparning");
+    alert("Fel: " + err.message);
     console.error(err);
   }
 });
