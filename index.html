@@ -112,7 +112,7 @@
   <form id="form">
 
     <label>Deltagare</label>
-    <select name="namn" required>
+    <select name="deltagare" required>
       <option value="">Välj deltagare</option>
       <option>Lars Boström</option>
       <option>Oliver Jansson</option>
@@ -161,10 +161,8 @@
 </div>
 
 <script>
-  // 🔴 KListra in din Apps Script URL här
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEDsXiwmCIXV8ZSxFr_qzKougjCQ2sqNyp-YzPirZqvogl5rVK51GZ7C0rDxU4cEMfKQ/exec";
 
-  // sätt dagens datum
   const idag = new Date().toISOString().split("T")[0];
   document.getElementById("datum").value = idag;
 
@@ -174,7 +172,7 @@
     const form = document.getElementById("form");
 
     const data = {
-      namn: form.namn.value,
+      deltagare: form.deltagare.value,
       art: form.art.value,
       vikt: form.vikt.value,
       datum: form.datum.value
