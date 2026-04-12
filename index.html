@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>Registrera fångst</title>
+  <title>Specimen Trophy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -63,10 +63,6 @@
       font-weight: bold;
     }
 
-    button:active {
-      transform: scale(0.98);
-    }
-
     .success {
       display: none;
       text-align: center;
@@ -80,7 +76,7 @@
 <body>
 
 <div class="container">
-  <h1>🎣 Registrera fångst</h1>
+  <h1>🎣 Specimen Trophy</h1>
 
   <form id="form">
 
@@ -130,7 +126,7 @@
     <input type="date" name="datum" id="datum" required>
 
     <!-- 📸 Bild -->
-    <label>Bild på fångst</label>
+    <label>Bild</label>
     <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara</button>
@@ -140,9 +136,9 @@
 </div>
 
 <script>
-/* 🔥 SUPABASE (bilder) */
+/* 🔥 SUPABASE */
 const supabase = window.supabase.createClient(
-  "ygilpwedyxbkvwupxngn",
+  "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
@@ -162,14 +158,17 @@ async function uploadImage(file) {
 
   const { error } = await supabase
     .storage
-    .from("Specimen Trophy")
+    .from("specimen-trophy")
     .upload(fileName, file);
 
-  if (error) throw error;
+  if (error) {
+    alert("Supabase error: " + error.message);
+    throw error;
+  }
 
   const { data } = supabase
     .storage
-    .from("Specimen Trophy")
+    .from("specimen-trophy")
     .getPublicUrl(fileName);
 
   return data.publicUrl;
@@ -179,20 +178,21 @@ async function uploadImage(file) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const file = document.getElementById("image").files[0];
-
   try {
+    const file = document.getElementById("image").files[0];
     const imageUrl = await uploadImage(file);
+
+    const payload = {
+      Deltagare: form.elements["Deltagare"].value,
+      Art: form.elements["Art"].value,
+      Vikt: form.elements["Vikt"].value,
+      datum: form.elements["datum"].value,
+      image: imageUrl
+    };
 
     await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({
-        Deltagare: form.elements["Deltagare"].value,
-        Art: form.elements["Art"].value,
-        Vikt: form.elements["Vikt"].value,
-        datum: form.elements["datum"].value,
-        image: imageUrl
-      })
+      body: JSON.stringify(payload)
     });
 
     document.getElementById("success").style.display = "block";
@@ -205,6 +205,9 @@ form.addEventListener("submit", async (e) => {
   }
 });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
