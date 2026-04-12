@@ -161,7 +161,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEDsXiwmCIXV8ZSxFr_qzKougjCQ2sqNyp-YzPirZqvogl5rVK51GZ7C0rDxU4cEMfKQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVPDW2B7Y6O982O7Iijn7VPgLhKMhJzuRKQ3ujGZqMkfwn9ohpymvva3XCGzFHYcYMwg/exec";
 
   const idag = new Date().toISOString().split("T")[0];
   document.getElementById("datum").value = idag;
@@ -179,10 +179,11 @@
     };
 
     try {
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(data)
-      });
+     await fetch(SCRIPT_URL, {
+  method: "POST",
+  mode: "no-cors",  // 🔥 DETTA ÄR FIXEN
+  body: JSON.stringify(data)
+});
 
       document.getElementById("success").style.display = "block";
       form.reset();
