@@ -111,7 +111,7 @@ const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
-/* 📸 upload bild (safe) */
+/* 📸 upload (ALDRIG blockerar sparning) */
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -141,7 +141,7 @@ async function uploadImage(file) {
   }
 }
 
-/* 🚀 submit (DETTA FUNKAR 100%) */
+/* 🚀 SUBMIT (ROBUST VERSION) */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -149,12 +149,16 @@ form.addEventListener("submit", async (e) => {
 
   let imageUrl = "";
 
-  // 1. bild laddas upp men får aldrig stoppa
+  // 1. försök upload men STOPPAR ALDRIG
   if (file) {
-    imageUrl = await uploadImage(file);
+    try {
+      imageUrl = await uploadImage(file);
+    } catch (err) {
+      console.log("Image failed but continuing");
+    }
   }
 
-  // 2. payload
+  // 2. bygg payload
   const payload = {
     Deltagare: form.elements["Deltagare"].value,
     Art: form.elements["Art"].value,
@@ -163,18 +167,26 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SEND:", payload);
+  console.log("SEND TO SHEETS:", payload);
 
-  // 3. SKICKA TILL GOOGLE SHEETS (ROBUST)
-  await fetch(SCRIPT_URL, {
-    method: "POST",
-    body: new URLSearchParams(payload)
-  });
+  // 3. SKICKA TILL GOOGLE SHEETS (ENKEL + STABIL)
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: new URLSearchParams(payload)
+    });
 
-  document.getElementById("success").style.display = "block";
+    console.log("SENT OK");
 
-  form.reset();
-  datumInput.value = new Date().toISOString().split("T")[0];
+    document.getElementById("success").style.display = "block";
+
+    form.reset();
+    datumInput.value = new Date().toISOString().split("T")[0];
+
+  } catch (err) {
+    console.error("SHEETS ERROR:", err);
+    alert("Kunde inte spara till Sheets");
+  }
 });
 </script>
 
