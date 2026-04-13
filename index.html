@@ -109,6 +109,7 @@ const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
+/* 📸 upload (påverkar inte flödet om det failar) */
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -138,27 +139,21 @@ async function uploadImage(file) {
   }
 }
 
+/* 🚀 submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = document.getElementById("image").files[0];
-
-  let imageUrl = "";
-
-  // 🔥 Bild försöker laddas upp men stoppar ALDRIG
-  if (file) {
-    imageUrl = await uploadImage(file);
-  }
 
   const payload = {
     Deltagare: form.elements["Deltagare"].value,
     Art: form.elements["Art"].value,
     Vikt: form.elements["Vikt"].value,
     datum: form.elements["datum"].value,
-    image: imageUrl
+    image: ""
   };
 
-  // 🔥 ALLTID till Sheets (som din gamla fungerande version)
+  /* 🔥 1. Skicka ALLTID till Google Sheets */
   await fetch(SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -166,6 +161,14 @@ form.addEventListener("submit", async (e) => {
   });
 
   document.getElementById("success").style.display = "block";
+
+  /* 🔥 2. Ladda upp bild separat (kan inte krascha) */
+  if (file) {
+    uploadImage(file)
+      .then(url => console.log("Bild uppladdad:", url))
+      .catch(err => console.log("Bild fail:", err));
+  }
+
   form.reset();
   datumInput.value = new Date().toISOString().split("T")[0];
 });
