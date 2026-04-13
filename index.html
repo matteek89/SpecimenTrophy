@@ -154,11 +154,13 @@ form.addEventListener("submit", async (e) => {
   };
 
   /* 🔥 1. Skicka ALLTID till Google Sheets */
-  await fetch(SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify(payload)
-  });
+ await fetch(SCRIPT_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body: new URLSearchParams(payload)
+});
 
   document.getElementById("success").style.display = "block";
 
