@@ -57,6 +57,7 @@
       background: #f9fafb;
 
       outline: none;
+      text-align: center;
     }
 
     select:focus,
@@ -68,6 +69,14 @@
     input[type="file"] {
       background: white;
       padding: 10px;
+    }
+
+    /* 📅 FIX FÖR DATE INPUT */
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      text-align: center;
+      color: #6b7280;
     }
 
     button {
@@ -167,7 +176,8 @@
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <input type="date" name="datum" id="datum" required>
+    <!-- 📅 FIX: inget auto-datum -->
+    <input type="date" name="datum" id="datum" placeholder="Datum" required>
 
     <input type="file" id="image" accept="image/*">
 
@@ -186,11 +196,8 @@ const supabaseClient = window.supabase.createClient(
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
 
 const form = document.getElementById("form");
-const datumInput = document.getElementById("datum");
 
-datumInput.value = new Date().toISOString().split("T")[0];
-
-/* 📸 Upload (stabil) */
+/* 📸 Upload */
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -251,10 +258,9 @@ form.addEventListener("submit", async (e) => {
     document.getElementById("success").style.display = "block";
 
     form.reset();
-    datumInput.value = new Date().toISOString().split("T")[0];
 
   } catch (err) {
-    console.error("Error:", err);
+    console.error(err);
     alert("Kunde inte spara");
   }
 });
