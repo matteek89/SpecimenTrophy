@@ -8,56 +8,31 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * { box-sizing: border-box; }
-
     body {
       font-family: Arial;
       background: #f1f5f9;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
+      padding: 20px;
     }
 
     .container {
-      width: 100%;
       max-width: 420px;
+      margin: auto;
       background: white;
       padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border-radius: 12px;
     }
 
-    h1 { text-align: center; font-size: 22px; }
-
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input, select {
+    input, select, button {
       width: 100%;
       padding: 12px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      margin-top: 10px;
     }
 
     button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 14px;
       background: #22c55e;
       color: white;
       border: none;
-      border-radius: 12px;
       font-size: 16px;
-      font-weight: bold;
     }
 
     .success {
@@ -65,7 +40,6 @@
       text-align: center;
       color: green;
       margin-top: 10px;
-      font-weight: bold;
     }
   </style>
 </head>
@@ -73,13 +47,12 @@
 <body>
 
 <div class="container">
-  <h1>🎣 Specimen Trophy</h1>
+  <h2>🎣 Specimen Trophy</h2>
 
   <form id="form">
 
-    <label>Deltagare</label>
     <select name="Deltagare" required>
-      <option value="">Välj deltagare</option>
+      <option value="">Deltagare</option>
       <option>Lars Boström</option>
       <option>Oliver Jansson</option>
       <option>Anders Boström</option>
@@ -99,9 +72,8 @@
       <option>Anders Wimmerstedt</option>
     </select>
 
-    <label>Art</label>
     <select name="Art" required>
-      <option value="">Välj art</option>
+      <option value="">Art</option>
       <option>Björkna</option>
       <option>Brax</option>
       <option>Id</option>
@@ -112,13 +84,10 @@
       <option>Vimma</option>
     </select>
 
-    <label>Vikt (gram)</label>
-    <input type="number" name="Vikt" required>
+    <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <label>Datum</label>
     <input type="date" name="datum" id="datum" required>
 
-    <label>Bild</label>
     <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara</button>
@@ -128,51 +97,58 @@
 </div>
 
 <script>
-/* 🔥 SUPABASE */
 const supabase = window.supabase.createClient(
   "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
-/* 📊 GOOGLE SHEETS */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-ojAuaw-OemixuNxJlBw3kN4s5sAk3-CtWWfx57FyThhr6v2r9PHm_XwGhUtrraw5HA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2qwwz7JM8vAL3KKVSq0MAIo24dQ6f9Yxj-aQ-YQe1Iw7_Rd5iiNg0rF200ZH6u84RXw/exec";
 
 const form = document.getElementById("form");
 const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
-/* 📸 upload */
 async function uploadImage(file) {
   if (!file) return "";
 
-  const fileName = Date.now() + "-" + file.name;
+  try {
+    const fileName = Date.now() + "-" + file.name;
 
-  const { error } = await supabase
-    .storage
-    .from("specimen-trophy")
-    .upload(fileName, file);
+    const { error } = await supabase
+      .storage
+      .from("specimen-trophy")
+      .upload(fileName, file);
 
-  if (error) {
-    console.log("Supabase error:", error.message);
+    if (error) {
+      console.log("Supabase fail:", error.message);
+      return "";
+    }
+
+    const { data } = supabase
+      .storage
+      .from("specimen-trophy")
+      .getPublicUrl(fileName);
+
+    return data.publicUrl;
+
+  } catch (err) {
+    console.log("Upload error:", err);
     return "";
   }
-
-  const { data } = supabase
-    .storage
-    .from("specimen-trophy")
-    .getPublicUrl(fileName);
-
-  return data.publicUrl;
 }
 
-/* 🚀 submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = document.getElementById("image").files[0];
 
-  const imageUrl = await uploadImage(file);
+  let imageUrl = "";
+
+  // 🔥 Bild försöker laddas upp men stoppar ALDRIG
+  if (file) {
+    imageUrl = await uploadImage(file);
+  }
 
   const payload = {
     Deltagare: form.elements["Deltagare"].value,
@@ -182,22 +158,16 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SENDING:", payload);
+  // 🔥 ALLTID till Sheets (som din gamla fungerande version)
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(payload)
+  });
 
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-    document.getElementById("success").style.display = "block";
-    form.reset();
-    datumInput.value = new Date().toISOString().split("T")[0];
-
-  } catch (err) {
-    console.error(err);
-    alert("Fel vid sparning");
-  }
+  document.getElementById("success").style.display = "block";
+  form.reset();
+  datumInput.value = new Date().toISOString().split("T")[0];
 });
 </script>
 
