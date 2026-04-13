@@ -99,26 +99,37 @@
 </div>
 
 <script>
-const supabase = window.supabase.createClient(
+/* =========================
+   SUPABASE (ENDA INIT)
+========================= */
+const supabaseClient = window.supabase.createClient(
   "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
+/* =========================
+   GOOGLE APPS SCRIPT URL
+========================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
 
+/* =========================
+   ELEMENT
+========================= */
 const form = document.getElementById("form");
 const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
-/* 📸 upload (ALDRIG blockerar sparning) */
+/* =========================
+   UPLOAD BILD (SAFE)
+========================= */
 async function uploadImage(file) {
   if (!file) return "";
 
   try {
     const fileName = Date.now() + "-" + file.name;
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .storage
       .from("specimen-trophy")
       .upload(fileName, file);
@@ -128,7 +139,7 @@ async function uploadImage(file) {
       return "";
     }
 
-    const { data } = supabase
+    const { data } = supabaseClient
       .storage
       .from("specimen-trophy")
       .getPublicUrl(fileName);
@@ -136,12 +147,14 @@ async function uploadImage(file) {
     return data.publicUrl;
 
   } catch (err) {
-    console.log("Upload error:", err);
+    console.log("Upload failed:", err);
     return "";
   }
 }
 
-/* 🚀 SUBMIT (ROBUST VERSION) */
+/* =========================
+   SUBMIT (STABIL VERSION)
+========================= */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -149,16 +162,11 @@ form.addEventListener("submit", async (e) => {
 
   let imageUrl = "";
 
-  // 1. försök upload men STOPPAR ALDRIG
+  /* Bild får aldrig stoppa flödet */
   if (file) {
-    try {
-      imageUrl = await uploadImage(file);
-    } catch (err) {
-      console.log("Image failed but continuing");
-    }
+    imageUrl = await uploadImage(file);
   }
 
-  // 2. bygg payload
   const payload = {
     Deltagare: form.elements["Deltagare"].value,
     Art: form.elements["Art"].value,
@@ -169,14 +177,11 @@ form.addEventListener("submit", async (e) => {
 
   console.log("SEND TO SHEETS:", payload);
 
-  // 3. SKICKA TILL GOOGLE SHEETS (ENKEL + STABIL)
   try {
     await fetch(SCRIPT_URL, {
-  method: "POST",
-  body: new URLSearchParams(payload)
-});
-
-    console.log("SENT OK");
+      method: "POST",
+      body: new URLSearchParams(payload)
+    });
 
     document.getElementById("success").style.display = "block";
 
@@ -184,8 +189,8 @@ form.addEventListener("submit", async (e) => {
     datumInput.value = new Date().toISOString().split("T")[0];
 
   } catch (err) {
-    console.error("SHEETS ERROR:", err);
-    alert("Kunde inte spara till Sheets");
+    console.error("Sheets error:", err);
+    alert("Kunde inte spara till Google Sheets");
   }
 });
 </script>
