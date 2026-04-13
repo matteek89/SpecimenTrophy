@@ -31,7 +31,6 @@
       padding: 18px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      overflow: hidden;
     }
 
     h2 {
@@ -71,12 +70,17 @@
       padding: 10px;
     }
 
-    /* 📅 FIX FÖR DATE INPUT */
+    /* 📅 FIX: DATE LOOK CONSISTENT */
     input[type="date"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
+
       appearance: none;
       -webkit-appearance: none;
       text-align: center;
-      color: #6b7280;
     }
 
     button {
@@ -89,7 +93,6 @@
       border-radius: 12px;
       background: linear-gradient(135deg, #22c55e, #16a34a);
       color: white;
-
       cursor: pointer;
     }
 
@@ -105,7 +108,6 @@
       margin-top: 12px;
     }
 
-    /* 📱 MOBILE OPTIMERING */
     @media (max-width: 480px) {
       body {
         padding: 12px;
@@ -176,8 +178,7 @@
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <!-- 📅 FIX: inget auto-datum -->
-    <input type="date" name="datum" id="datum" placeholder="Datum" required>
+    <input type="date" name="datum" id="datum" required>
 
     <input type="file" id="image" accept="image/*">
 
@@ -188,46 +189,50 @@
 </div>
 
 <script>
+/* =========================
+   SUPABASE INIT
+========================= */
 const supabaseClient = window.supabase.createClient(
   "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
+/* =========================
+   GOOGLE SHEETS SCRIPT
+========================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
 
 const form = document.getElementById("form");
 
-/* 📸 Upload */
+/* =========================
+   IMAGE UPLOAD
+========================= */
 async function uploadImage(file) {
   if (!file) return "";
 
-  try {
-    const fileName = Date.now() + "-" + file.name;
+  const fileName = Date.now() + "-" + file.name;
 
-    const { error } = await supabaseClient
-      .storage
-      .from("specimen-trophy")
-      .upload(fileName, file);
+  const { error } = await supabaseClient
+    .storage
+    .from("specimen-trophy")
+    .upload(fileName, file);
 
-    if (error) {
-      console.log("Upload error:", error.message);
-      return "";
-    }
-
-    const { data } = supabaseClient
-      .storage
-      .from("specimen-trophy")
-      .getPublicUrl(fileName);
-
-    return data.publicUrl;
-
-  } catch (err) {
-    console.log("Upload failed:", err);
+  if (error) {
+    console.log("Upload error:", error.message);
     return "";
   }
+
+  const { data } = supabaseClient
+    .storage
+    .from("specimen-trophy")
+    .getPublicUrl(fileName);
+
+  return data.publicUrl;
 }
 
-/* 🚀 Submit */
+/* =========================
+   SUBMIT
+========================= */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -247,8 +252,6 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SEND:", payload);
-
   try {
     await fetch(SCRIPT_URL, {
       method: "POST",
@@ -256,7 +259,6 @@ form.addEventListener("submit", async (e) => {
     });
 
     document.getElementById("success").style.display = "block";
-
     form.reset();
 
   } catch (err) {
