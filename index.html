@@ -30,10 +30,7 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
-    h1 {
-      text-align: center;
-      font-size: 22px;
-    }
+    h1 { text-align: center; font-size: 22px; }
 
     label {
       display: block;
@@ -80,7 +77,6 @@
 
   <form id="form">
 
-    <!-- 👤 Deltagare -->
     <label>Deltagare</label>
     <select name="Deltagare" required>
       <option value="">Välj deltagare</option>
@@ -103,7 +99,6 @@
       <option>Anders Wimmerstedt</option>
     </select>
 
-    <!-- 🐟 Art -->
     <label>Art</label>
     <select name="Art" required>
       <option value="">Välj art</option>
@@ -117,15 +112,12 @@
       <option>Vimma</option>
     </select>
 
-    <!-- ⚖️ Vikt -->
     <label>Vikt (gram)</label>
     <input type="number" name="Vikt" required>
 
-    <!-- 📅 Datum -->
     <label>Datum</label>
     <input type="date" name="datum" id="datum" required>
 
-    <!-- 📸 Bild -->
     <label>Bild</label>
     <input type="file" id="image" accept="image/*">
 
@@ -136,11 +128,13 @@
 </div>
 
 <script>
+/* 🔥 SUPABASE */
 const supabase = window.supabase.createClient(
   "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
+/* 📊 GOOGLE SHEETS */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHxk_DXcwRCwjVzrIy3wQO1b4Wqk0wnkrBZndl-AKCu3jBJfVnWcX3SsZd8Vz0A4T-Cg/exec";
 
 const form = document.getElementById("form");
@@ -148,34 +142,31 @@ const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
+/* 📸 upload */
 async function uploadImage(file) {
   if (!file) return "";
 
-  try {
-    const fileName = Date.now() + "-" + file.name;
+  const fileName = Date.now() + "-" + file.name;
 
-    const { error } = await supabase
-      .storage
-      .from("specimen-trophy")
-      .upload(fileName, file);
+  const { error } = await supabase
+    .storage
+    .from("specimen-trophy")
+    .upload(fileName, file);
 
-    if (error) {
-      console.log("Supabase error:", error.message);
-      return ""; // ⚠️ vikt: stoppar inte hela flödet
-    }
-
-    const { data } = supabase
-      .storage
-      .from("specimen-trophy")
-      .getPublicUrl(fileName);
-
-    return data.publicUrl;
-  } catch (err) {
-    console.log("Upload failed:", err);
+  if (error) {
+    console.log("Supabase error:", error.message);
     return "";
   }
+
+  const { data } = supabase
+    .storage
+    .from("specimen-trophy")
+    .getPublicUrl(fileName);
+
+  return data.publicUrl;
 }
 
+/* 🚀 submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -191,32 +182,24 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SENDING TO SHEETS:", payload);
+  console.log("SENDING:", payload);
 
   try {
-    const res = await fetch(SCRIPT_URL, {
+    await fetch(SCRIPT_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify(payload)
     });
 
-    const text = await res.text();
-    console.log("SHEETS RESPONSE:", text);
-
-    alert("Sparat!");
+    document.getElementById("success").style.display = "block";
     form.reset();
     datumInput.value = new Date().toISOString().split("T")[0];
 
   } catch (err) {
-    console.error("Sheets error:", err);
-    alert("Sheets error");
+    console.error(err);
+    alert("Fel vid sparning");
   }
 });
 </script>
-</body>
-</html>
 
 </body>
 </html>
