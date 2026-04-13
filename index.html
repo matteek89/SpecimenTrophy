@@ -8,39 +8,119 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
-      background: #f1f5f9;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .container {
+      width: 100%;
       max-width: 420px;
-      margin: auto;
       background: white;
-      padding: 20px;
-      border-radius: 12px;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      overflow: hidden;
     }
 
-    input, select, button {
+    h2 {
+      text-align: center;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    select,
+    input {
       width: 100%;
-      padding: 12px;
-      margin-top: 10px;
+      padding: 14px;
       font-size: 16px;
+
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #f9fafb;
+
+      outline: none;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #22c55e;
+      background: #fff;
+    }
+
+    input[type="file"] {
+      background: white;
+      padding: 10px;
     }
 
     button {
-      background: #22c55e;
-      color: white;
-      border: none;
+      width: 100%;
+      padding: 16px;
+      font-size: 17px;
       font-weight: bold;
+
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     .success {
       display: none;
       text-align: center;
-      color: green;
-      margin-top: 10px;
+      color: #16a34a;
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    /* 📱 MOBILE OPTIMERING */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      select,
+      input {
+        font-size: 15px;
+        padding: 13px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 15px;
+      }
     }
   </style>
 </head>
@@ -92,37 +172,25 @@
     <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara</button>
-
   </form>
 
   <div class="success" id="success">✔ Sparat!</div>
 </div>
 
 <script>
-/* =========================
-   SUPABASE (ENDA INIT)
-========================= */
 const supabaseClient = window.supabase.createClient(
   "https://ygilpwedyxbkvwupxngn.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
 );
 
-/* =========================
-   GOOGLE APPS SCRIPT URL
-========================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
 
-/* =========================
-   ELEMENT
-========================= */
 const form = document.getElementById("form");
 const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
-/* =========================
-   UPLOAD BILD (SAFE)
-========================= */
+/* 📸 Upload (stabil) */
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -135,7 +203,7 @@ async function uploadImage(file) {
       .upload(fileName, file);
 
     if (error) {
-      console.log("Supabase error:", error.message);
+      console.log("Upload error:", error.message);
       return "";
     }
 
@@ -152,9 +220,7 @@ async function uploadImage(file) {
   }
 }
 
-/* =========================
-   SUBMIT (STABIL VERSION)
-========================= */
+/* 🚀 Submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -162,7 +228,6 @@ form.addEventListener("submit", async (e) => {
 
   let imageUrl = "";
 
-  /* Bild får aldrig stoppa flödet */
   if (file) {
     imageUrl = await uploadImage(file);
   }
@@ -175,7 +240,7 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SEND TO SHEETS:", payload);
+  console.log("SEND:", payload);
 
   try {
     await fetch(SCRIPT_URL, {
@@ -189,8 +254,8 @@ form.addEventListener("submit", async (e) => {
     datumInput.value = new Date().toISOString().split("T")[0];
 
   } catch (err) {
-    console.error("Sheets error:", err);
-    alert("Kunde inte spara till Google Sheets");
+    console.error("Error:", err);
+    alert("Kunde inte spara");
   }
 });
 </script>
