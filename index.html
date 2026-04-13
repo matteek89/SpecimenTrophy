@@ -8,9 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -18,7 +16,6 @@
       margin: 0;
       padding: 16px;
       min-height: 100vh;
-
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -50,13 +47,11 @@
       width: 100%;
       padding: 14px;
       font-size: 16px;
-
       border: 1px solid #e5e7eb;
       border-radius: 12px;
       background: #f9fafb;
-
-      outline: none;
       text-align: center;
+      outline: none;
     }
 
     select:focus,
@@ -70,17 +65,13 @@
       padding: 10px;
     }
 
-    /* 📅 FIX: DATE LOOK CONSISTENT */
-    input[type="date"] {
-      width: 100%;
-      min-height: 48px;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 12px;
+    /* DATE LOOK FIX */
+    input[type="text"] {
+      color: #6b7280;
+    }
 
-      appearance: none;
-      -webkit-appearance: none;
-      text-align: center;
+    input[type="text"]:focus {
+      color: #111827;
     }
 
     button {
@@ -88,7 +79,6 @@
       padding: 16px;
       font-size: 17px;
       font-weight: bold;
-
       border: none;
       border-radius: 12px;
       background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -109,29 +99,11 @@
     }
 
     @media (max-width: 480px) {
-      body {
-        padding: 12px;
-      }
-
-      .container {
-        padding: 14px;
-        border-radius: 14px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
-
-      select,
-      input {
-        font-size: 15px;
-        padding: 13px;
-      }
-
-      button {
-        font-size: 16px;
-        padding: 15px;
-      }
+      body { padding: 12px; }
+      .container { padding: 14px; border-radius: 14px; }
+      h2 { font-size: 20px; }
+      select, input { font-size: 15px; padding: 13px; }
+      button { font-size: 16px; padding: 15px; }
     }
   </style>
 </head>
@@ -178,7 +150,15 @@
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <input type="date" name="datum" id="datum" required>
+    <input
+      type="text"
+      name="datum"
+      id="datum"
+      placeholder="Datum"
+      onfocus="this.type='date'"
+      onblur="if(!this.value) this.type='text'"
+      required
+    >
 
     <input type="file" id="image" accept="image/*">
 
@@ -189,24 +169,34 @@
 </div>
 
 <script>
-/* =========================
-   SUPABASE INIT
-========================= */
-const supabaseClient = window.supabase.createClient(
-  "https://ygilpwedyxbkvwupxngn.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI"
-);
 
 /* =========================
-   GOOGLE SHEETS SCRIPT
+   🔥 DINA URL:er
 ========================= */
+
+// Supabase (NON / Storage backend)
+const SUPABASE_URL = "https://ygilpwedyxbkvwupxngn.supabase.co";
+
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI";
+
+// Google Sheets Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
+
+/* =========================
+   INIT SUPABASE
+========================= */
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 const form = document.getElementById("form");
 
 /* =========================
    IMAGE UPLOAD
 ========================= */
+
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -231,8 +221,9 @@ async function uploadImage(file) {
 }
 
 /* =========================
-   SUBMIT
+   SUBMIT FORM
 ========================= */
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -266,6 +257,7 @@ form.addEventListener("submit", async (e) => {
     alert("Kunde inte spara");
   }
 });
+
 </script>
 
 </body>
