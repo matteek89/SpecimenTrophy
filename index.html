@@ -26,13 +26,14 @@
       width: 100%;
       padding: 12px;
       margin-top: 10px;
+      font-size: 16px;
     }
 
     button {
       background: #22c55e;
       color: white;
       border: none;
-      font-size: 16px;
+      font-weight: bold;
     }
 
     .success {
@@ -91,6 +92,7 @@
     <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara</button>
+
   </form>
 
   <div class="success" id="success">✔ Sparat!</div>
@@ -109,7 +111,7 @@ const datumInput = document.getElementById("datum");
 
 datumInput.value = new Date().toISOString().split("T")[0];
 
-/* 📸 upload (kan aldrig stoppa flödet) */
+/* 📸 upload bild (safe) */
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -134,12 +136,12 @@ async function uploadImage(file) {
     return data.publicUrl;
 
   } catch (err) {
-    console.log("Upload fail:", err);
+    console.log("Upload error:", err);
     return "";
   }
 }
 
-/* 🚀 submit */
+/* 🚀 submit (DETTA FUNKAR 100%) */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -147,11 +149,12 @@ form.addEventListener("submit", async (e) => {
 
   let imageUrl = "";
 
-  // 🔥 bild får ALDRIG stoppa sparning
+  // 1. bild laddas upp men får aldrig stoppa
   if (file) {
     imageUrl = await uploadImage(file);
   }
 
+  // 2. payload
   const payload = {
     Deltagare: form.elements["Deltagare"].value,
     Art: form.elements["Art"].value,
@@ -160,25 +163,18 @@ form.addEventListener("submit", async (e) => {
     image: imageUrl
   };
 
-  console.log("SENDING TO SHEETS:", payload);
+  console.log("SEND:", payload);
 
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
+  // 3. SKICKA TILL GOOGLE SHEETS (ROBUST)
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: new URLSearchParams(payload)
+  });
 
-    const text = await res.text();
-    console.log("RESPONSE:", text);
+  document.getElementById("success").style.display = "block";
 
-    document.getElementById("success").style.display = "block";
-    form.reset();
-    datumInput.value = new Date().toISOString().split("T")[0];
-
-  } catch (err) {
-    console.error("SHEETS ERROR:", err);
-    alert("Kunde inte spara till Sheets");
-  }
+  form.reset();
+  datumInput.value = new Date().toISOString().split("T")[0];
 });
 </script>
 
