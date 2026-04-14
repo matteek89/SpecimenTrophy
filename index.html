@@ -1,94 +1,154 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Specimensamling av olika fiskar. Använd vårt verktyg för att enkelt ladda upp och hantera dina fiskefynd!">
-    <title>Specimen Trophy</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <title>Specimen Trophy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #eaf2ff;
+      padding: 10px;
+    }
+
+    .box {
+      max-width: 420px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <h1>Specimen Trophy</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Hem</a></li>
-                <li><a href="#">Om</a></li>
-                <li><a href="#">Kontakta</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section>
-            <h2>Ladda upp din fångst</h2>
-            <form id="specimenForm" action="/upload" method="post" enctype="multipart/form-data">
-                <label for="specimenName">Artens namn:</label>
-                <input type="text" id="specimenName" name="specimenName" required aria-required="true">
-                <br>
+<div class="box">
+  <h2>🎣 Specimen Trophy</h2>
 
-                <label for="specimenImage">Upload image:</label>
-                <input type="file" id="specimenImage" name="specimenImage" accept="image/*" required aria-required="true">
-                <br>
+  <form id="form">
 
-                <label for="notes">Anteckningar:</label>
-                <textarea id="notes" name="notes" rows="4" required></textarea>
-                <br>
+    <!-- 👥 Deltagare -->
+    <select name="Deltagare" required>
+      <option value="">Välj deltagare</option>
+      <option>Lars Boström</option>
+      <option>Oliver Jansson</option>
+      <option>Anders Boström</option>
+      <option>Stefan Widh</option>
+      <option>Roger Norling</option>
+      <option>Micke Karlsson</option>
+      <option>Emil Larsson</option>
+      <option>Sonny Pettersson</option>
+      <option>Christian Rebello</option>
+      <option>Patrik Byström</option>
+      <option>Jonny Jansson</option>
+      <option>Kent Boström</option>
+      <option>Mattias Roming</option>
+      <option>Anton Lundholm</option>
+      <option>Robban Lager</option>
+      <option>Jonatan Boström</option>
+      <option>Anders Wimmerstedt</option>
+    </select>
 
-                <button type="submit">Ladda upp</button>
-                <div id="loading" style="display: none;">Laddar...</div>
-                <div id="error" style="color: red; display: none;">Det finns ett fel med din uppladdning. Kontrollera och försök igen.</div>
-            </form>
-            <div id="preview" style="display: none;">
-                <h3>Förhandsgranskning:</h3>
-                <p><strong>Namn:</strong> <span id="previewName"></span></p>
-                <img id="previewImage" src="#" alt="Förhandsgranskning av fångst">
-                <p><strong>Anteckningar:</strong> <span id="previewNotes"></span></p>
-            </div>
-        </section>
-    </main>
+    <!-- 🎣 Art -->
+    <select name="Art" required>
+      <option value="">Välj art</option>
+      <option>Björkna</option>
+      <option>Brax</option>
+      <option>Id</option>
+      <option>Mört</option>
+      <option>Ruda</option>
+      <option>Sarv</option>
+      <option>Sutare</option>
+      <option>Vimma</option>
+    </select>
 
-    <footer>
-        <p>&copy; 2026 Specimen Trophy</p>
-    </footer>
+    <input name="Vikt" placeholder="Vikt (gram)" required>
 
-    <script>
-        const input = document.getElementById('specimenImage');
-        const preview = document.getElementById('preview');
-        const previewName = document.getElementById('previewName');
-        const previewNotes = document.getElementById('previewNotes');
-        const loading = document.getElementById('loading');
-        const error = document.getElementById('error');
+    <input type="date" name="datum" required>
 
-        // Handle file input change for preview
-        input.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('previewImage').src = e.target.result;
-                    previewName.textContent = document.getElementById('specimenName').value;
-                    previewNotes.textContent = document.getElementById('notes').value;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
-            }
-        });
+    <input type="file" id="image">
 
-        // Handle form submission
-        document.getElementById('specimenForm').addEventListener('submit', (event) => {
-            event.preventDefault(); // Prevent the default form submission
-            loading.style.display = 'block';
-            error.style.display = 'none';
-            // Simulate file upload process
-            setTimeout(() => {
-                loading.style.display = 'none';
-                alert('Fångsten har laddats upp!');
-            }, 2000);
-        });
-    </script>
+    <button type="submit">Spara fångst</button>
+
+  </form>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylrsBkJy8HINU6WzLZPUV-b_-7_hphpYNfj49tU4xEHaCX2S6hUeRstcUd-jNPRD_nRg/exec";
+
+const form = document.getElementById("form");
+
+function toBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const file = document.getElementById("image").files[0];
+
+  let imageBase64 = "";
+
+  if (file) {
+    imageBase64 = await toBase64(file);
+  }
+
+  const payload = {
+    Deltagare: form.elements["Deltagare"].value,
+    Art: form.elements["Art"].value,
+    Vikt: form.elements["Vikt"].value,
+    datum: form.elements["datum"].value,
+    image: imageBase64
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: new URLSearchParams(payload)
+    });
+
+    const text = await res.text();
+    alert(text);
+
+    form.reset();
+
+  } catch (err) {
+    alert("Fel vid sparning");
+    console.error(err);
+  }
+});
+</script>
+
 </body>
 </html>
