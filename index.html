@@ -10,49 +10,43 @@
 
     body {
       font-family: Arial;
-      background: linear-gradient(#f1f5f9, #e2e8f0);
+      background: linear-gradient(180deg, #dbeafe, #f8fafc);
       margin: 0;
-      padding: 16px;
-      display: flex;
-      justify-content: center;
+      padding: 10px;
     }
 
     .container {
-      max-width: 420px;
-      width: 100%;
+      max-width: 400px;
+      margin: auto;
       background: white;
-      padding: 18px;
-      border-radius: 16px;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    input, select {
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
+    h1 {
       text-align: center;
-      background: #f9fafb;
+      font-size: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
 
     button {
-      padding: 16px;
-      border-radius: 12px;
-      border: none;
-      background: #22c55e;
+      width: 100%;
+      padding: 15px;
+      background: green;
       color: white;
-      font-weight: bold;
-    }
-
-    .success {
-      display: none;
-      text-align: center;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
       margin-top: 10px;
-      color: green;
     }
   </style>
 </head>
@@ -60,64 +54,27 @@
 <body>
 
 <div class="container">
-  <h2>🎣 Specimen Trophy</h2>
+  <h1>🎣 Registrera fångst</h1>
 
   <form id="form">
 
-    <select name="Deltagare" required>
-      <option value="">Deltagare</option>
-      <option>Lars Boström</option>
-      <option>Oliver Jansson</option>
-      <option>Anders Boström</option>
-      <option>Stefan Widh</option>
-      <option>Roger Norling</option>
-      <option>Micke Karlsson</option>
-      <option>Emil Larsson</option>
-      <option>Sonny Pettersson</option>
-      <option>Christian Rebello</option>
-      <option>Patrik Byström</option>
-      <option>Jonny Jansson</option>
-      <option>Kent Boström</option>
-      <option>Mattias Roming</option>
-      <option>Anton Lundholm</option>
-      <option>Robban Lager</option>
-      <option>Jonatan Boström</option>
-      <option>Anders Wimmerstedt</option>
-    </select>
+    <input name="Deltagare" placeholder="Deltagare" required>
+    <input name="Art" placeholder="Art" required>
+    <input name="Vikt" placeholder="Vikt (gram)" required>
+    <input name="datum" placeholder="Datum (YYYY-MM-DD)" required>
 
-    <select name="Art" required>
-      <option value="">Art</option>
-      <option>Björkna</option>
-      <option>Brax</option>
-      <option>Id</option>
-      <option>Mört</option>
-      <option>Ruda</option>
-      <option>Sarv</option>
-      <option>Sutare</option>
-      <option>Vimma</option>
-    </select>
-
-    <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
-
-    <!-- 📅 DATUM FIX -->
-    <input type="text" name="datum" placeholder="Datum"
-      onfocus="this.type='date'"
-      onblur="if(!this.value)this.type='text'"
-      required>
-
-    <input type="file" id="image" accept="image/*">
+    <input type="file" id="image">
 
     <button type="submit">Spara</button>
-  </form>
 
-  <div class="success" id="success">✔ Sparat!</div>
+  </form>
 </div>
 
 <script>
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylrsBkJy8HINU6WzLZPUV-b_-7_hphpYNfj49tU4xEHaCX2S6hUeRstcUd-jNPRD_nRg/exec";
 
-/* 📸 BASE64 */
+const form = document.getElementById("form");
+
 function toBase64(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -126,7 +83,7 @@ function toBase64(file) {
   });
 }
 
-document.getElementById("form").addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = document.getElementById("image").files[0];
@@ -137,22 +94,23 @@ document.getElementById("form").addEventListener("submit", async (e) => {
   }
 
   const payload = {
-    Deltagare: form.Deltagare.value,
-    Art: form.Art.value,
-    Vikt: form.Vikt.value,
-    datum: form.datum.value,
+    Deltagare: form.elements["Deltagare"].value,
+    Art: form.elements["Art"].value,
+    Vikt: form.elements["Vikt"].value,
+    datum: form.elements["datum"].value,
     image: imageBase64
   };
 
-  await fetch(SCRIPT_URL, {
+  const res = await fetch(SCRIPT_URL, {
     method: "POST",
     body: new URLSearchParams(payload)
   });
 
-  document.getElementById("success").style.display = "block";
+  const text = await res.text();
+  alert(text);
+
   form.reset();
 });
-
 </script>
 
 </body>
