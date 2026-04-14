@@ -9,21 +9,23 @@
     body {
       margin: 0;
       font-family: Arial;
-      background: #eaf2ff;
+      background: linear-gradient(180deg, #dbeafe, #f8fafc);
       padding: 10px;
     }
 
-    .box {
+    .container {
       max-width: 420px;
       margin: auto;
       background: white;
       padding: 20px;
-      border-radius: 15px;
+      border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
-    h2 {
+    h1 {
       text-align: center;
+      font-size: 22px;
+      margin-bottom: 10px;
     }
 
     select, input {
@@ -43,14 +45,20 @@
       border: none;
       border-radius: 10px;
       font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>🎣 Specimen Trophy</h2>
+<div class="container">
+  <h1>🎣 Specimen Trophy</h1>
 
   <form id="form">
 
@@ -93,7 +101,7 @@
 
     <input type="date" name="datum" required>
 
-    <input type="file" id="image">
+    <input type="file" id="image" accept="image/*">
 
     <button type="submit">Spara fångst</button>
 
@@ -106,9 +114,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylrsBkJy8HINU6WzLZP
 const form = document.getElementById("form");
 
 function toBase64(file) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
@@ -120,19 +129,19 @@ form.addEventListener("submit", async (e) => {
 
   let imageBase64 = "";
 
-  if (file) {
-    imageBase64 = await toBase64(file);
-  }
-
-  const payload = {
-    Deltagare: form.elements["Deltagare"].value,
-    Art: form.elements["Art"].value,
-    Vikt: form.elements["Vikt"].value,
-    datum: form.elements["datum"].value,
-    image: imageBase64
-  };
-
   try {
+    if (file) {
+      imageBase64 = await toBase64(file);
+    }
+
+    const payload = {
+      Deltagare: form.elements["Deltagare"].value,
+      Art: form.elements["Art"].value,
+      Vikt: form.elements["Vikt"].value,
+      datum: form.elements["datum"].value,
+      image: imageBase64
+    };
+
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
       body: new URLSearchParams(payload)
@@ -144,7 +153,7 @@ form.addEventListener("submit", async (e) => {
     form.reset();
 
   } catch (err) {
-    alert("Fel vid sparning");
+    alert("Fel vid uppladdning");
     console.error(err);
   }
 });
