@@ -5,35 +5,24 @@
   <title>Specimen Trophy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     * { box-sizing: border-box; }
 
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
+      font-family: Arial;
+      background: linear-gradient(#f1f5f9, #e2e8f0);
       margin: 0;
       padding: 16px;
-      min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
     }
 
     .container {
-      width: 100%;
       max-width: 420px;
+      width: 100%;
       background: white;
       padding: 18px;
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 16px;
-      font-size: 22px;
     }
 
     form {
@@ -42,68 +31,28 @@
       gap: 12px;
     }
 
-    select,
-    input {
-      width: 100%;
+    input, select {
       padding: 14px;
-      font-size: 16px;
-      border: 1px solid #e5e7eb;
       border-radius: 12px;
-      background: #f9fafb;
+      border: 1px solid #ddd;
       text-align: center;
-      outline: none;
-    }
-
-    select:focus,
-    input:focus {
-      border-color: #22c55e;
-      background: #fff;
-    }
-
-    input[type="file"] {
-      background: white;
-      padding: 10px;
-    }
-
-    /* DATE LOOK FIX */
-    input[type="text"] {
-      color: #6b7280;
-    }
-
-    input[type="text"]:focus {
-      color: #111827;
+      background: #f9fafb;
     }
 
     button {
-      width: 100%;
       padding: 16px;
-      font-size: 17px;
-      font-weight: bold;
-      border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border: none;
+      background: #22c55e;
       color: white;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.98);
+      font-weight: bold;
     }
 
     .success {
       display: none;
       text-align: center;
-      color: #16a34a;
-      font-weight: bold;
-      margin-top: 12px;
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 12px; }
-      .container { padding: 14px; border-radius: 14px; }
-      h2 { font-size: 20px; }
-      select, input { font-size: 15px; padding: 13px; }
-      button { font-size: 16px; padding: 15px; }
+      margin-top: 10px;
+      color: green;
     }
   </style>
 </head>
@@ -150,15 +99,11 @@
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <input
-      type="text"
-      name="datum"
-      id="datum"
-      placeholder="Datum"
+    <!-- 📅 DATUM FIX -->
+    <input type="text" name="datum" placeholder="Datum"
       onfocus="this.type='date'"
-      onblur="if(!this.value) this.type='text'"
-      required
-    >
+      onblur="if(!this.value)this.type='text'"
+      required>
 
     <input type="file" id="image" accept="image/*">
 
@@ -170,92 +115,42 @@
 
 <script>
 
-/* =========================
-   🔥 DINA URL:er
-========================= */
-
-// Supabase (NON / Storage backend)
-const SUPABASE_URL = "https://ygilpwedyxbkvwupxngn.supabase.co";
-
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnaWxwd2VkeXhia3Z3dXB4bmduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTA1MDksImV4cCI6MjA5MTU4NjUwOX0.29O-vQS2GTx4PZcATXvOvR0_gRC7wXLIURbguafjSpI";
-
-// Google Sheets Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypZ9Khb5M9_hS5AScLq47ESgh1PjErPXGDzGc7SviOYmBpwok9TIRvORKAj99AtxIdzw/exec";
 
-/* =========================
-   INIT SUPABASE
-========================= */
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-const form = document.getElementById("form");
-
-/* =========================
-   IMAGE UPLOAD
-========================= */
-
-async function uploadImage(file) {
-  if (!file) return "";
-
-  const fileName = Date.now() + "-" + file.name;
-
-  const { error } = await supabaseClient
-    .storage
-    .from("specimen-trophy")
-    .upload(fileName, file);
-
-  if (error) {
-    console.log("Upload error:", error.message);
-    return "";
-  }
-
-  const { data } = supabaseClient
-    .storage
-    .from("specimen-trophy")
-    .getPublicUrl(fileName);
-
-  return data.publicUrl;
+/* 📸 BASE64 */
+function toBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
 }
 
-/* =========================
-   SUBMIT FORM
-========================= */
-
-form.addEventListener("submit", async (e) => {
+document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = document.getElementById("image").files[0];
-
-  let imageUrl = "";
+  let imageBase64 = "";
 
   if (file) {
-    imageUrl = await uploadImage(file);
+    imageBase64 = await toBase64(file);
   }
 
   const payload = {
-    Deltagare: form.elements["Deltagare"].value,
-    Art: form.elements["Art"].value,
-    Vikt: form.elements["Vikt"].value,
-    datum: form.elements["datum"].value,
-    image: imageUrl
+    Deltagare: form.Deltagare.value,
+    Art: form.Art.value,
+    Vikt: form.Vikt.value,
+    datum: form.datum.value,
+    image: imageBase64
   };
 
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: new URLSearchParams(payload)
-    });
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: new URLSearchParams(payload)
+  });
 
-    document.getElementById("success").style.display = "block";
-    form.reset();
-
-  } catch (err) {
-    console.error(err);
-    alert("Kunde inte spara");
-  }
+  document.getElementById("success").style.display = "block";
+  form.reset();
 });
 
 </script>
