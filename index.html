@@ -109,53 +109,36 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylrsBkJy8HINU6WzLZPUV-b_-7_hphpYNfj49tU4xEHaCX2S6hUeRstcUd-jNPRD_nRg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykz0oB-DEKWmxPReP0RosAe1qMV33AUsg1oy815tOw/dev";
 
 const form = document.getElementById("form");
-
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const file = document.getElementById("image").files[0];
+  const fileInput = document.getElementById("image");
+  const file = fileInput.files[0];
 
-  let imageBase64 = "";
+  const formData = new FormData();
 
-  try {
-    if (file) {
-      imageBase64 = await toBase64(file);
-    }
+  formData.append("Deltagare", form.elements["Deltagare"].value);
+  formData.append("Art", form.elements["Art"].value);
+  formData.append("Vikt", form.elements["Vikt"].value);
+  formData.append("datum", form.elements["datum"].value);
 
-    const payload = {
-      Deltagare: form.elements["Deltagare"].value,
-      Art: form.elements["Art"].value,
-      Vikt: form.elements["Vikt"].value,
-      datum: form.elements["datum"].value,
-      image: imageBase64
-    };
-
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: new URLSearchParams(payload)
-    });
-
-    const text = await res.text();
-    alert(text);
-
-    form.reset();
-
-  } catch (err) {
-    alert("Fel vid uppladdning");
-    console.error(err);
+  if (file) {
+    formData.append("image", file);
   }
+
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: formData
+  });
+
+  const text = await res.text();
+  alert(text);
+
+  form.reset();
 });
 </script>
 
