@@ -117,53 +117,36 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylrsBkJy8HINU6WzLZPUV-b_-7_hphpYNfj49tU4xEHaCX2S6hUeRstcUd-jNPRD_nRg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykz0oB-DEKWmxPReP0RosAe1qMV33AUsg1oy815tOw/dev";
 
 const form = document.getElementById("form");
-
-function toBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
-}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const formData = new FormData();
+
+  formData.append("Deltagare", form.elements["Deltagare"].value);
+  formData.append("Art", form.elements["Art"].value);
+  formData.append("Vikt", form.elements["Vikt"].value);
+  formData.append("datum", form.elements["datum"].value);
+
   const file = document.getElementById("image").files[0];
-  let imageBase64 = "";
-
   if (file) {
-    imageBase64 = await toBase64(file);
+    formData.append("image", file);
   }
 
-  const payload = {
-    Deltagare: form.elements["Deltagare"].value,
-    Art: form.elements["Art"].value,
-    Vikt: form.elements["Vikt"].value,
-    datum: form.elements["datum"].value,
-    image: imageBase64
-  };
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: formData
+  });
 
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: new URLSearchParams(payload)
-    });
+  const text = await res.text();
+  alert(text);
 
-    const text = await res.text();
-    alert(text);
-
-    form.reset();
-
-  } catch (err) {
-    alert("Fel vid sparning");
-    console.error(err);
-  }
+  form.reset();
 });
 </script>
-
+  
 </body>
 </html>
