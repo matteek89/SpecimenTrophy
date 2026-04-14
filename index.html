@@ -6,51 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      margin: 0;
       font-family: Arial;
-      background: linear-gradient(180deg, #dbeafe, #f8fafc);
-      padding: 10px;
+      background: linear-gradient(#f1f5f9, #e2e8f0);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
     }
 
     .container {
       max-width: 420px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    select, input {
       width: 100%;
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input, select {
       padding: 14px;
-      margin: 8px 0;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+      background: #f9fafb;
     }
 
     button {
-      width: 100%;
-      padding: 15px;
-      background: #16a34a;
-      color: white;
+      padding: 16px;
+      border-radius: 12px;
       border: none;
-      border-radius: 10px;
-      font-size: 18px;
+      background: #22c55e;
+      color: white;
       font-weight: bold;
-      margin-top: 10px;
     }
 
-    button:active {
-      transform: scale(0.98);
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+      color: green;
     }
   </style>
 </head>
@@ -58,12 +60,12 @@
 <body>
 
 <div class="container">
-  <h1>🎣 Specimen Trophy</h1>
+  <h2>🎣 Specimen Trophy</h2>
 
   <form id="form">
 
     <select name="Deltagare" required>
-      <option value="">Välj deltagare</option>
+      <option value="">Deltagare</option>
       <option>Lars Boström</option>
       <option>Oliver Jansson</option>
       <option>Anders Boström</option>
@@ -84,7 +86,7 @@
     </select>
 
     <select name="Art" required>
-      <option value="">Välj art</option>
+      <option value="">Art</option>
       <option>Björkna</option>
       <option>Brax</option>
       <option>Id</option>
@@ -95,62 +97,63 @@
       <option>Vimma</option>
     </select>
 
-    <input name="Vikt" placeholder="Vikt (gram)" required>
+    <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
-    <input type="date" name="datum" required>
+    <!-- 📅 DATUM FIX -->
+    <input type="text" name="datum" placeholder="Datum"
+      onfocus="this.type='date'"
+      onblur="if(!this.value)this.type='text'"
+      required>
 
     <input type="file" id="image" accept="image/*">
 
-    <button type="submit">Spara fångst</button>
-
+    <button type="submit">Spara</button>
   </form>
+
+  <div class="success" id="success">✔ Sparat!</div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykz0oB-DEKWmxPReP0RosAe1qMV33AUsg1oy815tOw/dev";
 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
+
+/* 📸 BASE64 */
 function toBase64(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
   });
 }
 
-const form = document.getElementById("form");
-
-form.addEventListener("submit", async (e) => {
+document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const fileInput = document.getElementById("image");
-  const file = fileInput.files[0];
-
-  let base64Image = "";
+  const file = document.getElementById("image").files[0];
+  let imageBase64 = "";
 
   if (file) {
-    base64Image = await toBase64(file);
+    imageBase64 = await toBase64(file);
   }
 
-  const formData = new URLSearchParams();
-  formData.append("Deltagare", form.elements["Deltagare"].value);
-  formData.append("Art", form.elements["Art"].value);
-  formData.append("Vikt", form.elements["Vikt"].value);
-  formData.append("datum", form.elements["datum"].value);
-  formData.append("image", base64Image);
+  const payload = {
+    Deltagare: form.Deltagare.value,
+    Art: form.Art.value,
+    Vikt: form.Vikt.value,
+    datum: form.datum.value,
+    image: imageBase64
+  };
 
-  const res = await fetch(SCRIPT_URL, {
+  await fetch(SCRIPT_URL, {
     method: "POST",
-    body: formData
+    body: new URLSearchParams(payload)
   });
 
-  const text = await res.text();
-  alert(text);
-
+  document.getElementById("success").style.display = "block";
   form.reset();
 });
+
 </script>
 
 </body>
-</html>
 </html>
