@@ -31,7 +31,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 24px 10px;
+      padding: 14px 8px;
       background:
         linear-gradient(rgba(4, 8, 16, 0.40), rgba(4, 8, 16, 0.58)),
         url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
@@ -53,46 +53,46 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 500px;
+      max-width: 430px;
       display: flex;
       justify-content: center;
     }
 
     .frame {
       width: 100%;
-      max-width: 388px;
-      padding: 7px;
-      border-radius: 32px;
+      max-width: 370px;
+      padding: 4px;
+      border-radius: 26px;
       position: relative;
       background: linear-gradient(180deg, rgba(255, 153, 0, 0.95), rgba(255, 106, 0, 0.82));
       box-shadow:
         0 0 0 1px rgba(255, 153, 0, 0.96),
-        0 0 14px rgba(255, 145, 0, 0.34),
-        0 0 28px rgba(255, 106, 0, 0.14),
-        0 18px 40px rgba(0,0,0,0.30);
+        0 0 10px rgba(255, 145, 0, 0.28),
+        0 0 20px rgba(255, 106, 0, 0.10),
+        0 14px 28px rgba(0,0,0,0.24);
     }
 
     .frame::before {
       content: "";
       position: absolute;
       inset: 0;
-      border-radius: 32px;
+      border-radius: 26px;
       pointer-events: none;
       box-shadow:
-        inset 0 0 0 1px rgba(255,170,40,0.95),
-        0 0 10px rgba(255,153,0,0.14);
+        inset 0 0 0 1px rgba(255,170,40,0.92),
+        0 0 6px rgba(255,153,0,0.12);
     }
 
     .panel {
       width: 100%;
       background:
-        linear-gradient(180deg, rgba(5, 16, 34, 0.88), rgba(2, 10, 22, 0.94));
-      border: 1px solid rgba(255, 138, 0, 0.16);
-      border-radius: 24px;
+        linear-gradient(180deg, rgba(5, 16, 34, 0.90), rgba(2, 10, 22, 0.95));
+      border: 1px solid rgba(255, 138, 0, 0.14);
+      border-radius: 22px;
       padding: 12px 10px 14px;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.04),
-        0 10px 26px rgba(0,0,0,0.24);
+        0 8px 20px rgba(0,0,0,0.20);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       position: relative;
@@ -111,34 +111,34 @@
     .logo-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .logo {
-      width: min(100%, 188px);
+      width: min(100%, 180px);
       display: block;
-      border-radius: 24px;
+      border-radius: 22px;
       box-shadow:
-        0 0 12px rgba(255, 153, 0, 0.22),
-        0 0 24px rgba(255, 106, 0, 0.12);
+        0 0 10px rgba(255, 153, 0, 0.22),
+        0 0 22px rgba(255, 106, 0, 0.12);
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 10px;
     }
 
     .field,
     .custom-select {
       position: relative;
       display: grid;
-      grid-template-columns: 24px 1fr 18px;
+      grid-template-columns: 26px 1fr 20px;
       align-items: center;
-      gap: 9px;
-      min-height: 54px;
-      padding: 8px 10px;
-      border-radius: 15px;
+      gap: 10px;
+      min-height: 62px;
+      padding: 10px 11px;
+      border-radius: 16px;
       background:
         linear-gradient(90deg, rgba(2, 11, 23, 0.95), rgba(3, 18, 38, 0.88));
       border: 1px solid rgba(255, 255, 255, 0.06);
@@ -172,8 +172,8 @@
 
     .field-icon svg,
     .field-end svg {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       stroke: currentColor;
     }
 
@@ -182,10 +182,10 @@
     }
 
     .field-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       color: rgba(255,255,255,0.92);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     .field input[type="number"],
@@ -196,8 +196,8 @@
       border: 0;
       background: transparent;
       color: var(--text);
-      font-size: 14px;
-      line-height: 1.1;
+      font-size: 16px;
+      line-height: 1.15;
       outline: none;
       padding: 0;
       margin: 0;
@@ -245,14 +245,14 @@
       box-shadow:
         0 0 14px rgba(255, 138, 0, 0.12),
         0 10px 24px rgba(0,0,0,0.24);
-      max-height: 170px;
+      max-height: 190px;
       overflow-y: auto;
       backdrop-filter: blur(10px);
     }
 
     .options div {
-      padding: 9px 10px;
-      font-size: 13px;
+      padding: 10px 12px;
+      font-size: 14px;
       color: #f3f4f6;
       border-top: 1px solid rgba(255,255,255,0.05);
       text-align: center;
@@ -277,23 +277,23 @@
 
     .upload-text {
       color: rgba(255,255,255,0.92);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
     }
 
     .upload-subtext {
       margin-top: 3px;
       color: var(--muted);
-      font-size: 10px;
-      line-height: 1.2;
+      font-size: 11px;
+      line-height: 1.25;
     }
 
     .submit-btn {
-      margin-top: 3px;
-      height: 46px;
+      margin-top: 4px;
+      height: 52px;
       border: 0;
-      border-radius: 15px;
-      font-size: 17px;
+      border-radius: 16px;
+      font-size: 18px;
       font-weight: 800;
       color: white;
       cursor: pointer;
@@ -350,38 +350,42 @@
 
     @media (max-width: 420px) {
       body {
-        padding: 16px 8px;
+        padding: 12px 8px;
+      }
+
+      .page {
+        max-width: 100%;
       }
 
       .frame {
-        max-width: 368px;
-        padding: 7px;
+        max-width: 100%;
+        width: 100%;
       }
 
       .panel {
-        padding: 11px 9px 13px;
+        padding: 12px 10px 14px;
       }
 
       .logo {
-        width: min(100%, 176px);
+        width: min(100%, 182px);
       }
 
       .field,
       .custom-select {
-        min-height: 50px;
-        padding: 7px 9px;
-        gap: 8px;
+        min-height: 64px;
+        padding: 10px 11px;
+        gap: 10px;
       }
 
       .field input[type="number"],
       .field input[type="text"],
       .selected {
-        font-size: 13px;
+        font-size: 16px;
       }
 
       .submit-btn {
-        height: 43px;
-        font-size: 16px;
+        height: 54px;
+        font-size: 18px;
       }
     }
   </style>
