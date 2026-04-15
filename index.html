@@ -11,6 +11,7 @@
   --muted:rgba(255,255,255,.58);
   --orange:#ff9800;
   --green:#19d458;
+  --error:#ff6b6b;
 }
 
 *{box-sizing:border-box}
@@ -183,7 +184,8 @@ form{
   align-items:center;
   justify-content:center;
   color:var(--orange);
-  align-self:center;
+  align-self:flex-start;
+  padding-top:2px;
 }
 
 .field-body{
@@ -421,11 +423,29 @@ input:-webkit-autofill:focus{
 }
 
 .invalid-field{
-  border-color:rgba(255, 80, 80, .9) !important;
+  border-color:var(--error) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.03),
-    0 0 0 1px rgba(255,80,80,.18),
-    0 0 14px rgba(255,80,80,.14) !important;
+    0 0 0 1px rgba(255,107,107,.20),
+    0 0 14px rgba(255,107,107,.18),
+    inset 0 1px 0 rgba(255,255,255,.03) !important;
+}
+
+.error-text{
+  display:none;
+  margin-top:5px;
+  color:var(--error);
+  font-size:12px;
+  line-height:1.2;
+  animation:fadeIn .15s ease;
+}
+
+.invalid-field .error-text{
+  display:block;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-2px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
 @media (max-width:420px){
@@ -494,6 +514,7 @@ input:-webkit-autofill:focus{
           <div class="field-body">
             <div class="field-label">Deltagare</div>
             <div class="selected">Välj deltagare</div>
+            <div class="error-text">Fyll i detta fält</div>
           </div>
           <div class="field-end" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -520,7 +541,7 @@ input:-webkit-autofill:focus{
             <div>Anders Wimmerstedt</div>
           </div>
         </div>
-        <input type="hidden" name="Deltagare" required>
+        <input type="hidden" name="Deltagare">
 
         <div class="custom-select" data-name="Art" data-placeholder="Välj art" id="artField">
           <div class="field-icon" aria-hidden="true">
@@ -535,6 +556,7 @@ input:-webkit-autofill:focus{
           <div class="field-body">
             <div class="field-label">Art</div>
             <div class="selected">Välj art</div>
+            <div class="error-text">Fyll i detta fält</div>
           </div>
           <div class="field-end" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -552,7 +574,7 @@ input:-webkit-autofill:focus{
             <div>Vimma</div>
           </div>
         </div>
-        <input type="hidden" name="Art" required>
+        <input type="hidden" name="Art">
 
         <div class="field" id="viktField">
           <div class="field-icon" aria-hidden="true">
@@ -565,7 +587,8 @@ input:-webkit-autofill:focus{
           </div>
           <div class="field-body">
             <div class="field-label">Vikt (gram)</div>
-            <input type="number" name="Vikt" id="viktInput" placeholder="Ange vikt" required>
+            <input type="number" name="Vikt" id="viktInput" placeholder="Ange vikt">
+            <div class="error-text">Fyll i detta fält</div>
           </div>
           <div></div>
         </div>
@@ -581,7 +604,8 @@ input:-webkit-autofill:focus{
           </div>
           <div class="field-body">
             <div class="field-label">Datum</div>
-            <input type="date" id="datum" name="datum" required>
+            <input type="date" id="datum" name="datum">
+            <div class="error-text">Fyll i detta fält</div>
           </div>
         </label>
 
@@ -597,9 +621,10 @@ input:-webkit-autofill:focus{
             <div class="field-label">Bild</div>
             <div class="upload-text">Lägg till bild</div>
             <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
+            <div class="error-text">Fyll i detta fält</div>
           </div>
         </label>
-        <input type="file" id="image" class="file-input" accept="image/*" required>
+        <input type="file" id="image" class="file-input" accept="image/*">
 
         <button type="submit" class="submit-btn">SPARA</button>
 
@@ -649,11 +674,6 @@ function clearInvalidStates(){
   });
 }
 
-function showValidationMessage(targetField){
-  targetField.classList.add("invalid-field");
-  alert("Fyll i detta fält");
-}
-
 document.querySelectorAll(".custom-select").forEach(select=>{
   const selected=select.querySelector(".selected");
   const options=select.querySelector(".options");
@@ -693,9 +713,7 @@ document.addEventListener("click",e=>{
   }
 });
 
-const dateField=document.querySelector(".date-field");
-
-dateField.addEventListener("click",()=>{
+datumField.addEventListener("click",()=>{
   if(datumInput.showPicker){
     datumInput.showPicker();
   }else{
@@ -713,37 +731,46 @@ imageInput.addEventListener("change",()=>{
   }
 });
 
-viktInput.addEventListener("input",()=>viktField.classList.remove("invalid-field"));
-datumInput.addEventListener("input",()=>datumField.classList.remove("invalid-field"));
+viktInput.addEventListener("input",()=>{
+  if(viktInput.value) viktField.classList.remove("invalid-field");
+});
+
+datumInput.addEventListener("input",()=>{
+  if(datumInput.value) datumField.classList.remove("invalid-field");
+});
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
   clearInvalidStates();
 
+  let valid=true;
+
   if(!form.Deltagare.value){
-    showValidationMessage(deltagareField);
-    return;
+    deltagareField.classList.add("invalid-field");
+    valid=false;
   }
 
   if(!form.Art.value){
-    showValidationMessage(artField);
-    return;
+    artField.classList.add("invalid-field");
+    valid=false;
   }
 
   if(!form.Vikt.value){
-    showValidationMessage(viktField);
-    return;
+    viktField.classList.add("invalid-field");
+    valid=false;
   }
 
   if(!form.datum.value){
-    showValidationMessage(datumField);
-    return;
+    datumField.classList.add("invalid-field");
+    valid=false;
   }
 
   if(!imageInput.files || !imageInput.files[0]){
-    showValidationMessage(bildField);
-    return;
+    bildField.classList.add("invalid-field");
+    valid=false;
   }
+
+  if(!valid) return;
 
   const file=imageInput.files[0];
   let imageBase64="";
