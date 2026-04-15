@@ -1,337 +1,656 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Specimen Trophy</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Specimen Trophy</title>
 
-<style>
+  <style>
+    :root {
+      --bg: #05070a;
+      --card: rgba(5, 12, 24, 0.78);
+      --card-2: rgba(2, 10, 22, 0.9);
+      --text: #f3f4f6;
+      --muted: rgba(255, 255, 255, 0.58);
+      --line: rgba(255, 255, 255, 0.09);
+      --orange: #ff8a00;
+      --orange-2: #ff5e00;
+      --green: #1dd14f;
+      --green-2: #0aa03a;
+    }
 
-:root{
---card: rgba(17,24,39,0.85);
---text:#f9fafb;
---muted:#9ca3af;
---primary:#ff7a18;
---primary2:#ff3d00;
---border:rgba(255,255,255,0.08);
-}
+    * {
+      box-sizing: border-box;
+    }
 
-*{
-box-sizing:border-box;
-}
+    html,
+    body {
+      min-height: 100%;
+    }
 
-body{
-margin:0;
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-color:var(--text);
-display:flex;
-justify-content:center;
-padding:40px 16px;
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 18px;
+      background:
+        linear-gradient(to bottom, rgba(4, 7, 12, 0.35), rgba(4, 7, 12, 0.78)),
+        url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-/* 🌅 SUNSET BACKGROUND */
-background:
-linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)),
-url("images/sunset.jpg");
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255, 138, 0, 0.18), transparent 28%),
+        radial-gradient(circle at 50% 85%, rgba(255, 138, 0, 0.08), transparent 36%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.35));
+      pointer-events: none;
+      z-index: 0;
+    }
 
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-}
+    .page {
+      width: 100%;
+      max-width: 760px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+    }
 
-/* ORANGE GLOW */
-body::before{
-content:"";
-position:fixed;
-top:-200px;
-left:-200px;
-width:600px;
-height:600px;
-background:radial-gradient(circle, rgba(255,122,24,0.35), transparent 60%);
-filter:blur(70px);
-animation:floatGlow 10s ease-in-out infinite alternate;
-z-index:0;
-}
+    .panel {
+      width: min(100%, 560px);
+      background:
+        linear-gradient(180deg, rgba(8, 18, 34, 0.82), rgba(2, 8, 20, 0.9));
+      border: 2px solid rgba(255, 138, 0, 0.82);
+      border-radius: 34px;
+      padding: 34px 22px 28px;
+      box-shadow:
+        0 0 0 1px rgba(255, 138, 0, 0.08) inset,
+        0 0 34px rgba(255, 110, 0, 0.18),
+        0 24px 70px rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(6px);
+    }
 
-@keyframes floatGlow{
-from{transform:translate(0,0);}
-to{transform:translate(120px,80px);}
-}
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
 
-.container{
-width:100%;
-max-width:520px;
-position:relative;
-z-index:1;
-}
+    .logo {
+      width: min(100%, 285px);
+      display: block;
+      filter:
+        drop-shadow(0 0 8px rgba(255, 136, 0, 0.45))
+        drop-shadow(0 0 24px rgba(255, 94, 0, 0.3));
+    }
 
-/* HEADER */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-.header{
-text-align:center;
-margin-bottom:24px;
-}
+    .field,
+    .custom-select {
+      position: relative;
+      display: grid;
+      grid-template-columns: 44px 1fr 34px;
+      align-items: center;
+      gap: 14px;
+      min-height: 92px;
+      padding: 18px 18px;
+      border-radius: 20px;
+      background:
+        linear-gradient(90deg, rgba(2, 11, 23, 0.97), rgba(3, 18, 38, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        0 10px 30px rgba(0,0,0,0.28);
+    }
 
-.logo{
-max-width:260px;
-width:100%;
-border-radius:14px;
-box-shadow:
-0 0 30px rgba(255,122,24,0.35),
-0 0 80px rgba(255,61,0,0.18);
-}
+    .field-icon,
+    .field-end {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--orange);
+    }
 
-/* FORM */
+    .field-end.white {
+      color: rgba(255,255,255,0.92);
+    }
 
-form{
-background:var(--card);
-backdrop-filter:blur(14px);
-padding:22px;
-border-radius:18px;
-border:1px solid var(--border);
+    .field-icon svg,
+    .field-end svg {
+      width: 28px;
+      height: 28px;
+      stroke: currentColor;
+    }
 
-box-shadow:
-0 0 40px rgba(255,122,24,0.15),
-0 20px 60px rgba(0,0,0,0.7);
+    .field-body {
+      min-width: 0;
+    }
 
-display:flex;
-flex-direction:column;
-gap:14px;
-}
+    .field-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 8px;
+    }
 
-input{
-padding:14px;
-border-radius:12px;
-border:1px solid var(--border);
-text-align:center;
-font-size:15px;
-background:rgba(0,0,0,0.35);
-color:var(--text);
-outline:none;
-transition:0.25s;
-}
+    .field input[type="number"],
+    .field input[type="text"],
+    .selected,
+    .upload-text {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1.2;
+      outline: none;
+      padding: 0;
+      margin: 0;
+      font-weight: 500;
+    }
 
-input:focus{
-border-color:var(--primary);
-box-shadow:
-0 0 0 3px rgba(255,122,24,0.25),
-0 0 25px rgba(255,122,24,0.2);
-}
+    .field input::placeholder {
+      color: var(--muted);
+      opacity: 1;
+    }
 
-button{
-padding:14px;
-border-radius:12px;
-border:none;
-cursor:pointer;
+    .selected {
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
 
-background:linear-gradient(90deg,var(--primary),var(--primary2));
-color:white;
-font-weight:700;
+    .selected.active {
+      color: var(--text);
+    }
 
-transition:0.25s;
+    .custom-select {
+      cursor: pointer;
+    }
 
-box-shadow:0 0 25px rgba(255,122,24,0.35);
-}
+    .custom-select .field-end {
+      transition: transform 0.2s ease;
+    }
 
-button:hover{
-transform:translateY(-2px) scale(1.02);
-box-shadow:0 0 40px rgba(255,122,24,0.55);
-}
+    .custom-select.open .field-end {
+      transform: rotate(180deg);
+    }
 
-.success{
-display:none;
-text-align:center;
-margin-top:12px;
-color:#22c55e;
-font-weight:600;
-}
+    .options {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 10px);
+      background: rgba(6, 15, 28, 0.98);
+      border: 1px solid rgba(255, 138, 0, 0.28);
+      border-radius: 18px;
+      overflow: hidden;
+      z-index: 1000;
+      box-shadow:
+        0 0 24px rgba(255, 138, 0, 0.14),
+        0 18px 45px rgba(0,0,0,0.5);
+      max-height: 240px;
+      overflow-y: auto;
+    }
 
-/* CUSTOM SELECT */
+    .options div {
+      padding: 14px 18px;
+      font-size: 17px;
+      color: #f3f4f6;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      cursor: pointer;
+    }
 
-.custom-select{
-position:relative;
-}
+    .options div:first-child {
+      border-top: 0;
+    }
 
-.selected{
-padding:14px;
-border-radius:12px;
-border:1px solid var(--border);
-text-align:center;
-cursor:pointer;
-color:var(--muted);
-background:rgba(0,0,0,0.35);
-transition:0.25s;
-}
+    .options div:hover {
+      background: rgba(255, 138, 0, 0.14);
+    }
 
-.selected.active{
-color:var(--text);
-}
+    .options::-webkit-scrollbar {
+      width: 8px;
+    }
 
-.selected:hover{
-box-shadow:0 0 25px rgba(255,122,24,0.25);
-border-color:rgba(255,122,24,0.45);
-}
+    .options::-webkit-scrollbar-thumb {
+      background: rgba(255, 138, 0, 0.4);
+      border-radius: 999px;
+    }
 
-.options{
-display:none;
-position:absolute;
-width:100%;
-background:rgba(17,24,39,0.95);
-border:1px solid var(--border);
-border-radius:12px;
-margin-top:8px;
-max-height:220px;
-overflow-y:auto;
-z-index:999;
+    .file-input {
+      display: none;
+    }
 
-box-shadow:0 0 30px rgba(255,122,24,0.2);
-}
+    .upload-field {
+      cursor: pointer;
+    }
 
-.options div{
-padding:12px;
-text-align:center;
-cursor:pointer;
-transition:0.2s;
-}
+    .upload-text {
+      color: rgba(255,255,255,0.92);
+      font-size: 16px;
+      font-weight: 700;
+    }
 
-.options div:hover{
-background:rgba(255,122,24,0.2);
-}
+    .upload-subtext {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
 
-.options::-webkit-scrollbar{
-width:6px;
-}
+    .submit-btn {
+      margin-top: 8px;
+      height: 74px;
+      border: 0;
+      border-radius: 20px;
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      background:
+        linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 0 28px rgba(28, 209, 79, 0.3),
+        0 10px 30px rgba(0,0,0,0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
 
-.options::-webkit-scrollbar-thumb{
-background:rgba(255,122,24,0.4);
-border-radius:10px;
-}
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 0 34px rgba(28, 209, 79, 0.36),
+        0 14px 34px rgba(0,0,0,0.42);
+    }
 
-</style>
+    .submit-btn svg {
+      width: 34px;
+      height: 34px;
+      stroke: white;
+      flex: 0 0 auto;
+    }
+
+    .success {
+      display: none;
+      margin-top: 18px;
+      color: #19d458;
+      font-weight: 700;
+      font-size: 24px;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .success.show {
+      display: flex;
+    }
+
+    .success svg {
+      width: 30px;
+      height: 30px;
+      stroke: currentColor;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 20px 12px;
+        background-attachment: scroll;
+      }
+
+      .panel {
+        width: 100%;
+        padding: 24px 14px 22px;
+        border-radius: 28px;
+      }
+
+      .logo {
+        width: min(100%, 240px);
+      }
+
+      .field,
+      .custom-select {
+        grid-template-columns: 34px 1fr 28px;
+        min-height: 84px;
+        padding: 16px 14px;
+        gap: 12px;
+      }
+
+      .field input[type="number"],
+      .field input[type="text"],
+      .selected {
+        font-size: 18px;
+      }
+
+      .submit-btn {
+        height: 66px;
+        font-size: 24px;
+      }
+
+      .success {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <div class="panel">
+      <div class="logo-wrap">
+        <img src="images/logo.png" alt="Specimen Trophy" class="logo" />
+      </div>
 
-<div class="container">
+      <form id="form">
+        <div class="custom-select" data-name="Deltagare" data-placeholder="Välj deltagare">
+          <div class="field-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21a8 8 0 0 0-16 0"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
 
-<div class="header">
-<img src="images/logo.png" class="logo">
-</div>
+          <div class="field-body">
+            <div class="field-label">Deltagare</div>
+            <div class="selected">Välj deltagare</div>
+          </div>
 
-<form id="form">
+          <div class="field-end">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </div>
 
-<div class="custom-select" data-name="Deltagare">
-<div class="selected">Deltagare</div>
-<div class="options">
-<div>Lars Boström</div>
-<div>Oliver Jansson</div>
-<div>Anders Boström</div>
-<div>Stefan Widh</div>
-<div>Roger Norling</div>
-<div>Micke Karlsson</div>
-<div>Emil Larsson</div>
-<div>Sonny Pettersson</div>
-<div>Christian Rebello</div>
-<div>Patrik Byström</div>
-<div>Jonny Jansson</div>
-<div>Kent Boström</div>
-<div>Mattias Roming</div>
-<div>Anton Lundholm</div>
-<div>Robban Lager</div>
-<div>Jonatan Boström</div>
-<div>Anders Wimmerstedt</div>
-</div>
-</div>
+          <div class="options">
+            <div>Lars Boström</div>
+            <div>Oliver Jansson</div>
+            <div>Anders Boström</div>
+            <div>Stefan Widh</div>
+            <div>Roger Norling</div>
+            <div>Micke Karlsson</div>
+            <div>Emil Larsson</div>
+            <div>Sonny Pettersson</div>
+            <div>Christian Rebello</div>
+            <div>Patrik Byström</div>
+            <div>Jonny Jansson</div>
+            <div>Kent Boström</div>
+            <div>Mattias Roming</div>
+            <div>Anton Lundholm</div>
+            <div>Robban Lager</div>
+            <div>Jonatan Boström</div>
+            <div>Anders Wimmerstedt</div>
+          </div>
+        </div>
+        <input type="hidden" name="Deltagare" required />
 
-<input type="hidden" name="Deltagare">
+        <div class="custom-select" data-name="Art" data-placeholder="Välj art">
+          <div class="field-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12s3-4 9-4 9 4 9 4-3 4-9 4-9-4-9-4Z"></path>
+              <path d="M7 8 4 5"></path>
+              <path d="M7 16 4 19"></path>
+              <path d="M17 8l3-3"></path>
+              <path d="M17 16l3 3"></path>
+            </svg>
+          </div>
 
-<div class="custom-select" data-name="Art">
-<div class="selected">Art</div>
-<div class="options">
-<div>Björkna</div>
-<div>Brax</div>
-<div>Id</div>
-<div>Mört</div>
-<div>Ruda</div>
-<div>Sarv</div>
-<div>Sutare</div>
-<div>Vimma</div>
-</div>
-</div>
+          <div class="field-body">
+            <div class="field-label">Art</div>
+            <div class="selected">Välj art</div>
+          </div>
 
-<input type="hidden" name="Art">
+          <div class="field-end">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </div>
 
-<input type="number" name="Vikt" placeholder="Vikt (gram)" required>
+          <div class="options">
+            <div>Björkna</div>
+            <div>Brax</div>
+            <div>Id</div>
+            <div>Mört</div>
+            <div>Ruda</div>
+            <div>Sarv</div>
+            <div>Sutare</div>
+            <div>Vimma</div>
+          </div>
+        </div>
+        <input type="hidden" name="Art" required />
 
-<input type="text" name="datum" placeholder="Datum"
-onfocus="this.type='date'"
-onblur="if(!this.value)this.type='text'"
-required>
+        <div class="field">
+          <div class="field-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 5h12"></path>
+              <path d="M8 5l1-2h6l1 2"></path>
+              <path d="M7 5l-1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2L17 5"></path>
+              <circle cx="12" cy="13" r="2.5"></circle>
+            </svg>
+          </div>
 
-<input type="file" id="image" accept="image/*">
+          <div class="field-body">
+            <div class="field-label">Vikt (gram)</div>
+            <input type="number" name="Vikt" placeholder="Ange vikt" required />
+          </div>
 
-<button type="submit">Spara</button>
+          <div></div>
+        </div>
 
-</form>
+        <div class="field">
+          <div class="field-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <path d="M16 2v4"></path>
+              <path d="M8 2v4"></path>
+              <path d="M3 10h18"></path>
+              <path d="M8 14h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M16 14h.01"></path>
+            </svg>
+          </div>
 
-<div class="success" id="success">✔ Sparat!</div>
+          <div class="field-body">
+            <div class="field-label">Datum</div>
+            <input
+              type="text"
+              name="datum"
+              placeholder="Välj datum"
+              onfocus="this.type='date'"
+              onblur="if(!this.value)this.type='text'"
+              required
+            />
+          </div>
 
-</div>
+          <div class="field-end white">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <path d="M16 2v4"></path>
+              <path d="M8 2v4"></path>
+              <path d="M3 10h18"></path>
+            </svg>
+          </div>
+        </div>
 
-<script>
+        <label class="field upload-field" for="image">
+          <div class="field-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <circle cx="9" cy="10" r="1.2"></circle>
+              <path d="m21 15-5-5L5 19"></path>
+            </svg>
+          </div>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
+          <div class="field-body">
+            <div class="upload-text">Lägg till bild (valfritt)</div>
+            <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
+          </div>
 
-function toBase64(file){
-return new Promise(resolve=>{
-const reader=new FileReader();
-reader.onload=()=>resolve(reader.result);
-reader.readAsDataURL(file);
-});
-}
+          <div class="field-end white">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 16.5A4.5 4.5 0 0 0 18 8h-1.3A6 6 0 1 0 6 17.3"></path>
+              <path d="M12 12v9"></path>
+              <path d="m8.5 15.5 3.5-3.5 3.5 3.5"></path>
+            </svg>
+          </div>
+        </label>
+        <input class="file-input" type="file" id="image" accept="image/*" />
 
-document.getElementById("form").addEventListener("submit",async(e)=>{
-e.preventDefault();
+        <button type="submit" class="submit-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="m9 12 2 2 4-5"></path>
+          </svg>
+          <span>SPARA</span>
+        </button>
+      </form>
 
-const file=document.getElementById("image").files[0];
-let imageBase64=file?await toBase64(file):"";
+      <div class="success" id="success">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="m9 12 2 2 4-5"></path>
+        </svg>
+        <span>Sparat!</span>
+      </div>
+    </div>
+  </div>
 
-const payload={
-Deltagare:form.Deltagare.value,
-Art:form.Art.value,
-Vikt:form.Vikt.value,
-datum:form.datum.value,
-image:imageBase64
-};
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
+    const form = document.getElementById("form");
+    const success = document.getElementById("success");
+    const imageInput = document.getElementById("image");
+    const uploadText = document.getElementById("uploadText");
 
-await fetch(SCRIPT_URL,{
-method:"POST",
-body:new URLSearchParams(payload)
-});
+    function toBase64(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    }
 
-document.getElementById("success").style.display="block";
-form.reset();
-});
+    function closeAllSelects() {
+      document.querySelectorAll(".custom-select").forEach((s) => {
+        s.classList.remove("open");
+        const options = s.querySelector(".options");
+        if (options) options.style.display = "none";
+      });
+    }
 
-document.querySelectorAll(".custom-select").forEach(select=>{
-const selected=select.querySelector(".selected");
-const options=select.querySelector(".options");
-const hidden=document.querySelector(`input[name="${select.dataset.name}"]`);
+    document.querySelectorAll(".custom-select").forEach((select) => {
+      const selected = select.querySelector(".selected");
+      const options = select.querySelector(".options");
+      const hiddenInput = document.querySelector(`input[name="${select.dataset.name}"]`);
+      const placeholder = select.dataset.placeholder || select.dataset.name;
 
-selected.onclick=()=>{
-options.style.display=options.style.display==="block"?"none":"block";
-};
+      selected.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = select.classList.contains("open");
+        closeAllSelects();
 
-options.querySelectorAll("div").forEach(opt=>{
-opt.onclick=()=>{
-selected.textContent=opt.textContent;
-selected.classList.add("active");
-hidden.value=opt.textContent;
-options.style.display="none";
-};
-});
-});
+        if (!isOpen) {
+          select.classList.add("open");
+          options.style.display = "block";
+        }
+      });
 
-</script>
+      select.querySelector(".field-end").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = select.classList.contains("open");
+        closeAllSelects();
 
+        if (!isOpen) {
+          select.classList.add("open");
+          options.style.display = "block";
+        }
+      });
+
+      options.querySelectorAll("div").forEach((option) => {
+        option.addEventListener("click", () => {
+          selected.textContent = option.textContent;
+          selected.classList.add("active");
+          hiddenInput.value = option.textContent;
+          select.classList.remove("open");
+          options.style.display = "none";
+        });
+      });
+
+      selected.textContent = placeholder;
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".custom-select")) {
+        closeAllSelects();
+      }
+    });
+
+    imageInput.addEventListener("change", () => {
+      if (imageInput.files && imageInput.files[0]) {
+        uploadText.textContent = imageInput.files[0].name;
+      } else {
+        uploadText.textContent = "Välj bild från kameran eller galleri";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const file = imageInput.files[0];
+      let imageBase64 = "";
+
+      if (file) {
+        imageBase64 = await toBase64(file);
+      }
+
+      const payload = {
+        Deltagare: form.Deltagare.value,
+        Art: form.Art.value,
+        Vikt: form.Vikt.value,
+        datum: form.datum.value,
+        image: imageBase64
+      };
+
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: new URLSearchParams(payload)
+      });
+
+      success.classList.add("show");
+      form.reset();
+
+      uploadText.textContent = "Välj bild från kameran eller galleri";
+
+      document.querySelectorAll(".custom-select").forEach((select) => {
+        const selected = select.querySelector(".selected");
+        const placeholder = select.dataset.placeholder || select.dataset.name;
+        selected.textContent = placeholder;
+        selected.classList.remove("active");
+      });
+
+      document.querySelector("input[name='Deltagare']").value = "";
+      document.querySelector("input[name='Art']").value = "";
+    });
+  </script>
 </body>
 </html>
