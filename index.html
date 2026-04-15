@@ -10,6 +10,7 @@
       --text: #f3f4f6;
       --muted: rgba(255, 255, 255, 0.58);
       --orange: #ff8a00;
+      --orange-2: #ff5e00;
       --green: #19d458;
     }
 
@@ -30,9 +31,9 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 18px 10px;
+      padding: 20px 10px;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(0,0,0,0.22)),
+        linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.18)),
         url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
     }
 
@@ -45,66 +46,84 @@
       justify-content: center;
     }
 
-    /* SUNSET-RAM */
+    /* YTTERRAM MED SUNSET */
     .frame {
       width: 100%;
-      max-width: 390px;
-      padding: 10px;
-      border-radius: 34px;
+      max-width: 388px;
+      padding: 8px;
+      border-radius: 32px;
+      position: relative;
       background:
-        linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.08)),
+        linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04)),
         url("images/sunset_background_for_github.jpg") center center / cover no-repeat;
       box-shadow:
-        0 0 25px rgba(255, 140, 0, 0.18),
-        0 20px 50px rgba(0,0,0,0.25);
+        0 0 0 1px rgba(255, 138, 0, 0.92),
+        0 0 18px rgba(255, 138, 0, 0.35),
+        0 0 36px rgba(255, 94, 0, 0.18),
+        0 18px 40px rgba(0,0,0,0.24);
     }
 
-    /* MÖRK INNERPANEL */
+    /* SKARP SMAL GLOW-RAM */
+    .frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 32px;
+      pointer-events: none;
+      box-shadow:
+        inset 0 0 0 1.5px rgba(255, 145, 0, 0.95),
+        0 0 14px rgba(255, 136, 0, 0.32);
+    }
+
+    /* MÖRK PANEL, SMALARE SÅ SUNSET SYNNS UTANFÖR */
     .panel {
       width: 100%;
-      background: linear-gradient(180deg, rgba(5, 16, 34, 0.78), rgba(2, 10, 22, 0.84));
-      border: 1.5px solid rgba(255, 138, 0, 0.35);
-      border-radius: 26px;
-      padding: 14px 12px 16px;
+      background: linear-gradient(180deg, rgba(5, 16, 34, 0.82), rgba(2, 10, 22, 0.88));
+      border: 1px solid rgba(255, 138, 0, 0.18);
+      border-radius: 24px;
+      padding: 12px 10px 14px;
+      margin: 7px;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 8px 24px rgba(0,0,0,0.18);
     }
 
     .logo-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .logo {
-      width: min(100%, 200px);
+      width: min(100%, 188px);
       display: block;
-      border-radius: 26px;
+      border-radius: 24px;
       box-shadow:
-        0 0 14px rgba(255, 136, 0, 0.20),
-        0 0 28px rgba(255, 94, 0, 0.14);
+        0 0 10px rgba(255, 136, 0, 0.18),
+        0 0 20px rgba(255, 94, 0, 0.12);
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
     }
 
     .field,
     .custom-select {
       position: relative;
       display: grid;
-      grid-template-columns: 26px 1fr 20px;
+      grid-template-columns: 24px 1fr 18px;
       align-items: center;
-      gap: 10px;
-      min-height: 58px;
-      padding: 9px 11px;
-      border-radius: 16px;
-      background: linear-gradient(90deg, rgba(2, 11, 23, 0.78), rgba(3, 18, 38, 0.68));
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+      gap: 9px;
+      min-height: 54px;
+      padding: 8px 10px;
+      border-radius: 15px;
+      background: linear-gradient(90deg, rgba(2, 11, 23, 0.88), rgba(3, 18, 38, 0.78));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 5px 14px rgba(0,0,0,0.14);
     }
 
     .field-icon,
@@ -121,8 +140,8 @@
 
     .field-icon svg,
     .field-end svg {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       stroke: currentColor;
     }
 
@@ -134,7 +153,7 @@
       font-size: 10px;
       font-weight: 700;
       color: rgba(255,255,255,0.92);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .field input[type="number"],
@@ -145,7 +164,7 @@
       border: 0;
       background: transparent;
       color: var(--text);
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.1;
       outline: none;
       padding: 0;
@@ -185,23 +204,23 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: calc(100% + 8px);
-      background: rgba(6, 15, 28, 0.94);
-      border: 1px solid rgba(255, 138, 0, 0.22);
+      top: calc(100% + 6px);
+      background: rgba(6, 15, 28, 0.96);
+      border: 1px solid rgba(255, 138, 0, 0.24);
       border-radius: 14px;
       overflow: hidden;
       z-index: 1000;
       box-shadow:
-        0 0 16px rgba(255, 138, 0, 0.10),
-        0 14px 30px rgba(0,0,0,0.24);
-      max-height: 180px;
+        0 0 14px rgba(255, 138, 0, 0.10),
+        0 10px 24px rgba(0,0,0,0.22);
+      max-height: 170px;
       overflow-y: auto;
       backdrop-filter: blur(10px);
     }
 
     .options div {
-      padding: 10px 12px;
-      font-size: 14px;
+      padding: 9px 10px;
+      font-size: 13px;
       color: #f3f4f6;
       border-top: 1px solid rgba(255,255,255,0.05);
       text-align: center;
@@ -226,36 +245,36 @@
 
     .upload-text {
       color: rgba(255,255,255,0.92);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
     }
 
     .upload-subtext {
-      margin-top: 4px;
+      margin-top: 3px;
       color: var(--muted);
-      font-size: 11px;
-      line-height: 1.25;
+      font-size: 10px;
+      line-height: 1.2;
     }
 
     .submit-btn {
-      margin-top: 4px;
-      height: 50px;
+      margin-top: 3px;
+      height: 46px;
       border: 0;
-      border-radius: 16px;
-      font-size: 18px;
+      border-radius: 15px;
+      font-size: 17px;
       font-weight: 800;
       color: white;
       cursor: pointer;
       background: linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.18),
-        0 0 18px rgba(28, 209, 79, 0.18),
-        0 8px 18px rgba(0,0,0,0.20);
+        0 0 12px rgba(28, 209, 79, 0.18),
+        0 6px 14px rgba(0,0,0,0.20);
       transition: transform 0.15s ease, filter 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .submit-btn:hover {
@@ -264,23 +283,23 @@
     }
 
     .submit-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       stroke: white;
       flex: 0 0 auto;
     }
 
     .success {
       display: none;
-      margin-top: 12px;
+      margin-top: 10px;
       color: var(--green);
       font-weight: 700;
-      font-size: 18px;
+      font-size: 17px;
       text-align: center;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      text-shadow: 0 0 12px rgba(25, 212, 88, 0.22);
+      gap: 7px;
+      text-shadow: 0 0 10px rgba(25, 212, 88, 0.22);
     }
 
     .success.show {
@@ -288,8 +307,8 @@
     }
 
     .success svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
     }
 
@@ -299,34 +318,35 @@
       }
 
       .frame {
-        max-width: 372px;
-        padding: 8px;
+        max-width: 368px;
+        padding: 7px;
       }
 
       .panel {
-        padding: 13px 10px 14px;
+        margin: 6px;
+        padding: 11px 9px 13px;
       }
 
       .logo {
-        width: min(100%, 185px);
+        width: min(100%, 176px);
       }
 
       .field,
       .custom-select {
-        min-height: 54px;
-        padding: 8px 10px;
+        min-height: 50px;
+        padding: 7px 9px;
         gap: 8px;
       }
 
       .field input[type="number"],
       .field input[type="text"],
       .selected {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       .submit-btn {
-        height: 46px;
-        font-size: 17px;
+        height: 43px;
+        font-size: 16px;
       }
     }
   </style>
