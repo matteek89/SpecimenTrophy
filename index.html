@@ -10,7 +10,6 @@
   --text:#f3f4f6;
   --muted:rgba(255,255,255,.58);
   --orange:#ff9800;
-  --orange2:#ff6a00;
   --green:#19d458;
 }
 
@@ -29,7 +28,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:flex-start;
-  padding:12px 8px;
+  padding:10px 8px;
   background:
     linear-gradient(rgba(4,8,16,.34),rgba(4,8,16,.56)),
     url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
@@ -155,6 +154,10 @@ form{
     transform .18s ease;
 }
 
+.field.compact-rightless{
+  grid-template-columns:26px 1fr;
+}
+
 .field:hover,
 .custom-select:hover{
   border-color:rgba(255,153,0,.18);
@@ -187,13 +190,6 @@ form{
   color:rgba(255,255,255,.86);
 }
 
-.field-icon svg,
-.field-end svg{
-  width:18px;
-  height:18px;
-  stroke:currentColor;
-}
-
 .field-body{
   min-width:0;
   display:flex;
@@ -212,11 +208,12 @@ form{
 
 .field input[type="number"],
 .field input[type="text"],
+.field input[type="date"],
 .selected,
 .upload-text{
   width:100%;
   border:0;
-  background:transparent;
+  background:transparent !important;
   color:var(--text);
   font-size:16px;
   line-height:1.2;
@@ -227,6 +224,9 @@ form{
   min-height:20px;
   display:flex;
   align-items:center;
+  appearance:none;
+  -webkit-appearance:none;
+  box-shadow:none;
 }
 
 .field input[type="date"]{
@@ -236,6 +236,20 @@ form{
 .field input::placeholder{
   color:var(--muted);
   opacity:1;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#f3f4f6;
+  transition:background-color 5000s ease-in-out 0s;
+  box-shadow:0 0 0px 1000px transparent inset;
 }
 
 .selected{
@@ -381,13 +395,6 @@ form{
     0 10px 20px rgba(0,0,0,.24);
 }
 
-.submit-btn svg{
-  width:20px;
-  height:20px;
-  stroke:white;
-  flex:0 0 auto;
-}
-
 .success{
   display:none;
   margin-top:10px;
@@ -407,28 +414,11 @@ form{
   display:flex;
 }
 
-.success svg{
-  width:20px;
-  height:20px;
-  stroke:currentColor;
-}
-
 .date-field{
   cursor:pointer;
 }
 
-.date-field input[type=date]{
-  width:100%;
-  background:transparent;
-  border:none;
-  color:white;
-  font-size:16px;
-  outline:none;
-  color-scheme:dark;
-  cursor:pointer;
-}
-
-.date-field input::-webkit-calendar-picker-indicator{
+.date-field input[type=date]::-webkit-calendar-picker-indicator{
   opacity:0;
   position:absolute;
   width:100%;
@@ -467,9 +457,9 @@ form{
 
   .field input[type="number"],
   .field input[type="text"],
+  .field input[type="date"],
   .selected,
-  .upload-text,
-  .date-field input[type=date]{
+  .upload-text{
     font-size:16px;
   }
 
@@ -550,23 +540,21 @@ form{
           <div></div>
         </div>
 
-        <label class="field date-field">
+        <label class="field date-field compact-rightless">
           <div class="field-icon">📅</div>
           <div class="field-body">
             <div class="field-label">Datum</div>
             <input type="date" id="datum" name="datum" required>
           </div>
-          <div class="field-end white">📆</div>
         </label>
 
-        <label class="field upload-field" for="image">
+        <label class="field upload-field compact-rightless" for="image">
           <div class="field-icon">📷</div>
           <div class="field-body">
             <div class="field-label">Bild</div>
             <div class="upload-text">Lägg till bild</div>
             <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
           </div>
-          <div class="field-end white">⬆</div>
         </label>
         <input type="file" id="image" class="file-input" accept="image/*">
 
