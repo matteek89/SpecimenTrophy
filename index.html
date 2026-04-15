@@ -186,21 +186,6 @@ form{
   align-self:center;
 }
 
-.field-end.white{
-  color:rgba(255,255,255,.86);
-}
-
-.field-icon svg,
-.field-end svg{
-  width:18px;
-  height:18px;
-  stroke:currentColor;
-  fill:none;
-  stroke-width:2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
 .field-body{
   min-width:0;
   display:flex;
@@ -215,6 +200,17 @@ form{
   color:rgba(255,255,255,.92);
   margin-bottom:4px;
   line-height:1;
+}
+
+.field-icon svg,
+.field-end svg{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 
 .field input[type="number"],
@@ -384,31 +380,11 @@ input:-webkit-autofill:focus{
   gap:8px;
   position:relative;
   z-index:1;
-  animation:buttonPulse 2.2s ease-in-out infinite;
-}
-
-@keyframes buttonPulse{
-  0%,100%{
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.18),
-      0 0 12px rgba(28,209,79,.22),
-      0 8px 18px rgba(0,0,0,.22);
-  }
-  50%{
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.18),
-      0 0 18px rgba(28,209,79,.30),
-      0 8px 18px rgba(0,0,0,.22);
-  }
 }
 
 .submit-btn:hover{
   transform:translateY(-1px);
   filter:brightness(1.03);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    0 0 16px rgba(28,209,79,.26),
-    0 10px 20px rgba(0,0,0,.24);
 }
 
 .success{
@@ -442,6 +418,14 @@ input:-webkit-autofill:focus{
   cursor:pointer;
   left:0;
   top:0;
+}
+
+.invalid-field{
+  border-color:rgba(255, 80, 80, .9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 0 0 1px rgba(255,80,80,.18),
+    0 0 14px rgba(255,80,80,.14) !important;
 }
 
 @media (max-width:420px){
@@ -498,9 +482,9 @@ input:-webkit-autofill:focus{
         <img src="images/logo.png" alt="Specimen Trophy" class="logo">
       </div>
 
-      <form id="form">
+      <form id="form" novalidate>
 
-        <div class="custom-select" data-name="Deltagare" data-placeholder="Välj deltagare">
+        <div class="custom-select" data-name="Deltagare" data-placeholder="Välj deltagare" id="deltagareField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M20 21a8 8 0 0 0-16 0"></path>
@@ -538,7 +522,7 @@ input:-webkit-autofill:focus{
         </div>
         <input type="hidden" name="Deltagare" required>
 
-        <div class="custom-select" data-name="Art" data-placeholder="Välj art">
+        <div class="custom-select" data-name="Art" data-placeholder="Välj art" id="artField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M3 12s3-4 9-4 9 4 9 4-3 4-9 4-9-4-9-4Z"></path>
@@ -570,7 +554,7 @@ input:-webkit-autofill:focus{
         </div>
         <input type="hidden" name="Art" required>
 
-        <div class="field">
+        <div class="field" id="viktField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M6 5h12"></path>
@@ -581,12 +565,12 @@ input:-webkit-autofill:focus{
           </div>
           <div class="field-body">
             <div class="field-label">Vikt (gram)</div>
-            <input type="number" name="Vikt" placeholder="Ange vikt" required>
+            <input type="number" name="Vikt" id="viktInput" placeholder="Ange vikt" required>
           </div>
           <div></div>
         </div>
 
-        <label class="field date-field compact-rightless">
+        <label class="field date-field compact-rightless" id="datumField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <rect x="3" y="4" width="18" height="18" rx="2"></rect>
@@ -601,7 +585,7 @@ input:-webkit-autofill:focus{
           </div>
         </label>
 
-        <label class="field upload-field compact-rightless" for="image">
+        <label class="field upload-field compact-rightless" for="image" id="bildField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <rect x="3" y="5" width="18" height="14" rx="2"></rect>
@@ -615,7 +599,7 @@ input:-webkit-autofill:focus{
             <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
           </div>
         </label>
-        <input type="file" id="image" class="file-input" accept="image/*">
+        <input type="file" id="image" class="file-input" accept="image/*" required>
 
         <button type="submit" class="submit-btn">SPARA</button>
 
@@ -635,6 +619,14 @@ const success=document.getElementById("success");
 const imageInput=document.getElementById("image");
 const uploadText=document.getElementById("uploadText");
 
+const deltagareField=document.getElementById("deltagareField");
+const artField=document.getElementById("artField");
+const viktField=document.getElementById("viktField");
+const datumField=document.getElementById("datumField");
+const bildField=document.getElementById("bildField");
+const viktInput=document.getElementById("viktInput");
+const datumInput=document.getElementById("datum");
+
 function toBase64(file){
   return new Promise(resolve=>{
     const reader=new FileReader();
@@ -649,6 +641,17 @@ function closeAllSelects(){
     const options=s.querySelector(".options");
     if(options) options.style.display="none";
   });
+}
+
+function clearInvalidStates(){
+  [deltagareField, artField, viktField, datumField, bildField].forEach(el=>{
+    el.classList.remove("invalid-field");
+  });
+}
+
+function showValidationMessage(targetField){
+  targetField.classList.add("invalid-field");
+  alert("Fyll i detta fält");
 }
 
 document.querySelectorAll(".custom-select").forEach(select=>{
@@ -675,6 +678,7 @@ document.querySelectorAll(".custom-select").forEach(select=>{
       selected.textContent=option.textContent;
       selected.classList.add("active");
       hidden.value=option.textContent;
+      select.classList.remove("invalid-field");
       select.classList.remove("open");
       options.style.display="none";
     };
@@ -690,27 +694,56 @@ document.addEventListener("click",e=>{
 });
 
 const dateField=document.querySelector(".date-field");
-const dateInput=document.getElementById("datum");
 
 dateField.addEventListener("click",()=>{
-  if(dateInput.showPicker){
-    dateInput.showPicker();
+  if(datumInput.showPicker){
+    datumInput.showPicker();
   }else{
-    dateInput.focus();
-    dateInput.click();
+    datumInput.focus();
+    datumInput.click();
   }
 });
 
 imageInput.addEventListener("change",()=>{
   if(imageInput.files && imageInput.files[0]){
     uploadText.textContent=imageInput.files[0].name;
+    bildField.classList.remove("invalid-field");
   }else{
     uploadText.textContent="Välj bild från kameran eller galleri";
   }
 });
 
+viktInput.addEventListener("input",()=>viktField.classList.remove("invalid-field"));
+datumInput.addEventListener("input",()=>datumField.classList.remove("invalid-field"));
+
 form.addEventListener("submit",async e=>{
   e.preventDefault();
+  clearInvalidStates();
+
+  if(!form.Deltagare.value){
+    showValidationMessage(deltagareField);
+    return;
+  }
+
+  if(!form.Art.value){
+    showValidationMessage(artField);
+    return;
+  }
+
+  if(!form.Vikt.value){
+    showValidationMessage(viktField);
+    return;
+  }
+
+  if(!form.datum.value){
+    showValidationMessage(datumField);
+    return;
+  }
+
+  if(!imageInput.files || !imageInput.files[0]){
+    showValidationMessage(bildField);
+    return;
+  }
 
   const file=imageInput.files[0];
   let imageBase64="";
@@ -745,6 +778,7 @@ form.addEventListener("submit",async e=>{
 
   document.querySelector("input[name='Deltagare']").value="";
   document.querySelector("input[name='Art']").value="";
+  clearInvalidStates();
 });
 </script>
 </body>
