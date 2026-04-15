@@ -7,20 +7,13 @@
 
   <style>
     :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --primary: #2563eb;
-      --border: #e5e7eb;
-    }
-
-    body.dark {
-      --bg: #0b1220;
-      --card: #111827;
+      --bg: #0b0f14;
+      --card: rgba(17, 24, 39, 0.85);
       --text: #f9fafb;
       --muted: #9ca3af;
-      --border: #1f2937;
+      --primary: #ff7a18;
+      --primary2: #ff3d00;
+      --border: rgba(255,255,255,0.08);
     }
 
     * {
@@ -29,68 +22,73 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 30px 16px;
-      transition: 0.3s;
+      padding: 40px 16px;
+      overflow-x: hidden;
+
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 122, 24, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255, 61, 0, 0.18), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255, 122, 24, 0.12), transparent 50%),
+        linear-gradient(180deg, #05070a, #0b0f14);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -200px;
+      left: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,122,24,0.25), transparent 60%);
+      filter: blur(60px);
+      animation: floatGlow 8s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes floatGlow {
+      from { transform: translate(0,0); }
+      to { transform: translate(120px,80px); }
     }
 
     .container {
       width: 100%;
-      max-width: 540px;
-    }
-
-    /* NAV */
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding: 10px 4px;
-    }
-
-    .nav h1 {
-      font-size: 16px;
-      margin: 0;
-      font-weight: 600;
-    }
-
-    .toggle {
-      cursor: pointer;
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--card);
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
     }
 
     /* HEADER */
     .header {
       text-align: center;
-      margin-bottom: 20px;
-      animation: fade 0.6s ease;
+      margin-bottom: 24px;
     }
 
     .logo {
       max-width: 260px;
       width: 100%;
       border-radius: 14px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      box-shadow:
+        0 0 30px rgba(255, 122, 24, 0.25),
+        0 0 80px rgba(255, 61, 0, 0.12);
     }
 
-    /* CARD */
+    /* FORM */
     form {
       background: var(--card);
+      backdrop-filter: blur(12px);
       padding: 22px;
       border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+      box-shadow:
+        0 0 40px rgba(255, 122, 24, 0.08),
+        0 20px 60px rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
       gap: 14px;
-      animation: fade 0.6s ease;
     }
 
     input {
@@ -99,37 +97,40 @@
       border: 1px solid var(--border);
       text-align: center;
       font-size: 15px;
-      background: transparent;
+      background: rgba(0,0,0,0.2);
       color: var(--text);
       outline: none;
-      transition: 0.2s;
+      transition: 0.25s;
     }
 
     input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+      box-shadow:
+        0 0 0 3px rgba(255, 122, 24, 0.2),
+        0 0 20px rgba(255, 122, 24, 0.15);
     }
 
     button {
       padding: 14px;
       border-radius: 12px;
       border: none;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      color: white;
+      font-weight: 700;
+      transition: 0.25s;
+      box-shadow: 0 0 25px rgba(255, 122, 24, 0.25);
     }
 
     button:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 40px rgba(255, 122, 24, 0.4);
     }
 
     .success {
       display: none;
       text-align: center;
-      margin-top: 14px;
+      margin-top: 12px;
       color: #22c55e;
       font-weight: 600;
     }
@@ -146,42 +147,51 @@
       text-align: center;
       cursor: pointer;
       color: var(--muted);
-      background: transparent;
+      background: rgba(0,0,0,0.25);
+      transition: 0.25s;
     }
 
     .selected.active {
       color: var(--text);
     }
 
+    .selected:hover {
+      box-shadow: 0 0 25px rgba(255, 122, 24, 0.15);
+      border-color: rgba(255,122,24,0.4);
+    }
+
     .options {
       display: none;
       position: absolute;
       width: 100%;
-      background: var(--card);
+      background: rgba(17, 24, 39, 0.95);
       border: 1px solid var(--border);
       border-radius: 12px;
       margin-top: 8px;
       max-height: 220px;
       overflow-y: auto;
       z-index: 999;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      animation: fade 0.2s ease;
+      box-shadow: 0 0 30px rgba(255, 122, 24, 0.12);
     }
 
     .options div {
       padding: 12px;
       text-align: center;
       cursor: pointer;
+      transition: 0.2s;
     }
 
     .options div:hover {
-      background: rgba(37,99,235,0.1);
+      background: rgba(255, 122, 24, 0.15);
     }
 
-    /* ANIMATION */
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .options::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .options::-webkit-scrollbar-thumb {
+      background: rgba(255,122,24,0.4);
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -190,20 +200,12 @@
 
 <div class="container">
 
-  <!-- NAV -->
-  <div class="nav">
-    <h1>Specimen Trophy</h1>
-    <div class="toggle" onclick="toggleDark()">🌙 / ☀️</div>
-  </div>
-
-  <!-- HEADER -->
   <div class="header">
-    <img src="images/logo.png" class="logo">
+    <img src="images/logo.png" alt="Specimen Trophy" class="logo">
   </div>
 
   <form id="form">
 
-    <!-- Deltagare -->
     <div class="custom-select" data-name="Deltagare">
       <div class="selected">Deltagare</div>
       <div class="options">
@@ -217,11 +219,17 @@
         <div>Sonny Pettersson</div>
         <div>Christian Rebello</div>
         <div>Patrik Byström</div>
+        <div>Jonny Jansson</div>
+        <div>Kent Boström</div>
+        <div>Mattias Roming</div>
+        <div>Anton Lundholm</div>
+        <div>Robban Lager</div>
+        <div>Jonatan Boström</div>
+        <div>Anders Wimmerstedt</div>
       </div>
     </div>
     <input type="hidden" name="Deltagare">
 
-    <!-- Art -->
     <div class="custom-select" data-name="Art">
       <div class="selected">Art</div>
       <div class="options">
@@ -230,7 +238,9 @@
         <div>Id</div>
         <div>Mört</div>
         <div>Ruda</div>
+        <div>Sarv</div>
         <div>Sutare</div>
+        <div>Vimma</div>
       </div>
     </div>
     <input type="hidden" name="Art">
@@ -251,9 +261,6 @@
 </div>
 
 <script>
-function toggleDark() {
-  document.body.classList.toggle("dark");
-}
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
 
@@ -306,6 +313,7 @@ document.querySelectorAll(".custom-select").forEach(select => {
     };
   });
 });
+
 </script>
 
 </body>
