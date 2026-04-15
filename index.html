@@ -31,7 +31,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 14px 8px;
+      padding: 12px 8px;
       background:
         linear-gradient(rgba(4, 8, 16, 0.40), rgba(4, 8, 16, 0.58)),
         url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
@@ -141,8 +141,8 @@
       grid-template-columns: 26px 1fr 20px;
       align-items: center;
       gap: 10px;
-      min-height: 62px;
-      padding: 10px 11px;
+      min-height: 66px;
+      padding: 11px 12px;
       border-radius: 16px;
       background:
         linear-gradient(90deg, rgba(2, 11, 23, 0.95), rgba(3, 18, 38, 0.88));
@@ -177,6 +177,7 @@
       align-items: center;
       justify-content: center;
       color: var(--orange);
+      align-self: center;
     }
 
     .field-end.white {
@@ -192,13 +193,18 @@
 
     .field-body {
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 40px;
     }
 
     .field-label {
       font-size: 11px;
       font-weight: 700;
       color: rgba(255,255,255,0.92);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+      line-height: 1;
     }
 
     .field input[type="number"],
@@ -210,11 +216,18 @@
       background: transparent;
       color: var(--text);
       font-size: 16px;
-      line-height: 1.15;
+      line-height: 1.2;
       outline: none;
       padding: 0;
       margin: 0;
       font-weight: 500;
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .field input[type="date"] {
+      color-scheme: dark;
     }
 
     .field input::placeholder {
@@ -295,20 +308,20 @@
 
     .upload-text {
       color: rgba(255,255,255,0.92);
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 600;
     }
 
     .upload-subtext {
-      margin-top: 3px;
+      margin-top: 4px;
       color: var(--muted);
       font-size: 11px;
-      line-height: 1.25;
+      line-height: 1.3;
     }
 
     .submit-btn {
       margin-top: 4px;
-      height: 52px;
+      height: 54px;
       border: 0;
       border-radius: 16px;
       font-size: 18px;
@@ -372,7 +385,7 @@
 
     @media (max-width: 420px) {
       body {
-        padding: 12px 8px;
+        padding: 10px 8px;
       }
 
       .page {
@@ -394,14 +407,15 @@
 
       .field,
       .custom-select {
-        min-height: 64px;
-        padding: 10px 11px;
+        min-height: 66px;
+        padding: 11px 12px;
         gap: 10px;
       }
 
       .field input[type="number"],
       .field input[type="text"],
-      .selected {
+      .selected,
+      .upload-text {
         font-size: 16px;
       }
 
@@ -560,7 +574,8 @@
             </div>
 
             <div class="field-body">
-              <div class="upload-text">Lägg till bild (valfritt)</div>
+              <div class="field-label">Bild</div>
+              <div class="upload-text">Lägg till bild</div>
               <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
             </div>
 
