@@ -26,7 +26,6 @@
       box-shadow: 0 0 40px rgba(0,0,0,0.6);
     }
 
-    /* LOGGA */
     .header {
       text-align: center;
       margin-bottom: 10px;
@@ -45,7 +44,7 @@
       gap: 12px;
     }
 
-    input, select {
+    input {
       padding: 14px;
       border-radius: 12px;
       border: none;
@@ -56,10 +55,6 @@
     }
 
     input::placeholder {
-      color: #9ca3af;
-    }
-
-    select {
       color: #9ca3af;
     }
 
@@ -86,6 +81,87 @@
       color: #4ade80;
       font-weight: bold;
     }
+
+    /* PREMIUM DROPDOWN */
+
+    .custom-select {
+      position: relative;
+    }
+
+    .selected {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(17, 24, 39, 0.9);
+      color: #9ca3af;
+      text-align: center;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    .selected::after {
+      content: "▼";
+      position: absolute;
+      right: 14px;
+      font-size: 12px;
+      color: #6b7280;
+      transition: transform 0.3s ease;
+    }
+
+    .custom-select.open .selected::after {
+      transform: rotate(180deg);
+    }
+
+    .selected.active {
+      color: white;
+    }
+
+    .selected:hover {
+      box-shadow: 0 0 15px rgba(255,140,0,0.2);
+    }
+
+    .options {
+      display: none;
+      position: absolute;
+      width: 100%;
+      background: rgba(31, 41, 55, 0.95);
+      border-radius: 14px;
+      margin-top: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.05);
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .options div {
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    .options div:hover {
+      background: rgba(255,140,0,0.2);
+    }
+
+    .options::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .options::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+    }
   </style>
 </head>
 
@@ -99,38 +175,46 @@
 
   <form id="form">
 
-    <select name="Deltagare" required>
-      <option value="">Deltagare</option>
-      <option>Lars Boström</option>
-      <option>Oliver Jansson</option>
-      <option>Anders Boström</option>
-      <option>Stefan Widh</option>
-      <option>Roger Norling</option>
-      <option>Micke Karlsson</option>
-      <option>Emil Larsson</option>
-      <option>Sonny Pettersson</option>
-      <option>Christian Rebello</option>
-      <option>Patrik Byström</option>
-      <option>Jonny Jansson</option>
-      <option>Kent Boström</option>
-      <option>Mattias Roming</option>
-      <option>Anton Lundholm</option>
-      <option>Robban Lager</option>
-      <option>Jonatan Boström</option>
-      <option>Anders Wimmerstedt</option>
-    </select>
+    <!-- Deltagare -->
+    <div class="custom-select" data-name="Deltagare">
+      <div class="selected">Deltagare</div>
+      <div class="options">
+        <div>Lars Boström</div>
+        <div>Oliver Jansson</div>
+        <div>Anders Boström</div>
+        <div>Stefan Widh</div>
+        <div>Roger Norling</div>
+        <div>Micke Karlsson</div>
+        <div>Emil Larsson</div>
+        <div>Sonny Pettersson</div>
+        <div>Christian Rebello</div>
+        <div>Patrik Byström</div>
+        <div>Jonny Jansson</div>
+        <div>Kent Boström</div>
+        <div>Mattias Roming</div>
+        <div>Anton Lundholm</div>
+        <div>Robban Lager</div>
+        <div>Jonatan Boström</div>
+        <div>Anders Wimmerstedt</div>
+      </div>
+    </div>
+    <input type="hidden" name="Deltagare" required>
 
-    <select name="Art" required>
-      <option value="">Art</option>
-      <option>Björkna</option>
-      <option>Brax</option>
-      <option>Id</option>
-      <option>Mört</option>
-      <option>Ruda</option>
-      <option>Sarv</option>
-      <option>Sutare</option>
-      <option>Vimma</option>
-    </select>
+    <!-- Art -->
+    <div class="custom-select" data-name="Art">
+      <div class="selected">Art</div>
+      <div class="options">
+        <div>Björkna</div>
+        <div>Brax</div>
+        <div>Id</div>
+        <div>Mört</div>
+        <div>Ruda</div>
+        <div>Sarv</div>
+        <div>Sutare</div>
+        <div>Vimma</div>
+      </div>
+    </div>
+    <input type="hidden" name="Art" required>
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
@@ -184,6 +268,52 @@ document.getElementById("form").addEventListener("submit", async (e) => {
 
   document.getElementById("success").style.display = "block";
   form.reset();
+
+  // reset dropdown text
+  document.querySelectorAll(".selected").forEach(el => {
+    el.textContent = el.parentElement.dataset.name;
+    el.classList.remove("active");
+  });
+});
+
+document.querySelectorAll(".custom-select").forEach(select => {
+  const selected = select.querySelector(".selected");
+  const options = select.querySelector(".options");
+  const hiddenInput = document.querySelector(`input[name="${select.dataset.name}"]`);
+
+  selected.addEventListener("click", () => {
+    const isOpen = select.classList.contains("open");
+
+    document.querySelectorAll(".custom-select").forEach(s => {
+      s.classList.remove("open");
+      s.querySelector(".options").style.display = "none";
+    });
+
+    if (!isOpen) {
+      select.classList.add("open");
+      options.style.display = "block";
+    }
+  });
+
+  options.querySelectorAll("div").forEach(option => {
+    option.addEventListener("click", () => {
+      selected.textContent = option.textContent;
+      selected.classList.add("active");
+      hiddenInput.value = option.textContent;
+
+      select.classList.remove("open");
+      options.style.display = "none";
+    });
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".custom-select")) {
+    document.querySelectorAll(".custom-select").forEach(s => {
+      s.classList.remove("open");
+      s.querySelector(".options").style.display = "none";
+    });
+  }
 });
 
 </script>
