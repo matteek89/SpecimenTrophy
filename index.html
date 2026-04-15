@@ -1,729 +1,704 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Specimen Trophy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specimen Trophy</title>
 
-  <style>
-    :root {
-      --text: #f3f4f6;
-      --muted: rgba(255, 255, 255, 0.58);
-      --orange: #ff9800;
-      --orange-2: #ff6a00;
-      --green: #19d458;
-    }
+<style>
+:root{
+  --text:#f3f4f6;
+  --muted:rgba(255,255,255,.58);
+  --orange:#ff9800;
+  --orange2:#ff6a00;
+  --green:#19d458;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+*{box-sizing:border-box}
 
-    html, body {
-      min-height: 100%;
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      overflow-x: hidden;
-    }
+html,body{
+  min-height:100%;
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--text);
+  overflow-x:hidden;
+}
 
-    body {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 12px 8px;
-      background:
-        linear-gradient(rgba(4, 8, 16, 0.40), rgba(4, 8, 16, 0.58)),
-        url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
-    }
+body{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:12px 8px;
+  background:
+    linear-gradient(rgba(4,8,16,.34),rgba(4,8,16,.56)),
+    url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
+}
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 145, 0, 0.10), transparent 24%),
-        radial-gradient(circle at 85% 30%, rgba(255, 128, 0, 0.08), transparent 18%),
-        radial-gradient(circle at 15% 20%, rgba(30, 60, 110, 0.18), transparent 24%);
-      z-index: 0;
-    }
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,145,0,.12), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(255,120,0,.10), transparent 18%),
+    radial-gradient(circle at 20% 20%, rgba(255,170,70,.06), transparent 24%),
+    linear-gradient(to bottom, rgba(255,140,0,.03), transparent 25%);
+}
 
-    .page {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      display: flex;
-      justify-content: center;
-    }
+.page{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:430px;
+  display:flex;
+  justify-content:center;
+}
 
-    .frame {
-      width: 100%;
-      max-width: 370px;
-      padding: 4px;
-      border-radius: 26px;
-      position: relative;
-      background: linear-gradient(180deg, rgba(255, 153, 0, 0.95), rgba(255, 106, 0, 0.82));
-      box-shadow:
-        0 0 0 1px rgba(255, 153, 0, 0.96),
-        0 0 10px rgba(255, 145, 0, 0.28),
-        0 0 20px rgba(255, 106, 0, 0.10),
-        0 14px 28px rgba(0,0,0,0.24);
-    }
+.frame{
+  width:100%;
+  max-width:370px;
+  padding:4px;
+  border-radius:26px;
+  position:relative;
+  background:linear-gradient(180deg, rgba(255,153,0,.95), rgba(255,106,0,.82));
+  box-shadow:
+    0 0 0 1px rgba(255,153,0,.96),
+    0 0 10px rgba(255,145,0,.28),
+    0 0 20px rgba(255,106,0,.10),
+    0 14px 28px rgba(0,0,0,.24);
+}
 
-    .frame::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 26px;
-      pointer-events: none;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,170,40,0.92),
-        0 0 6px rgba(255,153,0,0.12);
-    }
+.frame::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,170,40,.92),
+    0 0 6px rgba(255,153,0,.12);
+}
 
-    .panel {
-      width: 100%;
-      background:
-        linear-gradient(180deg, rgba(5, 16, 34, 0.90), rgba(2, 10, 22, 0.95));
-      border: 1px solid rgba(255, 138, 0, 0.14);
-      border-radius: 22px;
-      padding: 12px 10px 14px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.04),
-        0 8px 20px rgba(0,0,0,0.20);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      position: relative;
-      overflow: visible;
-    }
+.panel{
+  width:100%;
+  background:
+    linear-gradient(180deg, rgba(5,16,34,.90), rgba(2,10,22,.95));
+  border:1px solid rgba(255,138,0,.14);
+  border-radius:22px;
+  padding:12px 10px 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 20px rgba(0,0,0,.20);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  position:relative;
+  overflow:visible;
+}
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.04), transparent 18%, transparent 82%, rgba(255,153,0,0.03));
-      border-radius: 22px;
-    }
+.panel::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:22px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(255,153,0,.03));
+}
 
-    .logo-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 1;
-    }
+.logo-wrap{
+  display:flex;
+  justify-content:center;
+  margin-bottom:12px;
+  position:relative;
+  z-index:1;
+}
 
-    .logo {
-      width: min(100%, 180px);
-      display: block;
-      border-radius: 22px;
-      box-shadow:
-        0 0 10px rgba(255, 153, 0, 0.22),
-        0 0 22px rgba(255, 106, 0, 0.12);
-    }
+.logo{
+  width:min(100%,180px);
+  display:block;
+  border-radius:22px;
+  box-shadow:
+    0 0 10px rgba(255,153,0,.22),
+    0 0 22px rgba(255,106,0,.12);
+}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: relative;
-      z-index: 2;
-    }
+form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  position:relative;
+  z-index:2;
+}
 
-    .field,
-    .custom-select {
-      position: relative;
-      display: grid;
-      grid-template-columns: 26px 1fr 20px;
-      align-items: center;
-      gap: 10px;
-      min-height: 66px;
-      padding: 11px 12px;
-      border-radius: 16px;
-      background:
-        linear-gradient(90deg, rgba(2, 11, 23, 0.95), rgba(3, 18, 38, 0.88));
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.03),
-        0 6px 14px rgba(0,0,0,0.14);
-      transition: box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
+.field,
+.custom-select{
+  position:relative;
+  display:grid;
+  grid-template-columns:26px 1fr 20px;
+  align-items:center;
+  gap:10px;
+  min-height:66px;
+  padding:11px 12px;
+  border-radius:16px;
+  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88));
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 6px 14px rgba(0,0,0,.14);
+  transition:
+    box-shadow .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
 
-    .field:hover,
-    .custom-select:hover {
-      border-color: rgba(255, 153, 0, 0.18);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.03),
-        0 8px 18px rgba(0,0,0,0.16),
-        0 0 12px rgba(255,145,0,0.08);
-    }
+.field:hover,
+.custom-select:hover{
+  border-color:rgba(255,153,0,.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 8px 18px rgba(0,0,0,.16),
+    0 0 12px rgba(255,145,0,.08);
+  transform:translateY(-1px);
+}
 
-    .custom-select {
-      cursor: pointer;
-      z-index: 20;
-    }
+.custom-select{
+  cursor:pointer;
+  z-index:20;
+}
 
-    .custom-select.open {
-      z-index: 30;
-    }
+.custom-select.open{
+  z-index:30;
+}
 
-    .field-icon,
-    .field-end {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--orange);
-      align-self: center;
-    }
+.field-icon,
+.field-end{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--orange);
+  align-self:center;
+}
 
-    .field-end.white {
-      color: rgba(255,255,255,0.86);
-    }
+.field-end.white{
+  color:rgba(255,255,255,.86);
+}
 
-    .field-icon svg,
-    .field-end svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-    }
+.field-icon svg,
+.field-end svg{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+}
 
-    .field-body {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 40px;
-    }
+.field-body{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:40px;
+}
 
-    .field-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.92);
-      margin-bottom: 4px;
-      line-height: 1;
-    }
+.field-label{
+  font-size:11px;
+  font-weight:700;
+  color:rgba(255,255,255,.92);
+  margin-bottom:4px;
+  line-height:1;
+}
 
-    .field input[type="number"],
-    .field input[type="text"],
-    .selected,
-    .upload-text {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      font-size: 16px;
-      line-height: 1.2;
-      outline: none;
-      padding: 0;
-      margin: 0;
-      font-weight: 500;
-      min-height: 20px;
-      display: flex;
-      align-items: center;
-    }
+.field input[type="number"],
+.field input[type="text"],
+.selected,
+.upload-text{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:var(--text);
+  font-size:16px;
+  line-height:1.2;
+  outline:none;
+  padding:0;
+  margin:0;
+  font-weight:500;
+  min-height:20px;
+  display:flex;
+  align-items:center;
+}
 
-    .field input[type="date"] {
-      color-scheme: dark;
-    }
+.field input[type="date"]{
+  color-scheme:dark;
+}
 
-    .field input::placeholder {
-      color: var(--muted);
-      opacity: 1;
-    }
+.field input::placeholder{
+  color:var(--muted);
+  opacity:1;
+}
 
-    .selected {
-      color: var(--muted);
-      cursor: pointer;
-      user-select: none;
-    }
+.selected{
+  color:var(--muted);
+  cursor:pointer;
+  user-select:none;
+}
 
-    .selected.active {
-      color: var(--text);
-    }
+.selected.active{
+  color:var(--text);
+}
 
-    .custom-select .field-end {
-      transition: transform 0.2s ease;
-    }
+.custom-select .field-end{
+  transition:transform .2s ease;
+}
 
-    .custom-select.open .field-end {
-      transform: rotate(180deg);
-    }
+.custom-select.open .field-end{
+  transform:rotate(180deg);
+}
 
-    .options {
-      display: none;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: calc(100% + 6px);
-      background: rgba(6, 15, 28, 0.98);
-      border: 1px solid rgba(255, 138, 0, 0.24);
-      border-radius: 14px;
-      z-index: 9999;
-      box-shadow:
-        0 0 14px rgba(255, 138, 0, 0.12),
-        0 10px 24px rgba(0,0,0,0.24);
-      max-height: 190px;
-      overflow-y: auto;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
+.options{
+  display:none;
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  background:rgba(6,15,28,.98);
+  border:1px solid rgba(255,138,0,.24);
+  border-radius:14px;
+  z-index:9999;
+  box-shadow:
+    0 0 14px rgba(255,138,0,.12),
+    0 10px 24px rgba(0,0,0,.24);
+  max-height:190px;
+  overflow-y:auto;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  opacity:0;
+  transform:translateY(-6px);
+  animation:dropdownIn .18s ease forwards;
+}
 
-    .options div {
-      padding: 10px 12px;
-      font-size: 14px;
-      color: #f3f4f6;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      text-align: center;
-      cursor: pointer;
-    }
+@keyframes dropdownIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
 
-    .options div:first-child {
-      border-top: 0;
-    }
+.options div{
+  padding:10px 12px;
+  font-size:14px;
+  color:#f3f4f6;
+  border-top:1px solid rgba(255,255,255,.05);
+  text-align:center;
+  cursor:pointer;
+  transition:background .14s ease;
+}
 
-    .options div:hover {
-      background: rgba(255, 138, 0, 0.12);
-    }
+.options div:first-child{
+  border-top:0;
+}
 
-    .options::-webkit-scrollbar {
-      width: 8px;
-    }
+.options div:hover{
+  background:rgba(255,138,0,.12);
+}
 
-    .options::-webkit-scrollbar-thumb {
-      background: rgba(255, 138, 0, 0.35);
-      border-radius: 999px;
-    }
+.options::-webkit-scrollbar{
+  width:8px;
+}
 
-    .file-input {
-      display: none;
-    }
+.options::-webkit-scrollbar-thumb{
+  background:rgba(255,138,0,.35);
+  border-radius:999px;
+}
 
-    .upload-field {
-      cursor: pointer;
-    }
+.file-input{
+  display:none;
+}
 
-    .upload-text {
-      color: rgba(255,255,255,0.92);
-      font-size: 15px;
-      font-weight: 600;
-    }
+.upload-field{
+  cursor:pointer;
+}
 
-    .upload-subtext {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.3;
-    }
+.upload-text{
+  color:rgba(255,255,255,.92);
+  font-size:15px;
+  font-weight:600;
+}
 
-    .submit-btn {
-      margin-top: 4px;
-      height: 54px;
-      border: 0;
-      border-radius: 16px;
-      font-size: 18px;
-      font-weight: 800;
-      color: white;
-      cursor: pointer;
-      background: linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.18),
-        0 0 12px rgba(28, 209, 79, 0.22),
-        0 8px 18px rgba(0,0,0,0.22);
-      transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      position: relative;
-      z-index: 1;
-    }
+.upload-subtext{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.3;
+}
 
-    .submit-btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.18),
-        0 0 16px rgba(28, 209, 79, 0.26),
-        0 10px 20px rgba(0,0,0,0.24);
-    }
+.submit-btn{
+  margin-top:4px;
+  height:54px;
+  border:0;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:800;
+  color:white;
+  cursor:pointer;
+  background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 12px rgba(28,209,79,.22),
+    0 8px 18px rgba(0,0,0,.22);
+  transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  position:relative;
+  z-index:1;
+  animation:buttonPulse 2.2s ease-in-out infinite;
+}
 
-    .submit-btn svg {
-      width: 20px;
-      height: 20px;
-      stroke: white;
-      flex: 0 0 auto;
-    }
+@keyframes buttonPulse{
+  0%,100%{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.18),
+      0 0 12px rgba(28,209,79,.22),
+      0 8px 18px rgba(0,0,0,.22);
+  }
+  50%{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.18),
+      0 0 18px rgba(28,209,79,.30),
+      0 8px 18px rgba(0,0,0,.22);
+  }
+}
 
-    .success {
-      display: none;
-      margin-top: 10px;
-      color: var(--green);
-      font-weight: 700;
-      font-size: 17px;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      text-shadow: 0 0 10px rgba(25, 212, 88, 0.22);
-      position: relative;
-      z-index: 1;
-    }
+.submit-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 16px rgba(28,209,79,.26),
+    0 10px 20px rgba(0,0,0,.24);
+}
 
-    .success.show {
-      display: flex;
-    }
+.submit-btn svg{
+  width:20px;
+  height:20px;
+  stroke:white;
+  flex:0 0 auto;
+}
 
-    .success svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-    }
+.success{
+  display:none;
+  margin-top:10px;
+  color:var(--green);
+  font-weight:700;
+  font-size:17px;
+  text-align:center;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  text-shadow:0 0 10px rgba(25,212,88,.22);
+  position:relative;
+  z-index:1;
+}
 
-    @media (max-width: 420px) {
-      body {
-        padding: 10px 8px;
-      }
+.success.show{
+  display:flex;
+}
 
-      .page {
-        max-width: 100%;
-      }
+.success svg{
+  width:20px;
+  height:20px;
+  stroke:currentColor;
+}
 
-      .frame {
-        max-width: 100%;
-        width: 100%;
-      }
+.date-field{
+  cursor:pointer;
+}
 
-      .panel {
-        padding: 12px 10px 14px;
-      }
+.date-field input[type=date]{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:white;
+  font-size:16px;
+  outline:none;
+  color-scheme:dark;
+  cursor:pointer;
+}
 
-      .logo {
-        width: min(100%, 182px);
-      }
+.date-field input::-webkit-calendar-picker-indicator{
+  opacity:0;
+  position:absolute;
+  width:100%;
+  height:100%;
+  cursor:pointer;
+}
 
-      .field,
-      .custom-select {
-        min-height: 66px;
-        padding: 11px 12px;
-        gap: 10px;
-      }
+@media (max-width:420px){
+  body{
+    padding:10px 8px;
+  }
 
-      .field input[type="number"],
-      .field input[type="text"],
-      .selected,
-      .upload-text {
-        font-size: 16px;
-      }
+  .page{
+    max-width:100%;
+  }
 
-      .submit-btn {
-        height: 54px;
-        font-size: 18px;
-      }
-    }
-  </style>
+  .frame{
+    max-width:100%;
+    width:100%;
+  }
+
+  .panel{
+    padding:12px 10px 14px;
+  }
+
+  .logo{
+    width:min(100%,182px);
+  }
+
+  .field,
+  .custom-select{
+    min-height:66px;
+    padding:11px 12px;
+    gap:10px;
+  }
+
+  .field input[type="number"],
+  .field input[type="text"],
+  .selected,
+  .upload-text,
+  .date-field input[type=date]{
+    font-size:16px;
+  }
+
+  .submit-btn{
+    height:54px;
+    font-size:18px;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div class="page">
-    <div class="frame">
-      <div class="panel">
-        <div class="logo-wrap">
-          <img src="images/logo.png" alt="Specimen Trophy" class="logo" />
-        </div>
+<div class="page">
+  <div class="frame">
+    <div class="panel">
 
-        <form id="form">
-          <div class="custom-select" data-name="Deltagare" data-placeholder="Välj deltagare">
-            <div class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21a8 8 0 0 0-16 0"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </div>
-
-            <div class="field-body">
-              <div class="field-label">Deltagare</div>
-              <div class="selected">Välj deltagare</div>
-            </div>
-
-            <div class="field-end">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            </div>
-
-            <div class="options">
-              <div>Lars Boström</div>
-              <div>Oliver Jansson</div>
-              <div>Anders Boström</div>
-              <div>Stefan Widh</div>
-              <div>Roger Norling</div>
-              <div>Micke Karlsson</div>
-              <div>Emil Larsson</div>
-              <div>Sonny Pettersson</div>
-              <div>Christian Rebello</div>
-              <div>Patrik Byström</div>
-              <div>Jonny Jansson</div>
-              <div>Kent Boström</div>
-              <div>Mattias Roming</div>
-              <div>Anton Lundholm</div>
-              <div>Robban Lager</div>
-              <div>Jonatan Boström</div>
-              <div>Anders Wimmerstedt</div>
-            </div>
-          </div>
-          <input type="hidden" name="Deltagare" required />
-
-          <div class="custom-select" data-name="Art" data-placeholder="Välj art">
-            <div class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12s3-4 9-4 9 4 9 4-3 4-9 4-9-4-9-4Z"></path>
-                <path d="M7 8 4 5"></path>
-                <path d="M7 16 4 19"></path>
-                <path d="M17 8l3-3"></path>
-                <path d="M17 16l3 3"></path>
-              </svg>
-            </div>
-
-            <div class="field-body">
-              <div class="field-label">Art</div>
-              <div class="selected">Välj art</div>
-            </div>
-
-            <div class="field-end">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            </div>
-
-            <div class="options">
-              <div>Björkna</div>
-              <div>Brax</div>
-              <div>Id</div>
-              <div>Mört</div>
-              <div>Ruda</div>
-              <div>Sarv</div>
-              <div>Sutare</div>
-              <div>Vimma</div>
-            </div>
-          </div>
-          <input type="hidden" name="Art" required />
-
-          <div class="field">
-            <div class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 5h12"></path>
-                <path d="M8 5l1-2h6l1 2"></path>
-                <path d="M7 5l-1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2L17 5"></path>
-                <circle cx="12" cy="13" r="2.5"></circle>
-              </svg>
-            </div>
-
-            <div class="field-body">
-              <div class="field-label">Vikt (gram)</div>
-              <input type="number" name="Vikt" placeholder="Ange vikt" required />
-            </div>
-
-            <div></div>
-          </div>
-
-          <div class="field">
-            <div class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                <path d="M16 2v4"></path>
-                <path d="M8 2v4"></path>
-                <path d="M3 10h18"></path>
-                <path d="M8 14h.01"></path>
-                <path d="M12 14h.01"></path>
-                <path d="M16 14h.01"></path>
-              </svg>
-            </div>
-
-            <div class="field-body">
-              <div class="field-label">Datum</div>
-              <input
-                type="text"
-                name="datum"
-                placeholder="Välj datum"
-                onfocus="this.type='date'"
-                onblur="if(!this.value)this.type='text'"
-                required
-              />
-            </div>
-
-            <div class="field-end white">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                <path d="M16 2v4"></path>
-                <path d="M8 2v4"></path>
-                <path d="M3 10h18"></path>
-              </svg>
-            </div>
-          </div>
-
-          <label class="field upload-field" for="image">
-            <div class="field-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                <circle cx="9" cy="10" r="1.2"></circle>
-                <path d="m21 15-5-5L5 19"></path>
-              </svg>
-            </div>
-
-            <div class="field-body">
-              <div class="field-label">Bild</div>
-              <div class="upload-text">Lägg till bild</div>
-              <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
-            </div>
-
-            <div class="field-end white">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 16.5A4.5 4.5 0 0 0 18 8h-1.3A6 6 0 1 0 6 17.3"></path>
-                <path d="M12 12v9"></path>
-                <path d="m8.5 15.5 3.5-3.5 3.5 3.5"></path>
-              </svg>
-            </div>
-          </label>
-          <input class="file-input" type="file" id="image" accept="image/*" />
-
-          <button type="submit" class="submit-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="m9 12 2 2 4-5"></path>
-            </svg>
-            <span>SPARA</span>
-          </button>
-        </form>
-
-        <div class="success" id="success">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="m9 12 2 2 4-5"></path>
-          </svg>
-          <span>Sparat!</span>
-        </div>
+      <div class="logo-wrap">
+        <img src="images/logo.png" alt="Specimen Trophy" class="logo">
       </div>
+
+      <form id="form">
+
+        <div class="custom-select" data-name="Deltagare" data-placeholder="Välj deltagare">
+          <div class="field-icon">👤</div>
+          <div class="field-body">
+            <div class="field-label">Deltagare</div>
+            <div class="selected">Välj deltagare</div>
+          </div>
+          <div class="field-end">▼</div>
+          <div class="options">
+            <div>Lars Boström</div>
+            <div>Oliver Jansson</div>
+            <div>Anders Boström</div>
+            <div>Stefan Widh</div>
+            <div>Roger Norling</div>
+            <div>Micke Karlsson</div>
+            <div>Emil Larsson</div>
+            <div>Sonny Pettersson</div>
+            <div>Christian Rebello</div>
+            <div>Patrik Byström</div>
+            <div>Jonny Jansson</div>
+            <div>Kent Boström</div>
+            <div>Mattias Roming</div>
+            <div>Anton Lundholm</div>
+            <div>Robban Lager</div>
+            <div>Jonatan Boström</div>
+            <div>Anders Wimmerstedt</div>
+          </div>
+        </div>
+        <input type="hidden" name="Deltagare" required>
+
+        <div class="custom-select" data-name="Art" data-placeholder="Välj art">
+          <div class="field-icon">🐟</div>
+          <div class="field-body">
+            <div class="field-label">Art</div>
+            <div class="selected">Välj art</div>
+          </div>
+          <div class="field-end">▼</div>
+          <div class="options">
+            <div>Björkna</div>
+            <div>Brax</div>
+            <div>Id</div>
+            <div>Mört</div>
+            <div>Ruda</div>
+            <div>Sarv</div>
+            <div>Sutare</div>
+            <div>Vimma</div>
+          </div>
+        </div>
+        <input type="hidden" name="Art" required>
+
+        <div class="field">
+          <div class="field-icon">⚖️</div>
+          <div class="field-body">
+            <div class="field-label">Vikt (gram)</div>
+            <input type="number" name="Vikt" placeholder="Ange vikt" required>
+          </div>
+          <div></div>
+        </div>
+
+        <label class="field date-field">
+          <div class="field-icon">📅</div>
+          <div class="field-body">
+            <div class="field-label">Datum</div>
+            <input type="date" id="datum" name="datum" required>
+          </div>
+          <div class="field-end white">📆</div>
+        </label>
+
+        <label class="field upload-field" for="image">
+          <div class="field-icon">📷</div>
+          <div class="field-body">
+            <div class="field-label">Bild</div>
+            <div class="upload-text">Lägg till bild</div>
+            <div class="upload-subtext" id="uploadText">Välj bild från kameran eller galleri</div>
+          </div>
+          <div class="field-end white">⬆</div>
+        </label>
+        <input type="file" id="image" class="file-input" accept="image/*">
+
+        <button type="submit" class="submit-btn">SPARA</button>
+
+      </form>
+
+      <div class="success" id="success">✔ Sparat!</div>
+
     </div>
   </div>
+</div>
 
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
-    const form = document.getElementById("form");
-    const success = document.getElementById("success");
-    const imageInput = document.getElementById("image");
-    const uploadText = document.getElementById("uploadText");
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
 
-    function toBase64(file) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
+const form=document.getElementById("form");
+const success=document.getElementById("success");
+const imageInput=document.getElementById("image");
+const uploadText=document.getElementById("uploadText");
+
+function toBase64(file){
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+function closeAllSelects(){
+  document.querySelectorAll(".custom-select").forEach(s=>{
+    s.classList.remove("open");
+    const options=s.querySelector(".options");
+    if(options) options.style.display="none";
+  });
+}
+
+document.querySelectorAll(".custom-select").forEach(select=>{
+  const selected=select.querySelector(".selected");
+  const options=select.querySelector(".options");
+  const hidden=document.querySelector(`input[name="${select.dataset.name}"]`);
+  const placeholder=select.dataset.placeholder || select.dataset.name;
+
+  function toggleSelect(e){
+    e.stopPropagation();
+    const isOpen=select.classList.contains("open");
+    closeAllSelects();
+    if(!isOpen){
+      select.classList.add("open");
+      options.style.display="block";
     }
+  }
 
-    function closeAllSelects() {
-      document.querySelectorAll(".custom-select").forEach((s) => {
-        s.classList.remove("open");
-        const options = s.querySelector(".options");
-        if (options) options.style.display = "none";
-      });
-    }
+  selected.addEventListener("click", toggleSelect);
+  select.querySelector(".field-end").addEventListener("click", toggleSelect);
 
-    document.querySelectorAll(".custom-select").forEach((select) => {
-      const selected = select.querySelector(".selected");
-      const options = select.querySelector(".options");
-      const hiddenInput = document.querySelector(`input[name="${select.dataset.name}"]`);
-      const placeholder = select.dataset.placeholder || select.dataset.name;
+  options.querySelectorAll("div").forEach(option=>{
+    option.onclick=()=>{
+      selected.textContent=option.textContent;
+      selected.classList.add("active");
+      hidden.value=option.textContent;
+      select.classList.remove("open");
+      options.style.display="none";
+    };
+  });
 
-      selected.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = select.classList.contains("open");
-        closeAllSelects();
+  selected.textContent=placeholder;
+});
 
-        if (!isOpen) {
-          select.classList.add("open");
-          options.style.display = "block";
-        }
-      });
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".custom-select")){
+    closeAllSelects();
+  }
+});
 
-      select.querySelector(".field-end").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = select.classList.contains("open");
-        closeAllSelects();
+const dateField=document.querySelector(".date-field");
+const dateInput=document.getElementById("datum");
 
-        if (!isOpen) {
-          select.classList.add("open");
-          options.style.display = "block";
-        }
-      });
+dateField.addEventListener("click",()=>{
+  if(dateInput.showPicker){
+    dateInput.showPicker();
+  }else{
+    dateInput.focus();
+    dateInput.click();
+  }
+});
 
-      options.querySelectorAll("div").forEach((option) => {
-        option.addEventListener("click", () => {
-          selected.textContent = option.textContent;
-          selected.classList.add("active");
-          hiddenInput.value = option.textContent;
-          select.classList.remove("open");
-          options.style.display = "none";
-        });
-      });
+imageInput.addEventListener("change",()=>{
+  if(imageInput.files && imageInput.files[0]){
+    uploadText.textContent=imageInput.files[0].name;
+  }else{
+    uploadText.textContent="Välj bild från kameran eller galleri";
+  }
+});
 
-      selected.textContent = placeholder;
-    });
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
 
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".custom-select")) {
-        closeAllSelects();
-      }
-    });
+  const file=imageInput.files[0];
+  let imageBase64="";
 
-    imageInput.addEventListener("change", () => {
-      if (imageInput.files && imageInput.files[0]) {
-        uploadText.textContent = imageInput.files[0].name;
-      } else {
-        uploadText.textContent = "Välj bild från kameran eller galleri";
-      }
-    });
+  if(file){
+    imageBase64=await toBase64(file);
+  }
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  const payload={
+    Deltagare:form.Deltagare.value,
+    Art:form.Art.value,
+    Vikt:form.Vikt.value,
+    datum:form.datum.value,
+    image:imageBase64
+  };
 
-      const file = imageInput.files[0];
-      let imageBase64 = "";
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams(payload)
+  });
 
-      if (file) {
-        imageBase64 = await toBase64(file);
-      }
+  success.classList.add("show");
+  form.reset();
+  uploadText.textContent="Välj bild från kameran eller galleri";
 
-      const payload = {
-        Deltagare: form.Deltagare.value,
-        Art: form.Art.value,
-        Vikt: form.Vikt.value,
-        datum: form.datum.value,
-        image: imageBase64
-      };
+  document.querySelectorAll(".custom-select").forEach(select=>{
+    const selected=select.querySelector(".selected");
+    const placeholder=select.dataset.placeholder || select.dataset.name;
+    selected.textContent=placeholder;
+    selected.classList.remove("active");
+  });
 
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: new URLSearchParams(payload)
-      });
-
-      success.classList.add("show");
-      form.reset();
-      uploadText.textContent = "Välj bild från kameran eller galleri";
-
-      document.querySelectorAll(".custom-select").forEach((select) => {
-        const selected = select.querySelector(".selected");
-        const placeholder = select.dataset.placeholder || select.dataset.name;
-        selected.textContent = placeholder;
-        selected.classList.remove("active");
-      });
-
-      document.querySelector("input[name='Deltagare']").value = "";
-      document.querySelector("input[name='Art']").value = "";
-    });
-  </script>
+  document.querySelector("input[name='Deltagare']").value="";
+  document.querySelector("input[name='Art']").value="";
+});
+</script>
 </body>
 </html>
