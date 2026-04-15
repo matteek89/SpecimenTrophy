@@ -6,6 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --border: #e5e7eb;
+    }
+
+    body.dark {
+      --bg: #0b1220;
+      --card: #111827;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -13,87 +30,107 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #f5f7fb;
-      color: #111827;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 50px 16px;
+      padding: 30px 16px;
+      transition: 0.3s;
     }
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 4px;
+    }
+
+    .nav h1 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .toggle {
+      cursor: pointer;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
     }
 
     /* HEADER */
     .header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
+      animation: fade 0.6s ease;
     }
 
     .logo {
-      max-width: 280px;
+      max-width: 260px;
       width: 100%;
       border-radius: 14px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
 
-    /* CARD FORM */
+    /* CARD */
     form {
-      background: white;
+      background: var(--card);
       padding: 22px;
       border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
       gap: 14px;
+      animation: fade 0.6s ease;
     }
 
-    /* INPUTS */
     input {
       padding: 14px;
       border-radius: 12px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--border);
       text-align: center;
       font-size: 15px;
-      background: #fff;
+      background: transparent;
+      color: var(--text);
       outline: none;
       transition: 0.2s;
     }
 
     input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
     }
 
-    input::placeholder {
-      color: #9ca3af;
-    }
-
-    /* BUTTON */
     button {
       padding: 14px;
       border-radius: 12px;
       border: none;
-      background: #2563eb;
+      background: var(--primary);
       color: white;
       font-weight: 600;
-      font-size: 15px;
       cursor: pointer;
       transition: 0.2s;
     }
 
     button:hover {
-      background: #1d4ed8;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      opacity: 0.9;
     }
 
-    /* SUCCESS */
     .success {
       display: none;
       text-align: center;
-      margin-top: 16px;
-      color: #16a34a;
+      margin-top: 14px;
+      color: #22c55e;
       font-weight: 600;
     }
 
@@ -105,66 +142,47 @@
     .selected {
       padding: 14px;
       border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      background: white;
+      border: 1px solid var(--border);
       text-align: center;
       cursor: pointer;
-      color: #6b7280;
-      transition: 0.2s;
-      position: relative;
+      color: var(--muted);
+      background: transparent;
     }
 
     .selected.active {
-      color: #111827;
-    }
-
-    .selected::after {
-      content: "▼";
-      position: absolute;
-      right: 14px;
-      font-size: 10px;
-      color: #9ca3af;
-    }
-
-    .selected:hover {
-      border-color: #cbd5e1;
+      color: var(--text);
     }
 
     .options {
       display: none;
       position: absolute;
       width: 100%;
-      background: white;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 12px;
       margin-top: 8px;
       max-height: 220px;
       overflow-y: auto;
       z-index: 999;
-
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      animation: fade 0.2s ease;
     }
 
     .options div {
       padding: 12px;
       text-align: center;
       cursor: pointer;
-      transition: 0.15s;
     }
 
     .options div:hover {
-      background: #f3f4f6;
+      background: rgba(37,99,235,0.1);
     }
 
-    .options::-webkit-scrollbar {
-      width: 6px;
+    /* ANIMATION */
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .options::-webkit-scrollbar-thumb {
-      background: #d1d5db;
-      border-radius: 10px;
-    }
-
   </style>
 </head>
 
@@ -172,8 +190,15 @@
 
 <div class="container">
 
+  <!-- NAV -->
+  <div class="nav">
+    <h1>Specimen Trophy</h1>
+    <div class="toggle" onclick="toggleDark()">🌙 / ☀️</div>
+  </div>
+
+  <!-- HEADER -->
   <div class="header">
-    <img src="images/logo.png" alt="Specimen Trophy" class="logo">
+    <img src="images/logo.png" class="logo">
   </div>
 
   <form id="form">
@@ -192,16 +217,9 @@
         <div>Sonny Pettersson</div>
         <div>Christian Rebello</div>
         <div>Patrik Byström</div>
-        <div>Jonny Jansson</div>
-        <div>Kent Boström</div>
-        <div>Mattias Roming</div>
-        <div>Anton Lundholm</div>
-        <div>Robban Lager</div>
-        <div>Jonatan Boström</div>
-        <div>Anders Wimmerstedt</div>
       </div>
     </div>
-    <input type="hidden" name="Deltagare" required>
+    <input type="hidden" name="Deltagare">
 
     <!-- Art -->
     <div class="custom-select" data-name="Art">
@@ -212,12 +230,10 @@
         <div>Id</div>
         <div>Mört</div>
         <div>Ruda</div>
-        <div>Sarv</div>
         <div>Sutare</div>
-        <div>Vimma</div>
       </div>
     </div>
-    <input type="hidden" name="Art" required>
+    <input type="hidden" name="Art">
 
     <input type="number" name="Vikt" placeholder="Vikt (gram)" required>
 
@@ -232,15 +248,17 @@
   </form>
 
   <div class="success" id="success">✔ Sparat!</div>
-
 </div>
 
 <script>
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
 
 function toBase64(file) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
     reader.readAsDataURL(file);
@@ -251,11 +269,7 @@ document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = document.getElementById("image").files[0];
-  let imageBase64 = "";
-
-  if (file) {
-    imageBase64 = await toBase64(file);
-  }
+  let imageBase64 = file ? await toBase64(file) : "";
 
   const payload = {
     Deltagare: form.Deltagare.value,
@@ -272,53 +286,26 @@ document.getElementById("form").addEventListener("submit", async (e) => {
 
   document.getElementById("success").style.display = "block";
   form.reset();
-
-  document.querySelectorAll(".selected").forEach(el => {
-    el.textContent = el.parentElement.dataset.name;
-    el.classList.remove("active");
-  });
 });
 
 document.querySelectorAll(".custom-select").forEach(select => {
   const selected = select.querySelector(".selected");
   const options = select.querySelector(".options");
-  const hiddenInput = document.querySelector(`input[name="${select.dataset.name}"]`);
+  const hidden = document.querySelector(`input[name="${select.dataset.name}"]`);
 
-  selected.addEventListener("click", () => {
-    const isOpen = select.classList.contains("open");
+  selected.onclick = () => {
+    options.style.display = options.style.display === "block" ? "none" : "block";
+  };
 
-    document.querySelectorAll(".custom-select").forEach(s => {
-      s.classList.remove("open");
-      s.querySelector(".options").style.display = "none";
-    });
-
-    if (!isOpen) {
-      select.classList.add("open");
-      options.style.display = "block";
-    }
-  });
-
-  options.querySelectorAll("div").forEach(option => {
-    option.addEventListener("click", () => {
-      selected.textContent = option.textContent;
+  options.querySelectorAll("div").forEach(opt => {
+    opt.onclick = () => {
+      selected.textContent = opt.textContent;
       selected.classList.add("active");
-      hiddenInput.value = option.textContent;
-
-      select.classList.remove("open");
+      hidden.value = opt.textContent;
       options.style.display = "none";
-    });
+    };
   });
 });
-
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".custom-select")) {
-    document.querySelectorAll(".custom-select").forEach(s => {
-      s.classList.remove("open");
-      s.querySelector(".options").style.display = "none";
-    });
-  }
-});
-
 </script>
 
 </body>
