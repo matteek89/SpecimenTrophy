@@ -10,6 +10,7 @@
       --text: #f3f4f6;
       --muted: rgba(255, 255, 255, 0.58);
       --orange: #ff8a00;
+      --orange-2: #ff5e00;
       --green: #19d458;
     }
 
@@ -19,55 +20,63 @@
 
     html, body {
       min-height: 100%;
-    }
-
-    body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 16px 10px;
-      position: relative;
-      overflow-x: hidden;
-
-      background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.18)),
-        url("images/sunset_background_for_github.jpg") center top / cover no-repeat fixed;
+      padding: 18px 10px;
+      background: #05070a;
     }
 
-    body::before {
-      content: "";
+    /* EGET BAKGRUNDSLAGER */
+    .bg-layer {
       position: fixed;
       inset: 0;
-      pointer-events: none;
       z-index: 0;
       background:
-        radial-gradient(circle at 50% 18%, rgba(255, 138, 0, 0.10), transparent 24%),
-        radial-gradient(circle at 50% 85%, rgba(255, 138, 0, 0.04), transparent 30%);
+        linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.22)),
+        url("images/sunset_background_for_github.jpg") center center / cover no-repeat;
+      transform: scale(1.02);
     }
 
+    .bg-layer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 145, 0, 0.10), transparent 22%),
+        radial-gradient(circle at 50% 90%, rgba(255, 145, 0, 0.05), transparent 28%);
+    }
+
+    /* SIDANS INNEHÅLL */
     .page {
-      width: 100%;
-      max-width: 500px;
       position: relative;
       z-index: 1;
+      width: 100%;
+      max-width: 500px;
       display: flex;
       justify-content: center;
     }
 
     .panel {
       width: 100%;
-      max-width: 390px;
-      background: linear-gradient(180deg, rgba(5, 16, 34, 0.48), rgba(3, 10, 22, 0.56));
+      max-width: 388px;
+      background: linear-gradient(180deg, rgba(4, 16, 34, 0.42), rgba(2, 10, 22, 0.52));
       border: 2px solid rgba(255, 138, 0, 0.88);
-      border-radius: 28px;
+      border-radius: 30px;
       padding: 18px 14px 20px;
       box-shadow:
-        0 0 16px rgba(255, 110, 0, 0.18),
-        0 14px 40px rgba(0, 0, 0, 0.34);
-      backdrop-filter: blur(2px);
+        0 0 18px rgba(255, 110, 0, 0.22),
+        0 16px 40px rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
     }
 
     .logo-wrap {
@@ -81,8 +90,8 @@
       display: block;
       border-radius: 26px;
       box-shadow:
-        0 0 14px rgba(255, 136, 0, 0.24),
-        0 0 30px rgba(255, 94, 0, 0.18);
+        0 0 14px rgba(255, 136, 0, 0.28),
+        0 0 34px rgba(255, 94, 0, 0.18);
     }
 
     form {
@@ -99,9 +108,9 @@
       align-items: center;
       gap: 12px;
       min-height: 72px;
-      padding: 13px 13px;
+      padding: 13px;
       border-radius: 18px;
-      background: linear-gradient(90deg, rgba(2, 11, 23, 0.72), rgba(3, 18, 38, 0.66));
+      background: linear-gradient(90deg, rgba(2, 11, 23, 0.70), rgba(3, 18, 38, 0.60));
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 20px rgba(0,0,0,0.16);
     }
@@ -185,7 +194,7 @@
       left: 0;
       right: 0;
       top: calc(100% + 8px);
-      background: rgba(6, 15, 28, 0.94);
+      background: rgba(6, 15, 28, 0.95);
       border: 1px solid rgba(255, 138, 0, 0.24);
       border-radius: 16px;
       overflow: hidden;
@@ -334,6 +343,8 @@
   </style>
 </head>
 <body>
+  <div class="bg-layer"></div>
+
   <div class="page">
     <div class="panel">
       <div class="logo-wrap">
