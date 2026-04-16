@@ -219,7 +219,8 @@ form{
 .field input[type="text"],
 .field input[type="date"],
 .selected,
-.upload-text{
+.upload-text,
+.code-input{
   width:100%;
   border:0;
   background:transparent !important;
@@ -247,7 +248,8 @@ form{
   text-align:left;
 }
 
-.field input::placeholder{
+.field input::placeholder,
+.code-input::placeholder{
   color:var(--muted);
   opacity:1;
 }
@@ -361,15 +363,19 @@ input:-webkit-autofill:focus{
   line-height:1.3;
 }
 
-.submit-btn{
-  margin-top:4px;
-  height:54px;
+.submit-btn,
+.modal-btn{
   border:0;
   border-radius:16px;
   font-size:18px;
   font-weight:800;
   color:white;
   cursor:pointer;
+}
+
+.submit-btn{
+  margin-top:4px;
+  height:54px;
   background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.18),
@@ -446,6 +452,96 @@ input:-webkit-autofill:focus{
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(-2px);}
   to{opacity:1; transform:translateY(0);}
+}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:320px;
+  background:linear-gradient(180deg, rgba(5,16,34,.97), rgba(2,10,22,.99));
+  border:1px solid rgba(255,138,0,.22);
+  border-radius:18px;
+  padding:18px 16px;
+  box-shadow:
+    0 0 18px rgba(255,153,0,.18),
+    0 14px 30px rgba(0,0,0,.35);
+  text-align:center;
+}
+
+.modal-box h3{
+  margin:0 0 8px;
+  font-size:18px;
+}
+
+.modal-box p{
+  margin:0 0 14px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.4;
+}
+
+.code-input{
+  height:52px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88)) !important;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:4px;
+}
+
+.code-input:focus{
+  border-color:rgba(255,153,0,.45);
+  box-shadow:0 0 12px rgba(255,153,0,.14);
+}
+
+.code-error{
+  display:none;
+  color:var(--error);
+  font-size:12px;
+  margin-top:8px;
+}
+
+.code-error.show{
+  display:block;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.modal-btn{
+  flex:1;
+  height:46px;
+  font-size:15px;
+  font-weight:700;
+}
+
+.cancel-btn{
+  background:#1f2937;
+}
+
+.confirm-btn{
+  background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
 }
 
 @media (max-width:420px){
@@ -636,6 +732,22 @@ input:-webkit-autofill:focus{
   </div>
 </div>
 
+<div id="codeModal" class="modal">
+  <div class="modal-box">
+    <h3>Bekräfta med kod</h3>
+    <p>Skriv in den 4-siffriga koden för att spara.</p>
+
+    <input type="password" id="codeInput" class="code-input" maxlength="4" inputmode="numeric" placeholder="0000">
+
+    <div id="codeError" class="code-error">Fel kod</div>
+
+    <div class="modal-actions">
+      <button type="button" class="modal-btn cancel-btn" id="cancelCodeBtn">Avbryt</button>
+      <button type="button" class="modal-btn confirm-btn" id="confirmCodeBtn">Bekräfta</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycby3KpZo67xriKcCMPYvLSuNNYn-SUxbEdDs8seSOD_T7Ky8eC9UzSxtp1Mj_jT5NHykNg/exec";
 
@@ -651,6 +763,14 @@ const datumField=document.getElementById("datumField");
 const bildField=document.getElementById("bildField");
 const viktInput=document.getElementById("viktInput");
 const datumInput=document.getElementById("datum");
+
+const codeModal=document.getElementById("codeModal");
+const codeInput=document.getElementById("codeInput");
+const codeError=document.getElementById("codeError");
+const confirmCodeBtn=document.getElementById("confirmCodeBtn");
+const cancelCodeBtn=document.getElementById("cancelCodeBtn");
+
+let pendingSubmit=false;
 
 function toBase64(file){
   return new Promise(resolve=>{
@@ -672,6 +792,89 @@ function clearInvalidStates(){
   [deltagareField, artField, viktField, datumField, bildField].forEach(el=>{
     el.classList.remove("invalid-field");
   });
+}
+
+function validateForm(){
+  clearInvalidStates();
+  let valid=true;
+
+  if(!form.Deltagare.value){
+    deltagareField.classList.add("invalid-field");
+    valid=false;
+  }
+
+  if(!form.Art.value){
+    artField.classList.add("invalid-field");
+    valid=false;
+  }
+
+  if(!form.Vikt.value){
+    viktField.classList.add("invalid-field");
+    valid=false;
+  }
+
+  if(!form.datum.value){
+    datumField.classList.add("invalid-field");
+    valid=false;
+  }
+
+  if(!imageInput.files || !imageInput.files[0]){
+    bildField.classList.add("invalid-field");
+    valid=false;
+  }
+
+  return valid;
+}
+
+function openCodeModal(){
+  codeInput.value="";
+  codeError.classList.remove("show");
+  codeModal.classList.add("show");
+  setTimeout(()=>codeInput.focus(),50);
+}
+
+function closeCodeModal(){
+  codeModal.classList.remove("show");
+  codeInput.value="";
+  codeError.classList.remove("show");
+  pendingSubmit=false;
+}
+
+async function sendForm(){
+  const file=imageInput.files[0];
+  let imageBase64="";
+
+  if(file){
+    imageBase64=await toBase64(file);
+  }
+
+  const payload={
+    Deltagare:form.Deltagare.value,
+    Art:form.Art.value,
+    Vikt:form.Vikt.value,
+    datum:form.datum.value,
+    image:imageBase64
+  };
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:new URLSearchParams(payload)
+  });
+
+  success.classList.add("show");
+  form.reset();
+  uploadText.textContent="Välj bild från kameran eller galleri";
+
+  document.querySelectorAll(".custom-select").forEach(select=>{
+    const selected=select.querySelector(".selected");
+    const placeholder=select.dataset.placeholder || select.dataset.name;
+    selected.textContent=placeholder;
+    selected.classList.remove("active");
+  });
+
+  document.querySelector("input[name='Deltagare']").value="";
+  document.querySelector("input[name='Art']").value="";
+  clearInvalidStates();
 }
 
 document.querySelectorAll(".custom-select").forEach(select=>{
@@ -739,73 +942,53 @@ datumInput.addEventListener("input",()=>{
   if(datumInput.value) datumField.classList.remove("invalid-field");
 });
 
-form.addEventListener("submit",async e=>{
+form.addEventListener("submit",e=>{
   e.preventDefault();
-  clearInvalidStates();
 
-  let valid=true;
+  if(!validateForm()) return;
 
-  if(!form.Deltagare.value){
-    deltagareField.classList.add("invalid-field");
-    valid=false;
+  pendingSubmit=true;
+  openCodeModal();
+});
+
+confirmCodeBtn.addEventListener("click", async ()=>{
+  if(!pendingSubmit) return;
+
+  if(codeInput.value !== "2026"){
+    codeError.classList.add("show");
+    codeInput.focus();
+    codeInput.select();
+    return;
   }
 
-  if(!form.Art.value){
-    artField.classList.add("invalid-field");
-    valid=false;
+  codeError.classList.remove("show");
+  codeModal.classList.remove("show");
+  pendingSubmit=false;
+
+  await sendForm();
+});
+
+cancelCodeBtn.addEventListener("click", closeCodeModal);
+
+codeInput.addEventListener("input", ()=>{
+  codeError.classList.remove("show");
+});
+
+codeInput.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    confirmCodeBtn.click();
   }
 
-  if(!form.Vikt.value){
-    viktField.classList.add("invalid-field");
-    valid=false;
+  if(e.key === "Escape"){
+    closeCodeModal();
   }
+});
 
-  if(!form.datum.value){
-    datumField.classList.add("invalid-field");
-    valid=false;
+codeModal.addEventListener("click", (e)=>{
+  if(e.target === codeModal){
+    closeCodeModal();
   }
-
-  if(!imageInput.files || !imageInput.files[0]){
-    bildField.classList.add("invalid-field");
-    valid=false;
-  }
-
-  if(!valid) return;
-
-  const file=imageInput.files[0];
-  let imageBase64="";
-
-  if(file){
-    imageBase64=await toBase64(file);
-  }
-
-  const payload={
-    Deltagare:form.Deltagare.value,
-    Art:form.Art.value,
-    Vikt:form.Vikt.value,
-    datum:form.datum.value,
-    image:imageBase64
-  };
-
-  await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:new URLSearchParams(payload)
-  });
-
-  success.classList.add("show");
-  form.reset();
-  uploadText.textContent="Välj bild från kameran eller galleri";
-
-  document.querySelectorAll(".custom-select").forEach(select=>{
-    const selected=select.querySelector(".selected");
-    const placeholder=select.dataset.placeholder || select.dataset.name;
-    selected.textContent=placeholder;
-    selected.classList.remove("active");
-  });
-
-  document.querySelector("input[name='Deltagare']").value="";
-  document.querySelector("input[name='Art']").value="";
-  clearInvalidStates();
 });
 </script>
 </body>
