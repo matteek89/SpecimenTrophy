@@ -454,7 +454,6 @@ input:-webkit-autofill:focus{
   to{opacity:1; transform:translateY(0);}
 }
 
-/* MODAL */
 .modal{
   display:none;
   position:fixed;
@@ -617,25 +616,7 @@ input:-webkit-autofill:focus{
               <path d="m6 9 6 6 6-6"></path>
             </svg>
           </div>
-          <div class="options">
-            <div>Lars Boström</div>
-            <div>Oliver Jansson</div>
-            <div>Anders Boström</div>
-            <div>Stefan Widh</div>
-            <div>Roger Norling</div>
-            <div>Micke Karlsson</div>
-            <div>Emil Larsson</div>
-            <div>Sonny Pettersson</div>
-            <div>Christian Rebello</div>
-            <div>Patrik Byström</div>
-            <div>Jonny Jansson</div>
-            <div>Kent Boström</div>
-            <div>Mattias Roming</div>
-            <div>Anton Lundholm</div>
-            <div>Robban Lager</div>
-            <div>Jonatan Boström</div>
-            <div>Anders Wimmerstedt</div>
-          </div>
+          <div class="options"></div>
         </div>
         <input type="hidden" name="Deltagare">
 
@@ -659,16 +640,7 @@ input:-webkit-autofill:focus{
               <path d="m6 9 6 6 6-6"></path>
             </svg>
           </div>
-          <div class="options">
-            <div>Björkna</div>
-            <div>Brax</div>
-            <div>Id</div>
-            <div>Mört</div>
-            <div>Ruda</div>
-            <div>Sarv</div>
-            <div>Sutare</div>
-            <div>Vimma</div>
-          </div>
+          <div class="options"></div>
         </div>
         <input type="hidden" name="Art">
 
@@ -877,38 +849,64 @@ async function sendForm(){
   clearInvalidStates();
 }
 
-document.querySelectorAll(".custom-select").forEach(select=>{
-  const selected=select.querySelector(".selected");
-  const options=select.querySelector(".options");
-  const hidden=document.querySelector(`input[name="${select.dataset.name}"]`);
-  const placeholder=select.dataset.placeholder || select.dataset.name;
+async function loadDropdownData() {
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const data = await response.json();
 
-  function toggleSelect(e){
-    e.stopPropagation();
-    const isOpen=select.classList.contains("open");
-    closeAllSelects();
-    if(!isOpen){
-      select.classList.add("open");
-      options.style.display="block";
-    }
+    fillOptions("deltagareField", data.deltagare || []);
+    fillOptions("artField", data.arter || []);
+  } catch (error) {
+    console.error("Kunde inte läsa dropdown-data:", error);
   }
+}
 
-  selected.addEventListener("click", toggleSelect);
-  select.querySelector(".field-end").addEventListener("click", toggleSelect);
+function fillOptions(fieldId, items) {
+  const field = document.getElementById(fieldId);
+  const options = field.querySelector(".options");
+  options.innerHTML = "";
 
-  options.querySelectorAll("div").forEach(option=>{
-    option.onclick=()=>{
-      selected.textContent=option.textContent;
-      selected.classList.add("active");
-      hidden.value=option.textContent;
-      select.classList.remove("invalid-field");
-      select.classList.remove("open");
-      options.style.display="none";
-    };
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.textContent = item;
+    options.appendChild(div);
   });
+}
 
-  selected.textContent=placeholder;
-});
+function initializeCustomSelects(){
+  document.querySelectorAll(".custom-select").forEach(select=>{
+    const selected=select.querySelector(".selected");
+    const options=select.querySelector(".options");
+    const hidden=document.querySelector(`input[name="${select.dataset.name}"]`);
+    const placeholder=select.dataset.placeholder || select.dataset.name;
+
+    function toggleSelect(e){
+      e.stopPropagation();
+      const isOpen=select.classList.contains("open");
+      closeAllSelects();
+      if(!isOpen){
+        select.classList.add("open");
+        options.style.display="block";
+      }
+    }
+
+    selected.addEventListener("click", toggleSelect);
+    select.querySelector(".field-end").addEventListener("click", toggleSelect);
+
+    options.querySelectorAll("div").forEach(option=>{
+      option.onclick=()=>{
+        selected.textContent=option.textContent;
+        selected.classList.add("active");
+        hidden.value=option.textContent;
+        select.classList.remove("invalid-field");
+        select.classList.remove("open");
+        options.style.display="none";
+      };
+    });
+
+    selected.textContent=placeholder;
+  });
+}
 
 document.addEventListener("click",e=>{
   if(!e.target.closest(".custom-select")){
@@ -990,6 +988,11 @@ codeModal.addEventListener("click", (e)=>{
     closeCodeModal();
   }
 });
+
+(async function startApp() {
+  await loadDropdownData();
+  initializeCustomSelects();
+})();
 </script>
 </body>
 </html>
