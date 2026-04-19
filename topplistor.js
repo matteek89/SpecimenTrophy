@@ -1,6 +1,6 @@
 const leaderboardData = {
   "Björkna": [
-    { placering: 1, namn: "Mattias", vikt: "1450 g", datum: "2026-04-10", poang: 102 },
+    { placering: 1, namn: "Mattias", vikt: "1450 g", datum: "10/04", poang: 102 },
     { placering: 2, namn: "Andreas", vikt: "1380 g", datum: "2026-04-09", poang: 96 },
     { placering: 3, namn: "Johan", vikt: "1320 g", datum: "2026-04-08", poang: 91 }
   ],
