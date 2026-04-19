@@ -28,11 +28,23 @@ const leaderboardData = {
   ]
 };
 
-const speciesSelect = document.getElementById("speciesSelect");
+const dropdownButton = document.getElementById("dropdownButton");
+const dropdownMenu = document.getElementById("dropdownMenu");
+const selectedValue = document.getElementById("selectedValue");
+const dropdownItems = document.querySelectorAll(".dropdown-item");
+
 const leaderboardHead = document.getElementById("leaderboardHead");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const tableElement = document.querySelector("table");
+
+function setActiveDropdownItem(value) {
+  dropdownItems.forEach(item => {
+    const isActive = item.dataset.value === value;
+    item.classList.toggle("active", isActive);
+    item.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+}
 
 function renderSpeciesTable(species, rows) {
   tableTitle.textContent = `${species} - Top 12`;
@@ -93,18 +105,23 @@ function renderTotalTable(rows) {
     return;
   }
 
-  leaderboardBody.innerHTML = rows.map(row => `
-    <tr>
-      <td>${row.placering ?? ""}</td>
-      <td>${row.namn ?? ""}</td>
-      <td>${row.poang ?? 0}</td>
-      <td>${row.antal ?? 0}</td>
-    </tr>
-  `).join("");
+  leaderboardBody.innerHTML = rows
+    .map(row => `
+      <tr>
+        <td>${row.placering ?? ""}</td>
+        <td>${row.namn ?? ""}</td>
+        <td>${row.poang ?? 0}</td>
+        <td>${row.antal ?? 0}</td>
+      </tr>
+    `)
+    .join("");
 }
 
 function renderSelected(value) {
   const rows = leaderboardData[value] || [];
+
+  selectedValue.textContent = value;
+  setActiveDropdownItem(value);
 
   if (value === "Bäste poängplockare") {
     renderTotalTable(rows);
@@ -114,8 +131,25 @@ function renderSelected(value) {
   renderSpeciesTable(value, rows);
 }
 
-speciesSelect.addEventListener("change", (event) => {
-  renderSelected(event.target.value);
+dropdownButton.addEventListener("click", () => {
+  const isOpen = dropdownMenu.classList.toggle("active");
+  dropdownButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
 });
 
-renderSelected(speciesSelect.value);
+dropdownItems.forEach(item => {
+  item.addEventListener("click", () => {
+    const value = item.dataset.value;
+    dropdownMenu.classList.remove("active");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    renderSelected(value);
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".custom-dropdown")) {
+    dropdownMenu.classList.remove("active");
+    dropdownButton.setAttribute("aria-expanded", "false");
+  }
+});
+
+renderSelected("Björkna");
