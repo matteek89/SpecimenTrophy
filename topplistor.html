@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css" />
+  <link rel="stylesheet" href="topplistor.css?v=4" />
 </head>
 <body>
   <div class="page">
     <header class="page-header">
       <img src="./images/logo.png" alt="Specimen Trophy" class="logo" />
-      <p>Topplistor - välj art för att se Top 12</p>
+      <p class="subtitle">Topplistor - välj art för att se Top 12</p>
     </header>
 
-    <section class="filter-card">
-      <label for="speciesSelect">Välj art</label> 
+    <section class="panel filter-panel">
+      <label for="speciesSelect">Välj art</label>
       <select id="speciesSelect">
         <option value="Björkna">Björkna</option>
         <option value="Brax">Brax</option>
@@ -27,7 +27,7 @@
       </select>
     </section>
 
-    <section class="leaderboard-card">
+    <section class="panel leaderboard-panel">
       <div class="leaderboard-header">
         <h2 id="tableTitle">Björkna - Top 12</h2>
       </div>
@@ -36,7 +36,7 @@
         <table>
           <thead>
             <tr>
-              <th>#</th>
+              <th>Plac.</th>
               <th>Namn</th>
               <th>Vikt</th>
               <th>Datum</th>
@@ -49,6 +49,6 @@
     </section>
   </div>
 
-  <script src="topplistor.js"></script>
+  <script src="topplistor.js?v=4"></script>
 </body>
 </html>
