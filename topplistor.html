@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topplistor</title>
+  <link rel="stylesheet" href="topplistor.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>Topplistor</h1>
+      <p>Välj art för att se Top 12</p>
+    </header>
 
+    <section class="filter-card">
+      <label for="speciesSelect">Välj art</label>
+      <select id="speciesSelect">
+        <option value="Björkna">Björkna</option>
+        <option value="Brax">Brax</option>
+        <option value="Id">Id</option>
+        <option value="Mört">Mört</option>
+        <option value="Ruda">Ruda</option>
+        <option value="Sarv">Sarv</option>
+        <option value="Sutare">Sutare</option>
+        <option value="Vimma">Vimma</option>
+      </select>
+    </section>
+
+    <section class="leaderboard-card">
+      <div class="leaderboard-header">
+        <h2 id="tableTitle">Björkna - Top 12</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plac.</th>
+              <th>Namn</th>
+              <th>Vikt</th>
+              <th>Datum</th>
+              <th>Poäng</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="topplistor.js"></script>
+</body>
+</html>
