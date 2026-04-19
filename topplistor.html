@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css?v=11" />
+  <link rel="stylesheet" href="topplistor.css?v=12" />
 </head>
 <body>
   <div class="page-wrap">
@@ -14,17 +14,23 @@
       </header>
 
       <section class="inner-card filter-card">
-        <label for="speciesSelect">Art</label>
-        <select id="speciesSelect">
-          <option value="Björkna">Björkna</option>
-          <option value="Brax">Brax</option>
-          <option value="Id">Id</option>
-          <option value="Mört">Mört</option>
-          <option value="Ruda">Ruda</option>
-          <option value="Sarv">Sarv</option>
-          <option value="Sutare">Sutare</option>
-          <option value="Vimma">Vimma</option>
-        </select>
+        <label for="speciesSelect">Topplista</label>
+
+        <div class="select-shell">
+          <span class="select-icon">🏆</span>
+          <select id="speciesSelect">
+            <option value="Björkna">Björkna</option>
+            <option value="Brax">Brax</option>
+            <option value="Id">Id</option>
+            <option value="Mört">Mört</option>
+            <option value="Ruda">Ruda</option>
+            <option value="Sarv">Sarv</option>
+            <option value="Sutare">Sutare</option>
+            <option value="Vimma">Vimma</option>
+            <option value="Bäste poängplockare">Bäste poängplockare</option>
+          </select>
+          <span class="select-arrow">⌄</span>
+        </div>
       </section>
 
       <section class="inner-card leaderboard-card">
@@ -34,15 +40,7 @@
 
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Plac.</th>
-                <th>Namn</th>
-                <th>Vikt</th>
-                <th>Datum</th>
-                <th>Poäng</th>
-              </tr>
-            </thead>
+            <thead id="leaderboardHead"></thead>
             <tbody id="leaderboardBody"></tbody>
           </table>
         </div>
@@ -50,6 +48,6 @@
     </main>
   </div>
 
-  <script src="topplistor.js?v=11"></script>
+  <script src="topplistor.js?v=12"></script>
 </body>
 </html>
