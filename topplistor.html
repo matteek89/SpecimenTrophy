@@ -16,21 +16,25 @@
       <section class="inner-card filter-card">
         <label for="speciesSelect">Topplista</label>
 
-        <div class="select-shell">
-          <span class="select-icon">🏆</span>
-          <select id="speciesSelect">
-            <option value="Björkna">Björkna</option>
-            <option value="Brax">Brax</option>
-            <option value="Id">Id</option>
-            <option value="Mört">Mört</option>
-            <option value="Ruda">Ruda</option>
-            <option value="Sarv">Sarv</option>
-            <option value="Sutare">Sutare</option>
-            <option value="Vimma">Vimma</option>
-            <option value="Bäste poängplockare">Bäste poängplockare</option>
-          </select>
-          <span class="select-arrow">⌄</span>
-        </div>
+        <div class="custom-dropdown">
+  <button class="dropdown-button" id="dropdownButton">
+    <span class="dropdown-icon">🏆</span>
+    <span id="selectedValue">Björkna</span>
+    <span class="dropdown-arrow">⌄</span>
+  </button>
+
+  <div class="dropdown-menu" id="dropdownMenu">
+    <div class="dropdown-item" data-value="Björkna">Björkna</div>
+    <div class="dropdown-item" data-value="Brax">Brax</div>
+    <div class="dropdown-item" data-value="Id">Id</div>
+    <div class="dropdown-item" data-value="Mört">Mört</div>
+    <div class="dropdown-item" data-value="Ruda">Ruda</div>
+    <div class="dropdown-item" data-value="Sarv">Sarv</div>
+    <div class="dropdown-item" data-value="Sutare">Sutare</div>
+    <div class="dropdown-item" data-value="Vimma">Vimma</div>
+    <div class="dropdown-item" data-value="Bäste poängplockare">Bäste poängplockare</div>
+  </div>
+</div>
       </section>
 
       <section class="inner-card leaderboard-card">
