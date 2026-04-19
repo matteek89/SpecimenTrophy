@@ -2,89 +2,78 @@
   box-sizing: border-box;
 }
 
-:root {
-  --orange: #ff7a00;
-  --orange-soft: #ffb066;
-  --bg-dark: #070707;
-  --panel-dark: rgba(15, 15, 15, 0.94);
-  --panel-inner: rgba(8, 8, 8, 0.96);
-  --text: #ffffff;
-  --muted: #d8d8d8;
-  --line: rgba(255, 122, 0, 0.45);
-  --line-strong: rgba(255, 122, 0, 0.65);
-  --line-soft: rgba(255, 255, 255, 0.08);
-  --shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
-}
-
-html,
 body {
   margin: 0;
-  min-height: 100%;
   font-family: Arial, sans-serif;
-  color: var(--text);
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.64), rgba(0, 0, 0, 0.82)),
-    url("./images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
-}
-
-body {
+  color: white;
   min-height: 100vh;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.70),
+      rgba(0, 0, 0, 0.82)
+    ),
+    url("./images/sunset_background_for_github.jpg")
+    center center / cover no-repeat fixed;
 }
 
-/* Mobil-look även i PC-webbläsare */
-@media (min-width: 641px) {
-  body {
-    display: flex;
-    justify-content: center;
-  }
+/* samma mobil-look även på PC */
+body {
+  display: flex;
+  justify-content: center;
 }
 
 .page {
   width: 100%;
   max-width: 430px;
   min-height: 100vh;
-  margin: 0 auto;
-  padding: 14px 10px 22px;
+  padding: 16px 10px 30px;
 }
+
+/* ---------- HEADER ---------- */
 
 .page-header {
   text-align: center;
-  margin-bottom: 16px;
-  padding-top: 6px;
+  margin-bottom: 18px;
 }
 
 .logo {
   display: block;
   width: min(250px, 78vw);
   max-width: 250px;
-  height: auto;
   margin: 0 auto 14px;
   padding: 8px;
-  border-radius: 24px;
+
   background: rgba(10, 10, 10, 0.82);
-  border: 2px solid var(--line-strong);
+
+  border: 2px solid #ff7a00;
+  border-radius: 24px;
+
   box-shadow:
-    0 0 0 1px rgba(255, 122, 0, 0.16),
-    0 0 18px rgba(255, 122, 0, 0.16),
-    0 0 30px rgba(255, 122, 0, 0.10),
-    0 14px 26px rgba(0, 0, 0, 0.35);
+    0 0 0 1px rgba(255, 122, 0, 0.12),
+    0 0 18px rgba(255, 122, 0, 0.14),
+    0 0 30px rgba(255, 122, 0, 0.08),
+    0 14px 28px rgba(0, 0, 0, 0.35);
 }
 
 .subtitle {
   margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+  color: #dddddd;
+  font-size: 0.92rem;
 }
 
+/* ---------- PANELS ---------- */
+
 .panel {
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.96), rgba(8, 8, 8, 0.96));
-  border: 2px solid rgba(255, 122, 0, 0.48);
-  border-radius: 28px;
+  background: rgba(18, 18, 18, 0.94);
+
+  border: 2px solid rgba(255, 122, 0, 0.45);
+  border-radius: 26px;
+
   box-shadow:
-    0 0 0 1px rgba(255, 122, 0, 0.10),
-    0 0 22px rgba(255, 122, 0, 0.08),
-    0 12px 30px rgba(0, 0, 0, 0.42);
+    0 0 0 1px rgba(255, 122, 0, 0.08),
+    0 10px 30px rgba(0, 0, 0, 0.42);
+
   backdrop-filter: blur(4px);
 }
 
@@ -93,40 +82,47 @@ body {
   margin-bottom: 16px;
 }
 
+/* ---------- DROPDOWN ---------- */
+
 .filter-panel {
-  padding: 14px;
+  padding: 16px;
 }
 
 .filter-panel label {
   display: block;
-  margin-bottom: 12px;
-  color: var(--orange-soft);
-  font-size: 0.98rem;
-  font-weight: 700;
+  margin-bottom: 10px;
+
+  color: #ffb066;
+  font-weight: bold;
+  font-size: 0.95rem;
 }
 
 .filter-panel select {
   width: 100%;
   padding: 14px 14px;
+
   border-radius: 16px;
   border: 1.5px solid rgba(255, 122, 0, 0.25);
-  background: var(--panel-inner);
-  color: var(--text);
+
+  background: #0f0f0f;
+  color: white;
   font-size: 1rem;
+
   outline: none;
   appearance: none;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .filter-panel select:focus {
-  border-color: rgba(255, 122, 0, 0.55);
+  border-color: #ff7a00;
+
   box-shadow:
-    0 0 0 3px rgba(255, 122, 0, 0.15),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    0 0 0 3px rgba(255, 122, 0, 0.14);
 }
 
+/* ---------- TABLE CARD ---------- */
+
 .leaderboard-panel {
-  padding: 14px;
+  padding: 16px;
 }
 
 .leaderboard-header {
@@ -135,18 +131,20 @@ body {
 
 .leaderboard-header h2 {
   margin: 0;
-  color: var(--orange);
+  color: #ff7a00;
   font-size: 1rem;
-  line-height: 1.2;
 }
+
+/* ---------- TABLE ---------- */
 
 .table-wrap {
   width: 100%;
   overflow: hidden;
-  border-radius: 22px;
-  border: 1.5px solid rgba(255, 122, 0, 0.18);
-  background: rgba(24, 24, 24, 0.95);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+
+  border-radius: 20px;
+  border: 1px solid rgba(255, 122, 0, 0.14);
+
+  background: rgba(26, 26, 26, 0.96);
 }
 
 table {
@@ -156,20 +154,25 @@ table {
 }
 
 thead th {
-  background: linear-gradient(180deg, rgba(42, 42, 42, 0.98), rgba(31, 31, 31, 0.98));
-  color: var(--orange-soft);
+  background: #232323;
+  color: #ffb066;
+
   text-align: center;
+
   padding: 6px 2px;
   font-size: 0.62rem;
   line-height: 1.1;
 }
 
 tbody td {
-  padding: 6px 2px;
-  border-top: 1px solid var(--line-soft);
+  padding: 7px 2px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
   color: #f2f2f2;
   font-size: 0.66rem;
   line-height: 1.15;
+
   text-align: center;
   vertical-align: middle;
 }
@@ -179,112 +182,78 @@ tbody tr:nth-child(odd) {
 }
 
 tbody tr:hover {
-  background: rgba(255, 122, 0, 0.06);
+  background: rgba(255, 122, 0, 0.05);
 }
 
 .empty-row td {
-  color: #c3c3c3;
   padding: 16px 8px;
+  color: #bdbdbd;
 }
 
-/* Kolumnbredder */
+/* ---------- COLUMN WIDTHS ---------- */
+
+/* Placering */
 th:nth-child(1),
 td:nth-child(1) {
   width: 9%;
 }
 
+/* Namn */
 th:nth-child(2),
 td:nth-child(2) {
   width: 25%;
   text-align: left;
   padding-left: 5px;
+
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
+/* Vikt */
 th:nth-child(3),
 td:nth-child(3) {
   width: 17%;
 }
 
+/* Datum */
 th:nth-child(4),
 td:nth-child(4) {
   width: 31%;
 }
 
+/* Poäng */
 th:nth-child(5),
 td:nth-child(5) {
   width: 18%;
 }
 
-/* Mobil */
+/* ---------- MOBILE ---------- */
+
 @media (max-width: 640px) {
   .page {
-    padding: 14px 10px 22px;
+    padding: 14px 10px 24px;
   }
 
   .logo {
     width: min(240px, 74vw);
     border-radius: 22px;
-    padding: 8px;
   }
 
   .subtitle {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .panel {
-    border-radius: 24px;
-  }
-
-  .filter-panel,
-  .leaderboard-panel {
-    padding: 14px;
-  }
-
-  .filter-panel select {
-    padding: 14px 14px;
-    border-radius: 16px;
-  }
-
-  .leaderboard-header h2 {
-    font-size: 1rem;
+    border-radius: 22px;
   }
 
   thead th {
     font-size: 0.64rem;
-    padding: 6px 2px;
   }
 
   tbody td {
     font-size: 0.68rem;
-    padding: 7px 2px;
-  }
-
-  th:nth-child(1),
-  td:nth-child(1) {
-    width: 9%;
-  }
-
-  th:nth-child(2),
-  td:nth-child(2) {
-    width: 25%;
-  }
-
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 17%;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 31%;
-  }
-
-  th:nth-child(5),
-  td:nth-child(5) {
-    width: 18%;
   }
 }
 
@@ -294,21 +263,15 @@ td:nth-child(5) {
   }
 
   .logo {
-    width: min(225px, 72vw);
-  }
-
-  .subtitle {
-    font-size: 0.84rem;
+    width: min(220px, 72vw);
   }
 
   thead th {
     font-size: 0.58rem;
-    padding: 5px 2px;
   }
 
   tbody td {
     font-size: 0.63rem;
-    padding: 6px 2px;
   }
 
   .leaderboard-header h2 {
