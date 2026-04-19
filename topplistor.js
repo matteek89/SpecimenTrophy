@@ -89,7 +89,7 @@ function renderTotalTable(rows) {
 
   leaderboardHead.innerHTML = `
     <tr>
-      <th>Plac.</th>
+      <th>#</th>
       <th>Namn</th>
       <th>Poäng</th>
       <th>Antal</th>
