@@ -52,7 +52,7 @@ function renderSpeciesTable(species, rows) {
 
   leaderboardHead.innerHTML = `
     <tr>
-      <th>Plac.</th>
+      <th>#</th>
       <th>Namn</th>
       <th>Vikt</th>
       <th>Datum</th>
