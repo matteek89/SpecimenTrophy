@@ -1,1 +1,128 @@
+* {
+  box-sizing: border-box;
+}
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg, #111111 0%, #1a1a1a 100%);
+  color: #ffffff;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  color: #ff7a00;
+  font-size: 2.2rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: #d0d0d0;
+  font-size: 1rem;
+}
+
+.filter-card,
+.leaderboard-card {
+  background: #1b1b1b;
+  border: 1px solid #2e2e2e;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.filter-card {
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.filter-card label {
+  display: block;
+  margin-bottom: 10px;
+  color: #ffb066;
+  font-weight: bold;
+}
+
+.filter-card select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.filter-card select:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+}
+
+.leaderboard-card {
+  padding: 18px;
+}
+
+.leaderboard-header {
+  margin-bottom: 14px;
+}
+
+.leaderboard-header h2 {
+  margin: 0;
+  color: #ff7a00;
+  font-size: 1.4rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  background: #262626;
+  color: #ffb066;
+  text-align: left;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+tbody td {
+  padding: 12px;
+  border-top: 1px solid #2e2e2e;
+  color: #f3f3f3;
+}
+
+tbody tr:hover {
+  background: #222222;
+}
+
+.empty-row td {
+  text-align: center;
+  color: #bbbbbb;
+  padding: 18px 12px;
+}
+
+@media (max-width: 700px) {
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 8px;
+    font-size: 0.92rem;
+  }
+}
