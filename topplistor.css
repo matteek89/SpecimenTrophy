@@ -89,14 +89,13 @@ body {
 }
 
 .table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  overflow: hidden;
   border-radius: 12px;
 }
 
 table {
   width: 100%;
-  min-width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -104,18 +103,20 @@ table {
 thead th {
   background: #262626;
   color: #ffb066;
-  text-align: left;
-  padding: 8px 6px;
-  font-size: 0.82rem;
-  line-height: 1.2;
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 0.75rem;
+  line-height: 1.1;
 }
 
 tbody td {
-  padding: 8px 6px;
+  padding: 8px 4px;
   border-top: 1px solid #2e2e2e;
   color: #f3f3f3;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   line-height: 1.2;
+  text-align: center;
+  word-break: break-word;
 }
 
 tbody tr:hover {
@@ -128,74 +129,60 @@ tbody tr:hover {
   padding: 14px 8px;
 }
 
-/* Kolumnbredder */
+/* Placering */
 th:nth-child(1),
 td:nth-child(1) {
   width: 12%;
-  text-align: center;
 }
 
+/* Namn */
 th:nth-child(2),
 td:nth-child(2) {
   width: 28%;
 }
 
+/* Vikt */
 th:nth-child(3),
 td:nth-child(3) {
   width: 20%;
-  text-align: center;
 }
 
+/* Datum */
 th:nth-child(4),
 td:nth-child(4) {
   width: 22%;
-  text-align: center;
 }
 
+/* Poäng */
 th:nth-child(5),
 td:nth-child(5) {
   width: 18%;
-  text-align: center;
 }
 
 /* Mobil */
 @media (max-width: 640px) {
-  thead th,
+  thead th {
+    font-size: 0.68rem;
+    padding: 7px 3px;
+  }
+
   tbody td {
-    padding: 7px 4px;
-    font-size: 0.76rem;
-  }
-
-  th:nth-child(2),
-  td:nth-child(2) {
-    width: 26%;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 20%;
-  }
-}
-
-/* Extra små mobiler */
-@media (max-width: 420px) {
-  thead th,
-  tbody td {
-    padding: 6px 3px;
     font-size: 0.72rem;
+    padding: 7px 3px;
   }
 
   .leaderboard-header h2 {
     font-size: 1rem;
   }
 }
-  thead th,
-  tbody td {
-    font-size: 0.84rem;
-    padding: 9px 7px;
+
+/* Extra små mobiler */
+@media (max-width: 400px) {
+  thead th {
+    font-size: 0.64rem;
   }
 
-  table {
-    min-width: 420px;
+  tbody td {
+    font-size: 0.68rem;
   }
 }
