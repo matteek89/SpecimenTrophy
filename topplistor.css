@@ -96,25 +96,26 @@ body {
 
 table {
   width: 100%;
-  min-width: 520px;
+  min-width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 thead th {
   background: #262626;
   color: #ffb066;
   text-align: left;
-  padding: 12px 10px;
-  font-size: 0.92rem;
-  white-space: nowrap;
+  padding: 8px 6px;
+  font-size: 0.82rem;
+  line-height: 1.2;
 }
 
 tbody td {
-  padding: 12px 10px;
+  padding: 8px 6px;
   border-top: 1px solid #2e2e2e;
   color: #f3f3f3;
-  font-size: 0.94rem;
-  white-space: nowrap;
+  font-size: 0.84rem;
+  line-height: 1.2;
 }
 
 tbody tr:hover {
@@ -124,63 +125,70 @@ tbody tr:hover {
 .empty-row td {
   text-align: center;
   color: #bbbbbb;
-  padding: 18px 12px;
-  white-space: normal;
+  padding: 14px 8px;
+}
+
+/* Kolumnbredder */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 12%;
+  text-align: center;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 28%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 20%;
+  text-align: center;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 22%;
+  text-align: center;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 18%;
+  text-align: center;
 }
 
 /* Mobil */
 @media (max-width: 640px) {
-  .page {
-    padding: 16px 10px 24px;
-  }
-
-  .page-header h1 {
-    font-size: 1.7rem;
-  }
-
-  .page-header p {
-    font-size: 0.92rem;
-  }
-
-  .filter-card,
-  .leaderboard-card {
-    border-radius: 14px;
-  }
-
-  .filter-card {
-    padding: 14px;
-  }
-
-  .leaderboard-card {
-    padding: 14px;
-  }
-
-  .leaderboard-header h2 {
-    font-size: 1.08rem;
-  }
-
   thead th,
   tbody td {
-    padding: 10px 8px;
-    font-size: 0.88rem;
+    padding: 7px 4px;
+    font-size: 0.76rem;
   }
 
-  table {
-    min-width: 460px;
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 26%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 20%;
   }
 }
 
-/* Extra små skärmar */
+/* Extra små mobiler */
 @media (max-width: 420px) {
-  .page-header h1 {
-    font-size: 1.5rem;
+  thead th,
+  tbody td {
+    padding: 6px 3px;
+    font-size: 0.72rem;
   }
 
-  .filter-card select {
-    font-size: 0.95rem;
-    padding: 13px 14px;
+  .leaderboard-header h2 {
+    font-size: 1rem;
   }
-
+}
   thead th,
   tbody td {
     font-size: 0.84rem;
