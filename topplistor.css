@@ -24,6 +24,7 @@ body {
   padding: 36px 16px;
 }
 
+/* Hela svarta/orange mobilramen */
 .app-shell {
   width: 100%;
   max-width: 380px;
@@ -43,6 +44,7 @@ body {
   height: auto;
 }
 
+/* Logga */
 .page-header {
   text-align: center;
   margin-bottom: 14px;
@@ -62,6 +64,7 @@ body {
     0 0 34px rgba(255, 153, 0, 0.10);
 }
 
+/* Inre mörka kort */
 .inner-card {
   background: linear-gradient(
     180deg,
@@ -88,50 +91,99 @@ body {
   font-weight: 700;
 }
 
-.select-shell {
+/* Custom dropdown */
+.custom-dropdown {
   position: relative;
-  display: flex;
-  align-items: center;
   width: 100%;
 }
 
-.select-icon {
-  position: absolute;
-  left: 14px;
-  font-size: 1rem;
-  line-height: 1;
-  opacity: 0.95;
-  pointer-events: none;
-}
-
-.select-arrow {
-  position: absolute;
-  right: 14px;
-  font-size: 1.2rem;
-  line-height: 1;
-  color: #ff9900;
-  pointer-events: none;
-}
-
-.filter-card select {
+.dropdown-button {
   width: 100%;
-  padding: 13px 42px 13px 42px;
+  padding: 13px 14px;
   border-radius: 14px;
   border: 1px solid rgba(255, 153, 0, 0.22);
   background: rgba(0, 0, 0, 0.35);
   color: #ffffff;
   font-size: 1rem;
   outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.filter-card select:focus {
+.dropdown-button:focus,
+.dropdown-button:hover {
   border-color: #ff9900;
   box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.12);
 }
 
+.dropdown-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dropdown-icon {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+#selectedValue {
+  display: block;
+  text-align: left;
+}
+
+.dropdown-arrow {
+  flex: 0 0 auto;
+  font-size: 1.2rem;
+  color: #ff9900;
+  line-height: 1;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  display: none;
+  z-index: 999;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 153, 0, 0.22);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 18, 45, 0.98) 0%,
+    rgba(0, 8, 22, 0.98) 100%
+  );
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 13px 14px;
+  color: #ffffff;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.95rem;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active {
+  background: rgba(255, 153, 0, 0.08);
+  color: #ffb347;
+}
+
+/* Topplista */
 .leaderboard-card {
   padding: 14px;
 }
@@ -193,7 +245,7 @@ tbody tr:hover {
   color: #bfbfbf;
 }
 
-/* Standardkolumner för artsidor */
+/* Artsidor */
 .species-table th:nth-child(1),
 .species-table td:nth-child(1) {
   width: 10%;
@@ -224,7 +276,7 @@ tbody tr:hover {
   width: 18%;
 }
 
-/* Kolumner för totalpoäng */
+/* Bäste poängplockare */
 .total-table th:nth-child(1),
 .total-table td:nth-child(1) {
   width: 12%;
@@ -279,6 +331,11 @@ tbody tr:hover {
   tbody td {
     font-size: 0.66rem;
     padding: 8px 2px;
+  }
+
+  .dropdown-button,
+  .dropdown-item {
+    font-size: 0.95rem;
   }
 }
 
