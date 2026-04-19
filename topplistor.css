@@ -8,26 +8,25 @@ body {
   color: white;
   min-height: 100vh;
 
+  /* samma mörka bakgrund som huvudsidan */
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.70),
-      rgba(0, 0, 0, 0.82)
-    ),
-    url("./images/sunset_background_for_github.jpg")
-    center center / cover no-repeat fixed;
-}
+      180deg,
+      #050505 0%,
+      #0a0a0a 35%,
+      #111111 100%
+    );
 
-/* samma mobil-look även på PC */
-body {
   display: flex;
   justify-content: center;
 }
 
+/* exakt mobilskärms-känsla även på PC */
 .page {
   width: 100%;
   max-width: 430px;
   min-height: 100vh;
-  padding: 16px 10px 30px;
+  padding: 14px 10px 28px;
 }
 
 /* ---------- HEADER ---------- */
@@ -35,6 +34,7 @@ body {
 .page-header {
   text-align: center;
   margin-bottom: 18px;
+  padding-top: 6px;
 }
 
 .logo {
@@ -44,7 +44,7 @@ body {
   margin: 0 auto 14px;
   padding: 8px;
 
-  background: rgba(10, 10, 10, 0.82);
+  background: rgba(12, 12, 12, 0.95);
 
   border: 2px solid #ff7a00;
   border-radius: 24px;
@@ -59,22 +59,20 @@ body {
 .subtitle {
   margin: 0;
   color: #dddddd;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 /* ---------- PANELS ---------- */
 
 .panel {
-  background: rgba(18, 18, 18, 0.94);
+  background: rgba(18, 18, 18, 0.98);
 
   border: 2px solid rgba(255, 122, 0, 0.45);
   border-radius: 26px;
 
   box-shadow:
     0 0 0 1px rgba(255, 122, 0, 0.08),
-    0 10px 30px rgba(0, 0, 0, 0.42);
-
-  backdrop-filter: blur(4px);
+    0 12px 30px rgba(0, 0, 0, 0.42);
 }
 
 .filter-panel,
@@ -91,7 +89,6 @@ body {
 .filter-panel label {
   display: block;
   margin-bottom: 10px;
-
   color: #ffb066;
   font-weight: bold;
   font-size: 0.95rem;
@@ -99,12 +96,12 @@ body {
 
 .filter-panel select {
   width: 100%;
-  padding: 14px 14px;
+  padding: 14px;
 
   border-radius: 16px;
   border: 1.5px solid rgba(255, 122, 0, 0.25);
 
-  background: #0f0f0f;
+  background: #0d0d0d;
   color: white;
   font-size: 1rem;
 
@@ -114,12 +111,11 @@ body {
 
 .filter-panel select:focus {
   border-color: #ff7a00;
-
   box-shadow:
     0 0 0 3px rgba(255, 122, 0, 0.14);
 }
 
-/* ---------- TABLE CARD ---------- */
+/* ---------- TOPPLISTA ---------- */
 
 .leaderboard-panel {
   padding: 16px;
@@ -144,7 +140,7 @@ body {
   border-radius: 20px;
   border: 1px solid rgba(255, 122, 0, 0.14);
 
-  background: rgba(26, 26, 26, 0.96);
+  background: rgba(24, 24, 24, 0.98);
 }
 
 table {
@@ -158,8 +154,8 @@ thead th {
   color: #ffb066;
 
   text-align: center;
-
   padding: 6px 2px;
+
   font-size: 0.62rem;
   line-height: 1.1;
 }
@@ -190,45 +186,39 @@ tbody tr:hover {
   color: #bdbdbd;
 }
 
-/* ---------- COLUMN WIDTHS ---------- */
+/* ---------- KOLUMNER ---------- */
 
-/* Placering */
 th:nth-child(1),
 td:nth-child(1) {
   width: 9%;
 }
 
-/* Namn */
 th:nth-child(2),
 td:nth-child(2) {
   width: 25%;
   text-align: left;
   padding-left: 5px;
-
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
-/* Vikt */
 th:nth-child(3),
 td:nth-child(3) {
   width: 17%;
 }
 
-/* Datum */
 th:nth-child(4),
 td:nth-child(4) {
   width: 31%;
 }
 
-/* Poäng */
 th:nth-child(5),
 td:nth-child(5) {
   width: 18%;
 }
 
-/* ---------- MOBILE ---------- */
+/* ---------- MOBIL ---------- */
 
 @media (max-width: 640px) {
   .page {
