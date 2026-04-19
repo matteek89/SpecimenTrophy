@@ -7,29 +7,32 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(180deg, #111111 0%, #1a1a1a 100%);
   color: #ffffff;
+  min-height: 100vh;
 }
 
 .page {
-  max-width: 1100px;
+  width: 100%;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px 40px;
+  padding: 20px 14px 32px;
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .page-header h1 {
   margin: 0 0 8px;
   color: #ff7a00;
-  font-size: 2.2rem;
+  font-size: 2rem;
+  line-height: 1.1;
 }
 
 .page-header p {
   margin: 0;
   color: #d0d0d0;
-  font-size: 1rem;
+  font-size: 0.98rem;
 }
 
 .filter-card,
@@ -41,8 +44,8 @@ body {
 }
 
 .filter-card {
-  padding: 18px;
-  margin-bottom: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .filter-card label {
@@ -50,6 +53,7 @@ body {
   margin-bottom: 10px;
   color: #ffb066;
   font-weight: bold;
+  font-size: 0.95rem;
 }
 
 .filter-card select {
@@ -61,33 +65,38 @@ body {
   color: #fff;
   font-size: 1rem;
   outline: none;
+  appearance: none;
 }
 
 .filter-card select:focus {
   border-color: #ff7a00;
-  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.18);
 }
 
 .leaderboard-card {
-  padding: 18px;
+  padding: 16px;
 }
 
 .leaderboard-header {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .leaderboard-header h2 {
   margin: 0;
   color: #ff7a00;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
+  line-height: 1.2;
 }
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
 }
 
 table {
   width: 100%;
+  min-width: 520px;
   border-collapse: collapse;
 }
 
@@ -95,14 +104,17 @@ thead th {
   background: #262626;
   color: #ffb066;
   text-align: left;
-  padding: 12px;
-  font-size: 0.95rem;
+  padding: 12px 10px;
+  font-size: 0.92rem;
+  white-space: nowrap;
 }
 
 tbody td {
-  padding: 12px;
+  padding: 12px 10px;
   border-top: 1px solid #2e2e2e;
   color: #f3f3f3;
+  font-size: 0.94rem;
+  white-space: nowrap;
 }
 
 tbody tr:hover {
@@ -113,16 +125,69 @@ tbody tr:hover {
   text-align: center;
   color: #bbbbbb;
   padding: 18px 12px;
+  white-space: normal;
 }
 
-@media (max-width: 700px) {
+/* Mobil */
+@media (max-width: 640px) {
+  .page {
+    padding: 16px 10px 24px;
+  }
+
   .page-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
+  }
+
+  .page-header p {
+    font-size: 0.92rem;
+  }
+
+  .filter-card,
+  .leaderboard-card {
+    border-radius: 14px;
+  }
+
+  .filter-card {
+    padding: 14px;
+  }
+
+  .leaderboard-card {
+    padding: 14px;
+  }
+
+  .leaderboard-header h2 {
+    font-size: 1.08rem;
   }
 
   thead th,
   tbody td {
     padding: 10px 8px;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+  }
+
+  table {
+    min-width: 460px;
+  }
+}
+
+/* Extra små skärmar */
+@media (max-width: 420px) {
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .filter-card select {
+    font-size: 0.95rem;
+    padding: 13px 14px;
+  }
+
+  thead th,
+  tbody td {
+    font-size: 0.84rem;
+    padding: 9px 7px;
+  }
+
+  table {
+    min-width: 420px;
   }
 }
