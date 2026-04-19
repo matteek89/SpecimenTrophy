@@ -5,16 +5,18 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #111111 0%, #1a1a1a 100%);
   color: #ffffff;
   min-height: 100vh;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.82)),
+    url("./images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
 }
 
 .page {
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 20px 14px 32px;
+  padding: 20px 12px 32px;
 }
 
 .page-header {
@@ -22,25 +24,27 @@ body {
   margin-bottom: 18px;
 }
 
-.page-header h1 {
-  margin: 0 0 8px;
-  color: #ff7a00;
-  font-size: 2rem;
-  line-height: 1.1;
+.logo {
+  display: block;
+  width: min(280px, 78vw);
+  height: auto;
+  margin: 0 auto 12px;
 }
 
 .page-header p {
   margin: 0;
-  color: #d0d0d0;
+  color: #e6e6e6;
   font-size: 0.98rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .filter-card,
 .leaderboard-card {
-  background: #1b1b1b;
-  border: 1px solid #2e2e2e;
+  background: rgba(20, 20, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(2px);
 }
 
 .filter-card {
@@ -61,7 +65,7 @@ body {
   padding: 14px 16px;
   border-radius: 12px;
   border: 1px solid #444;
-  background: #111;
+  background: rgba(10, 10, 10, 0.95);
   color: #fff;
   font-size: 1rem;
   outline: none;
@@ -84,7 +88,7 @@ body {
 .leaderboard-header h2 {
   margin: 0;
   color: #ff7a00;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   line-height: 1.2;
 }
 
@@ -97,99 +101,160 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto;
+  table-layout: fixed;
 }
 
 thead th {
-  background: #262626;
+  background: rgba(38, 38, 38, 0.95);
   color: #ffb066;
   text-align: center;
-  padding: 8px 4px;
-  font-size: 0.75rem;
+  padding: 7px 3px;
+  font-size: 0.7rem;
   line-height: 1.1;
 }
 
 tbody td {
-  padding: 8px 4px;
+  padding: 8px 3px;
   border-top: 1px solid #2e2e2e;
   color: #f3f3f3;
-  font-size: 0.78rem;
-  line-height: 1.2;
+  font-size: 0.74rem;
+  line-height: 1.15;
   text-align: center;
   vertical-align: middle;
 }
 
-/* Placering liten */
+tbody tr:hover {
+  background: rgba(34, 34, 34, 0.95);
+}
+
+.empty-row td {
+  text-align: center;
+  color: #bbbbbb;
+  padding: 14px 8px;
+}
+
+/* Kolumner */
 th:nth-child(1),
 td:nth-child(1) {
   width: 10%;
 }
 
-/* Namn flexibel + viktigast */
 th:nth-child(2),
 td:nth-child(2) {
-  width: auto;
-  min-width: 120px;
+  width: 26%;
   text-align: left;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
-  padding-left: 8px;
+  padding-left: 6px;
 }
 
-/* Vikt */
 th:nth-child(3),
 td:nth-child(3) {
   width: 18%;
 }
 
-/* Datum */
 th:nth-child(4),
 td:nth-child(4) {
-  width: 18%;
+  width: 28%;
 }
 
-/* Poäng */
 th:nth-child(5),
 td:nth-child(5) {
-  width: 14%;
+  width: 18%;
 }
 
 /* Mobil */
 @media (max-width: 640px) {
-  thead th {
-    font-size: 0.68rem;
-    padding: 7px 3px;
+  .page {
+    padding: 16px 10px 24px;
   }
 
-  tbody td {
-    font-size: 0.72rem;
-    padding: 7px 3px;
+  .logo {
+    width: min(240px, 74vw);
   }
 
-  th:nth-child(2),
-  td:nth-child(2) {
-    min-width: 100px;
-    font-size: 0.72rem;
+  .page-header p {
+    font-size: 0.92rem;
+  }
+
+  .filter-card,
+  .leaderboard-card {
+    border-radius: 14px;
+  }
+
+  .filter-card {
+    padding: 14px;
+  }
+
+  .leaderboard-card {
+    padding: 14px;
   }
 
   .leaderboard-header h2 {
     font-size: 1rem;
   }
-}
 
-/* Extra små mobiler */
-@media (max-width: 400px) {
   thead th {
     font-size: 0.64rem;
+    padding: 6px 2px;
   }
 
   tbody td {
     font-size: 0.68rem;
+    padding: 7px 2px;
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 9%;
   }
 
   th:nth-child(2),
   td:nth-child(2) {
-    min-width: 90px;
+    width: 25%;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 17%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 31%;
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 18%;
+  }
+}
+
+@media (max-width: 400px) {
+  .page {
+    padding: 14px 8px 22px;
+  }
+
+  .logo {
+    width: min(220px, 72vw);
+  }
+
+  .page-header p {
+    font-size: 0.88rem;
+  }
+
+  thead th {
+    font-size: 0.58rem;
+    padding: 5px 2px;
+  }
+
+  tbody td {
+    font-size: 0.63rem;
+    padding: 6px 2px;
+  }
+
+  .leaderboard-header h2 {
+    font-size: 0.94rem;
   }
 }
