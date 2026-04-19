@@ -4,50 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css?v=4" />
+  <link rel="stylesheet" href="topplistor.css?v=11" />
 </head>
 <body>
-  <div class="page">
-    <header class="page-header">
-      <img src="./images/logo.png" alt="Specimen Trophy" class="logo" />
-    </header>
+  <div class="page-wrap">
+    <main class="app-shell">
+      <header class="page-header">
+        <img src="./images/logo.png" alt="Specimen Trophy" class="logo" />
+      </header>
 
-    <section class="panel filter-panel">
-      <label for="speciesSelect">Välj art</label>
-      <select id="speciesSelect">
-        <option value="Björkna">Björkna</option>
-        <option value="Brax">Brax</option>
-        <option value="Id">Id</option>
-        <option value="Mört">Mört</option>
-        <option value="Ruda">Ruda</option>
-        <option value="Sarv">Sarv</option>
-        <option value="Sutare">Sutare</option>
-        <option value="Vimma">Vimma</option>
-      </select>
-    </section>
+      <section class="inner-card filter-card">
+        <label for="speciesSelect">Art</label>
+        <select id="speciesSelect">
+          <option value="Björkna">Björkna</option>
+          <option value="Brax">Brax</option>
+          <option value="Id">Id</option>
+          <option value="Mört">Mört</option>
+          <option value="Ruda">Ruda</option>
+          <option value="Sarv">Sarv</option>
+          <option value="Sutare">Sutare</option>
+          <option value="Vimma">Vimma</option>
+        </select>
+      </section>
 
-    <section class="panel leaderboard-panel">
-      <div class="leaderboard-header">
-        <h2 id="tableTitle">Björkna</h2>
-      </div>
+      <section class="inner-card leaderboard-card">
+        <div class="leaderboard-header">
+          <h2 id="tableTitle">Björkna - Top 12</h2>
+        </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Deltagare</th>
-              <th>Vikt</th>
-              <th>Datum</th>
-              <th>Poäng</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardBody"></tbody>
-        </table>
-      </div>
-    </section>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Plac.</th>
+                <th>Namn</th>
+                <th>Vikt</th>
+                <th>Datum</th>
+                <th>Poäng</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <script src="topplistor.js?v=4"></script>
+  <script src="topplistor.js?v=11"></script>
 </body>
 </html>
