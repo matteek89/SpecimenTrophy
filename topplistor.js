@@ -47,7 +47,7 @@ function setActiveDropdownItem(value) {
 }
 
 function renderSpeciesTable(species, rows) {
-  tableTitle.textContent = `${species} - Top 12`;
+  tableTitle.textContent = species;
   tableElement.className = "species-table";
 
   leaderboardHead.innerHTML = `
