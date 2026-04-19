@@ -39,7 +39,7 @@ const tableTitle = document.getElementById("tableTitle");
 const tableElement = document.querySelector("table");
 
 function setActiveDropdownItem(value) {
-  dropdownItems.forEach(item => {
+  dropdownItems.forEach((item) => {
     const isActive = item.dataset.value === value;
     item.classList.toggle("active", isActive);
     item.setAttribute("aria-selected", isActive ? "true" : "false");
@@ -71,7 +71,7 @@ function renderSpeciesTable(species, rows) {
 
   leaderboardBody.innerHTML = rows
     .slice(0, 12)
-    .map(row => `
+    .map((row) => `
       <tr>
         <td>${row.placering ?? ""}</td>
         <td>${row.namn ?? ""}</td>
@@ -106,7 +106,7 @@ function renderTotalTable(rows) {
   }
 
   leaderboardBody.innerHTML = rows
-    .map(row => `
+    .map((row) => `
       <tr>
         <td>${row.placering ?? ""}</td>
         <td>${row.namn ?? ""}</td>
@@ -119,36 +119,64 @@ function renderTotalTable(rows) {
 
 function renderSelected(value) {
   const rows = leaderboardData[value] || [];
-
   selectedValue.textContent = value;
   setActiveDropdownItem(value);
 
   if (value === "Bäste poängplockare") {
     renderTotalTable(rows);
-    return;
+  } else {
+    renderSpeciesTable(value, rows);
   }
-
-  renderSpeciesTable(value, rows);
 }
 
-dropdownButton.addEventListener("click", () => {
-  const isOpen = dropdownMenu.classList.toggle("active");
-  dropdownButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+function openDropdown() {
+  dropdownMenu.classList.add("active");
+  dropdownButton.classList.add("open");
+  dropdownButton.setAttribute("aria-expanded", "true");
+}
+
+function closeDropdown() {
+  dropdownMenu.classList.remove("active");
+  dropdownButton.classList.remove("open");
+  dropdownButton.setAttribute("aria-expanded", "false");
+}
+
+function toggleDropdown() {
+  if (dropdownMenu.classList.contains("active")) {
+    closeDropdown();
+  } else {
+    openDropdown();
+  }
+}
+
+dropdownButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  toggleDropdown();
 });
 
-dropdownItems.forEach(item => {
-  item.addEventListener("click", () => {
+dropdownButton.addEventListener("touchend", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  toggleDropdown();
+}, { passive: false });
+
+dropdownItems.forEach((item) => {
+  const handleSelect = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     const value = item.dataset.value;
-    dropdownMenu.classList.remove("active");
-    dropdownButton.setAttribute("aria-expanded", "false");
     renderSelected(value);
-  });
+    closeDropdown();
+  };
+
+  item.addEventListener("click", handleSelect);
+  item.addEventListener("touchend", handleSelect, { passive: false });
 });
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".custom-dropdown")) {
-    dropdownMenu.classList.remove("active");
-    dropdownButton.setAttribute("aria-expanded", "false");
+    closeDropdown();
   }
 });
 
