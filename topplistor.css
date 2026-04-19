@@ -8,25 +8,37 @@ body {
   color: white;
   min-height: 100vh;
 
-  /* samma mörka bakgrund som huvudsidan */
   background:
     linear-gradient(
-      180deg,
-      #050505 0%,
-      #0a0a0a 35%,
-      #111111 100%
-    );
+      rgba(0, 0, 0, 0.30),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url("./images/sunset_background_for_github.jpg")
+    center center / cover no-repeat fixed;
 
   display: flex;
   justify-content: center;
+  align-items: stretch;
 }
 
-/* exakt mobilskärms-känsla även på PC */
+/* Själva "mobilskärmen" ovanpå bakgrunden */
 .page {
   width: 100%;
   max-width: 430px;
   min-height: 100vh;
   padding: 14px 10px 28px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.96) 0%,
+      rgba(10, 10, 10, 0.98) 35%,
+      rgba(14, 14, 14, 0.99) 100%
+    );
+
+  box-shadow:
+    0 0 0 1px rgba(255, 122, 0, 0.06),
+    0 0 40px rgba(0, 0, 0, 0.35);
 }
 
 /* ---------- HEADER ---------- */
@@ -45,7 +57,6 @@ body {
   padding: 8px;
 
   background: rgba(12, 12, 12, 0.95);
-
   border: 2px solid #ff7a00;
   border-radius: 24px;
 
@@ -66,10 +77,8 @@ body {
 
 .panel {
   background: rgba(18, 18, 18, 0.98);
-
   border: 2px solid rgba(255, 122, 0, 0.45);
   border-radius: 26px;
-
   box-shadow:
     0 0 0 1px rgba(255, 122, 0, 0.08),
     0 12px 30px rgba(0, 0, 0, 0.42);
@@ -97,22 +106,18 @@ body {
 .filter-panel select {
   width: 100%;
   padding: 14px;
-
   border-radius: 16px;
   border: 1.5px solid rgba(255, 122, 0, 0.25);
-
   background: #0d0d0d;
   color: white;
   font-size: 1rem;
-
   outline: none;
   appearance: none;
 }
 
 .filter-panel select:focus {
   border-color: #ff7a00;
-  box-shadow:
-    0 0 0 3px rgba(255, 122, 0, 0.14);
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.14);
 }
 
 /* ---------- TOPPLISTA ---------- */
@@ -136,10 +141,8 @@ body {
 .table-wrap {
   width: 100%;
   overflow: hidden;
-
   border-radius: 20px;
   border: 1px solid rgba(255, 122, 0, 0.14);
-
   background: rgba(24, 24, 24, 0.98);
 }
 
@@ -152,23 +155,18 @@ table {
 thead th {
   background: #232323;
   color: #ffb066;
-
   text-align: center;
   padding: 6px 2px;
-
   font-size: 0.62rem;
   line-height: 1.1;
 }
 
 tbody td {
   padding: 7px 2px;
-
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-
   color: #f2f2f2;
   font-size: 0.66rem;
   line-height: 1.15;
-
   text-align: center;
   vertical-align: middle;
 }
@@ -221,8 +219,14 @@ td:nth-child(5) {
 /* ---------- MOBIL ---------- */
 
 @media (max-width: 640px) {
+  body {
+    display: block;
+  }
+
   .page {
+    max-width: 430px;
     padding: 14px 10px 24px;
+    box-shadow: none;
   }
 
   .logo {
