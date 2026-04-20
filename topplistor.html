@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css?v=30" />
+  <link rel="stylesheet" href="topplistor.css?v=40" />
 </head>
 <body>
   <div class="page-wrap">
@@ -17,7 +17,7 @@
         </div>
       </header>
 
-      <section class="card filter-card">
+      <section class="filter-card">
         <div class="custom-dropdown" id="customDropdown">
           <button
             type="button"
@@ -27,10 +27,27 @@
             aria-haspopup="listbox"
           >
             <span class="dropdown-left">
-              <span class="dropdown-icon">🏆</span>
-              <span id="selectedValue">Björkna</span>
+              <span class="dropdown-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 12s3-4 9-4 9 4 9 4-3 4-9 4-9-4-9-4Z"></path>
+                  <path d="M7 8 4 5"></path>
+                  <path d="M7 16 4 19"></path>
+                  <path d="M17 8l3-3"></path>
+                  <path d="M17 16l3 3"></path>
+                </svg>
+              </span>
+
+              <span class="dropdown-body">
+                <span class="dropdown-field-label">Välj art</span>
+                <span id="selectedValue">Björkna</span>
+              </span>
             </span>
-            <span class="dropdown-arrow">⌄</span>
+
+            <span class="dropdown-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </span>
           </button>
 
           <div class="dropdown-menu" id="dropdownMenu" role="listbox">
@@ -62,6 +79,6 @@
     </main>
   </div>
 
-  <script src="topplistor.js?v=30"></script>
+  <script src="topplistor.js?v=40"></script>
 </body>
 </html>
