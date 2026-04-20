@@ -878,6 +878,7 @@ function closeCodeModal() {
   pendingSubmit = false;
 }
 
+<script>
 async function sendForm() {
   if (isSubmitting) return;
   isSubmitting = true;
@@ -902,17 +903,28 @@ async function sendForm() {
 
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: payload
+      body: payload,
+      redirect: "follow"
     });
 
     const responseText = await response.text();
     console.log("Svar från Apps Script:", responseText);
 
     if (!response.ok) {
-      throw new Error(`HTTP-fel: ${response.status}`);
+      throw new Error(`HTTP ${response.status}: ${responseText}`);
     }
 
-    // Bara visa sparat efter lyckat svar
+    let parsed = null;
+    try {
+      parsed = JSON.parse(responseText);
+    } catch (_) {
+      parsed = { success: true, raw: responseText };
+    }
+
+    if (parsed && parsed.success === false) {
+      throw new Error(parsed.error || "Okänt fel i Apps Script");
+    }
+
     showMessage("✔ Sparat!", "#19d458");
 
     form.reset();
@@ -930,7 +942,7 @@ async function sendForm() {
     clearInvalidStates();
   } catch (error) {
     console.error("Fel vid sparning:", error);
-    showMessage("⚠ Kunde inte spara. Försök igen.", "#ff6b6b");
+    showMessage(`⚠ ${error.message}`, "#ff6b6b");
   } finally {
     isSubmitting = false;
   }
