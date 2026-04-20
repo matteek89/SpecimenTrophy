@@ -1,18 +1,18 @@
 const leaderboardData = {
   "Björkna": [
-    { placering: 1, namn: "Mattias", vikt: "1450 g", datum: "2026-04-10", poang: 102 },
-    { placering: 2, namn: "Anders Wimmerstedt", vikt: "1380 g", datum: "2026-04-09", poang: 96 },
-    { placering: 3, namn: "Johan", vikt: "1320 g", datum: "2026-04-08", poang: 91 }
+    { placering: 1, namn: "Mattias", vikt: "1450", datum: "2026-04-10", poang: 102 },
+    { placering: 2, namn: "Anders Wimmerstedt", vikt: "1380", datum: "2026-04-09", poang: 96 },
+    { placering: 3, namn: "Johan", vikt: "1320", datum: "2026-04-08", poang: 91 }
   ],
   "Brax": [
-    { placering: 1, namn: "Mattias", vikt: "3820 g", datum: "2026-04-05", poang: 114 },
-    { placering: 2, namn: "Peter", vikt: "3610 g", datum: "2026-04-03", poang: 108 }
+    { placering: 1, namn: "Mattias", vikt: "3820", datum: "2026-04-05", poang: 114 },
+    { placering: 2, namn: "Peter", vikt: "3610", datum: "2026-04-03", poang: 108 }
   ],
   "Id": [
-    { placering: 1, namn: "Anders Wimmerstedt", vikt: "2750 g", datum: "2026-04-04", poang: 98 }
+    { placering: 1, namn: "Anders Wimmerstedt", vikt: "2750", datum: "2026-04-04", poang: 98 }
   ],
   "Mört": [
-    { placering: 1, namn: "Johan", vikt: "920 g", datum: "2026-04-01", poang: 85 }
+    { placering: 1, namn: "Johan", vikt: "920", datum: "2026-04-01", poang: 85 }
   ],
   "Ruda": [],
   "Sarv": [],
@@ -36,19 +36,18 @@ const dropdownItems = document.querySelectorAll(".dropdown-item");
 const leaderboardHead = document.getElementById("leaderboardHead");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
-const tableElement = document.querySelector("table");
+const leaderboardTable = document.getElementById("leaderboardTable");
 
 function setActiveDropdownItem(value) {
   dropdownItems.forEach((item) => {
-    const isActive = item.dataset.value === value;
-    item.classList.toggle("active", isActive);
-    item.setAttribute("aria-selected", isActive ? "true" : "false");
+    const active = item.dataset.value === value;
+    item.classList.toggle("active", active);
   });
 }
 
 function renderSpeciesTable(species, rows) {
   tableTitle.textContent = species;
-  tableElement.className = "species-table";
+  leaderboardTable.className = "species-table";
 
   leaderboardHead.innerHTML = `
     <tr>
@@ -85,7 +84,7 @@ function renderSpeciesTable(species, rows) {
 
 function renderTotalTable(rows) {
   tableTitle.textContent = "Bäste poängplockare";
-  tableElement.className = "total-table";
+  leaderboardTable.className = "total-table";
 
   leaderboardHead.innerHTML = `
     <tr>
@@ -155,23 +154,13 @@ dropdownButton.addEventListener("click", (event) => {
   toggleDropdown();
 });
 
-dropdownButton.addEventListener("touchend", (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  toggleDropdown();
-}, { passive: false });
-
 dropdownItems.forEach((item) => {
-  const handleSelect = (event) => {
+  item.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const value = item.dataset.value;
-    renderSelected(value);
+    renderSelected(item.dataset.value);
     closeDropdown();
-  };
-
-  item.addEventListener("click", handleSelect);
-  item.addEventListener("touchend", handleSelect, { passive: false });
+  });
 });
 
 document.addEventListener("click", (event) => {
