@@ -44,16 +44,14 @@ body::before{
   z-index:1;
   width:100%;
   max-width:430px;
-  min-height:calc(100vh - 20px);
   display:flex;
   justify-content:center;
-  align-items:flex-start;
 }
 
 .app-shell{
   width:100%;
   max-width:370px;
-  min-height:calc(100vh - 20px);
+  min-height:760px; /* samma grundhöjd som registrera-sidan */
   padding:4px;
   border-radius:26px;
   position:relative;
@@ -89,7 +87,6 @@ body::before{
     inset 0 1px 0 rgba(255,255,255,.04),
     0 8px 20px rgba(0,0,0,.20);
   z-index:0;
-  min-height:calc(100% - 8px);
 }
 
 .page-switch{
@@ -455,6 +452,7 @@ tbody tr:nth-child(odd){
   .app-shell{
     max-width:100%;
     width:100%;
+    min-height:760px;
   }
 
   .logo{
