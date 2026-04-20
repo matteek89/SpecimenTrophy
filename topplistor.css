@@ -154,37 +154,22 @@ body::before{
     0 0 22px rgba(255,106,0,.12);
 }
 
-.card{
-  width:calc(100% - 16px);
-  margin-left:8px;
-  margin-right:8px;
-  background:
-    linear-gradient(180deg, rgba(5,16,34,.90), rgba(2,10,22,.95));
-  border:1px solid rgba(255,138,0,.14);
-  border-radius:22px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    0 8px 20px rgba(0,0,0,.20);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  position:relative;
-  overflow:visible;
-}
-
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  border-radius:22px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(255,153,0,.03));
-}
-
+/* Inget extra kort runt dropdown */
 .filter-card{
-  padding:10px 10px 12px;
-  margin-bottom:10px;
+  position:relative;
   z-index:20;
+  width:calc(100% - 16px);
+  margin:0 8px 10px;
+  padding:0;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+.filter-card::before{
+  display:none;
 }
 
 .custom-dropdown{
@@ -194,18 +179,14 @@ body::before{
   margin-bottom:2px;
 }
 
+/* Mer lik registrera-sidans custom-select */
 .dropdown-button{
   width:100%;
   min-height:66px;
   padding:11px 12px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.06);
-  background:
-    linear-gradient(
-      90deg,
-      rgba(2,11,23,.95),
-      rgba(3,18,38,.88)
-    );
+  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88));
   color:var(--text);
   display:grid;
   grid-template-columns:1fr 20px;
@@ -233,39 +214,79 @@ body::before{
 }
 
 .dropdown-left{
-  display:flex;
-  align-items:center;
+  display:grid;
+  grid-template-columns:26px 1fr;
+  align-items:start;
   gap:10px;
   min-width:0;
   text-align:left;
 }
 
 .dropdown-icon{
-  color:var(--orange);
-  font-size:18px;
-  width:26px;
   display:flex;
+  align-items:flex-start;
   justify-content:center;
-  flex:0 0 26px;
+  color:var(--orange);
+  padding-top:2px;
+}
+
+.dropdown-icon svg{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.dropdown-body{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:40px;
+}
+
+.dropdown-field-label{
+  font-size:11px;
+  font-weight:700;
+  color:rgba(255,255,255,.92);
+  margin-bottom:4px;
+  line-height:1;
 }
 
 #selectedValue{
   font-size:16px;
+  line-height:1.2;
   font-weight:500;
   color:var(--text);
   min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  display:flex;
+  align-items:center;
+  min-height:20px;
 }
 
 .dropdown-arrow{
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:center;
   color:var(--orange);
-  font-size:20px;
+  padding-top:2px;
   transition:transform .2s ease;
+}
+
+.dropdown-arrow svg{
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 
 .dropdown-button.open .dropdown-arrow{
@@ -332,6 +353,33 @@ body::before{
 .dropdown-menu::-webkit-scrollbar-thumb{
   background:rgba(255,138,0,.35);
   border-radius:999px;
+}
+
+.card{
+  width:calc(100% - 16px);
+  margin-left:8px;
+  margin-right:8px;
+  background:
+    linear-gradient(180deg, rgba(5,16,34,.90), rgba(2,10,22,.95));
+  border:1px solid rgba(255,138,0,.14);
+  border-radius:22px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 20px rgba(0,0,0,.20);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  position:relative;
+  overflow:visible;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:22px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(255,153,0,.03));
 }
 
 .leaderboard-card{
