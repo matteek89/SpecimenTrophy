@@ -899,29 +899,11 @@ async function sendForm(){
       image: imageBase64
     });
 
-    const response = await fetch(SCRIPT_URL, {
+    await fetch(SCRIPT_URL, {
       method: "POST",
       body: payload,
-      redirect: "follow"
+      mode: "no-cors"
     });
-
-    const responseText = await response.text();
-    console.log("Svar från Apps Script:", responseText);
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${responseText}`);
-    }
-
-    let parsed = null;
-    try {
-      parsed = JSON.parse(responseText);
-    } catch (_) {
-      parsed = { success: true, raw: responseText };
-    }
-
-    if (parsed && parsed.success === false) {
-      throw new Error(parsed.error || "Okänt fel i Apps Script");
-    }
 
     showMessage("✔ Sparat!", "#19d458");
 
@@ -938,9 +920,10 @@ async function sendForm(){
     document.querySelector("input[name='Deltagare']").value = "";
     document.querySelector("input[name='Art']").value = "";
     clearInvalidStates();
+
   } catch (error) {
     console.error("Fel vid sparning:", error);
-    showMessage(`⚠ ${error.message}`, "#ff6b6b");
+    showMessage("⚠ Kunde inte spara", "#ff6b6b");
   } finally {
     isSubmitting = false;
   }
