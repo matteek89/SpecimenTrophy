@@ -773,132 +773,167 @@ input:-webkit-autofill:focus{
 </div>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxq83CXsYmw1cWahthnOMDSwobPx_F9-S45jpedNDCilQls7UICnaqSBvkGyxFtL6IB-A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxq83CXsYmw1cWahthnOMDSwobPx_F9-S45jpedNDCilQls7UICnaqSBvkGyxFtL6IB-A/exec";
 
-const form=document.getElementById("form");
-const success=document.getElementById("success");
-const imageInput=document.getElementById("image");
-const uploadText=document.getElementById("uploadText");
+const form = document.getElementById("form");
+const success = document.getElementById("success");
+const imageInput = document.getElementById("image");
+const uploadText = document.getElementById("uploadText");
 
-const deltagareField=document.getElementById("deltagareField");
-const artField=document.getElementById("artField");
-const viktField=document.getElementById("viktField");
-const datumField=document.getElementById("datumField");
-const bildField=document.getElementById("bildField");
-const viktInput=document.getElementById("viktInput");
-const datumInput=document.getElementById("datum");
+const deltagareField = document.getElementById("deltagareField");
+const artField = document.getElementById("artField");
+const viktField = document.getElementById("viktField");
+const datumField = document.getElementById("datumField");
+const bildField = document.getElementById("bildField");
+const viktInput = document.getElementById("viktInput");
+const datumInput = document.getElementById("datum");
 
-const codeModal=document.getElementById("codeModal");
-const codeInput=document.getElementById("codeInput");
-const codeError=document.getElementById("codeError");
-const confirmCodeBtn=document.getElementById("confirmCodeBtn");
-const cancelCodeBtn=document.getElementById("cancelCodeBtn");
+const codeModal = document.getElementById("codeModal");
+const codeInput = document.getElementById("codeInput");
+const codeError = document.getElementById("codeError");
+const confirmCodeBtn = document.getElementById("confirmCodeBtn");
+const cancelCodeBtn = document.getElementById("cancelCodeBtn");
 
-let pendingSubmit=false;
+let pendingSubmit = false;
+let isSubmitting = false;
 
-function toBase64(file){
-  return new Promise(resolve=>{
-    const reader=new FileReader();
-    reader.onload=()=>resolve(reader.result);
+function showMessage(text, color = "#19d458") {
+  success.textContent = text;
+  success.style.color = color;
+  success.classList.add("show");
+}
+
+function hideMessage() {
+  success.classList.remove("show");
+  success.textContent = "✔ Sparat!";
+  success.style.color = "";
+}
+
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-function closeAllSelects(){
-  document.querySelectorAll(".custom-select").forEach(s=>{
+function closeAllSelects() {
+  document.querySelectorAll(".custom-select").forEach(s => {
     s.classList.remove("open");
-    const options=s.querySelector(".options");
-    if(options) options.style.display="none";
+    const options = s.querySelector(".options");
+    if (options) options.style.display = "none";
   });
 }
 
-function clearInvalidStates(){
-  [deltagareField, artField, viktField, datumField, bildField].forEach(el=>{
+function clearInvalidStates() {
+  [deltagareField, artField, viktField, datumField, bildField].forEach(el => {
     el.classList.remove("invalid-field");
   });
 }
 
-function validateForm(){
+function validateForm() {
   clearInvalidStates();
-  let valid=true;
+  let valid = true;
 
-  if(!form.Deltagare.value){
+  if (!form.Deltagare.value) {
     deltagareField.classList.add("invalid-field");
-    valid=false;
+    valid = false;
   }
 
-  if(!form.Art.value){
+  if (!form.Art.value) {
     artField.classList.add("invalid-field");
-    valid=false;
+    valid = false;
   }
 
-  if(!form.Vikt.value){
+  if (!form.Vikt.value) {
     viktField.classList.add("invalid-field");
-    valid=false;
+    valid = false;
   }
 
-  if(!form.datum.value){
+  if (!form.datum.value) {
     datumField.classList.add("invalid-field");
-    valid=false;
+    valid = false;
   }
 
-  if(!imageInput.files || !imageInput.files[0]){
+  if (!imageInput.files || !imageInput.files[0]) {
     bildField.classList.add("invalid-field");
-    valid=false;
+    valid = false;
   }
 
   return valid;
 }
 
-function openCodeModal(){
-  codeInput.value="";
+function openCodeModal() {
+  codeInput.value = "";
   codeError.classList.remove("show");
   codeModal.classList.add("show");
-  setTimeout(()=>codeInput.focus(),50);
+  setTimeout(() => codeInput.focus(), 50);
 }
 
-function closeCodeModal(){
+function closeCodeModal() {
   codeModal.classList.remove("show");
-  codeInput.value="";
+  codeInput.value = "";
   codeError.classList.remove("show");
-  pendingSubmit=false;
+  pendingSubmit = false;
 }
 
-async function sendForm(){
-  const file=imageInput.files[0];
-  let imageBase64="";
+async function sendForm() {
+  if (isSubmitting) return;
+  isSubmitting = true;
 
-  if(file){
-    imageBase64=await toBase64(file);
+  try {
+    hideMessage();
+
+    const file = imageInput.files[0];
+    let imageBase64 = "";
+
+    if (file) {
+      imageBase64 = await toBase64(file);
+    }
+
+    const payload = new URLSearchParams({
+      Deltagare: form.Deltagare.value,
+      Art: form.Art.value,
+      Vikt: form.Vikt.value,
+      datum: form.datum.value,
+      image: imageBase64
+    });
+
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: payload
+    });
+
+    const responseText = await response.text();
+    console.log("Svar från Apps Script:", responseText);
+
+    if (!response.ok) {
+      throw new Error(`HTTP-fel: ${response.status}`);
+    }
+
+    // Bara visa sparat efter lyckat svar
+    showMessage("✔ Sparat!", "#19d458");
+
+    form.reset();
+    uploadText.textContent = "Välj bild från kameran eller galleri";
+
+    document.querySelectorAll(".custom-select").forEach(select => {
+      const selected = select.querySelector(".selected");
+      const placeholder = select.dataset.placeholder || select.dataset.name;
+      selected.textContent = placeholder;
+      selected.classList.remove("active");
+    });
+
+    document.querySelector("input[name='Deltagare']").value = "";
+    document.querySelector("input[name='Art']").value = "";
+    clearInvalidStates();
+  } catch (error) {
+    console.error("Fel vid sparning:", error);
+    showMessage("⚠ Kunde inte spara. Försök igen.", "#ff6b6b");
+  } finally {
+    isSubmitting = false;
   }
-
-  const payload={
-    Deltagare:form.Deltagare.value,
-    Art:form.Art.value,
-    Vikt:form.Vikt.value,
-    datum:form.datum.value,
-    image:imageBase64
-  };
-
-  await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:new URLSearchParams(payload)
-  });
-
-  success.classList.add("show");
-  form.reset();
-  uploadText.textContent="Välj bild från kameran eller galleri";
-
-  document.querySelectorAll(".custom-select").forEach(select=>{
-    const selected=select.querySelector(".selected");
-    const placeholder=select.dataset.placeholder || select.dataset.name;
-    selected.textContent=placeholder;
-    selected.classList.remove("active");
-  });
-
-  document.querySelector("input[name='Deltagare']").value="";
-  document.querySelector("input[name='Art']").value="";
-  clearInvalidStates();
 }
 
 async function loadDropdownData() {
@@ -925,86 +960,87 @@ function fillOptions(fieldId, items) {
   });
 }
 
-function initializeCustomSelects(){
-  document.querySelectorAll(".custom-select").forEach(select=>{
-    const selected=select.querySelector(".selected");
-    const options=select.querySelector(".options");
-    const hidden=document.querySelector(`input[name="${select.dataset.name}"]`);
-    const placeholder=select.dataset.placeholder || select.dataset.name;
+function initializeCustomSelects() {
+  document.querySelectorAll(".custom-select").forEach(select => {
+    const selected = select.querySelector(".selected");
+    const options = select.querySelector(".options");
+    const hidden = document.querySelector(`input[name="${select.dataset.name}"]`);
+    const placeholder = select.dataset.placeholder || select.dataset.name;
 
-    function toggleSelect(e){
+    function toggleSelect(e) {
       e.stopPropagation();
-      const isOpen=select.classList.contains("open");
+      const isOpen = select.classList.contains("open");
       closeAllSelects();
-      if(!isOpen){
+      if (!isOpen) {
         select.classList.add("open");
-        options.style.display="block";
+        options.style.display = "block";
       }
     }
 
     selected.addEventListener("click", toggleSelect);
     select.querySelector(".field-end").addEventListener("click", toggleSelect);
 
-    options.querySelectorAll("div").forEach(option=>{
-      option.onclick=()=>{
-        selected.textContent=option.textContent;
+    options.querySelectorAll("div").forEach(option => {
+      option.onclick = () => {
+        selected.textContent = option.textContent;
         selected.classList.add("active");
-        hidden.value=option.textContent;
+        hidden.value = option.textContent;
         select.classList.remove("invalid-field");
         select.classList.remove("open");
-        options.style.display="none";
+        options.style.display = "none";
       };
     });
 
-    selected.textContent=placeholder;
+    selected.textContent = placeholder;
   });
 }
 
-document.addEventListener("click",e=>{
-  if(!e.target.closest(".custom-select")){
+document.addEventListener("click", e => {
+  if (!e.target.closest(".custom-select")) {
     closeAllSelects();
   }
 });
 
-datumField.addEventListener("click",()=>{
-  if(datumInput.showPicker){
+datumField.addEventListener("click", () => {
+  if (datumInput.showPicker) {
     datumInput.showPicker();
-  }else{
+  } else {
     datumInput.focus();
     datumInput.click();
   }
 });
 
-imageInput.addEventListener("change",()=>{
-  if(imageInput.files && imageInput.files[0]){
-    uploadText.textContent=imageInput.files[0].name;
+imageInput.addEventListener("change", () => {
+  if (imageInput.files && imageInput.files[0]) {
+    uploadText.textContent = imageInput.files[0].name;
     bildField.classList.remove("invalid-field");
-  }else{
-    uploadText.textContent="Välj bild från kameran eller galleri";
+  } else {
+    uploadText.textContent = "Välj bild från kameran eller galleri";
   }
 });
 
-viktInput.addEventListener("input",()=>{
-  if(viktInput.value) viktField.classList.remove("invalid-field");
+viktInput.addEventListener("input", () => {
+  if (viktInput.value) viktField.classList.remove("invalid-field");
 });
 
-datumInput.addEventListener("input",()=>{
-  if(datumInput.value) datumField.classList.remove("invalid-field");
+datumInput.addEventListener("input", () => {
+  if (datumInput.value) datumField.classList.remove("invalid-field");
 });
 
-form.addEventListener("submit",e=>{
+form.addEventListener("submit", e => {
   e.preventDefault();
+  hideMessage();
 
-  if(!validateForm()) return;
+  if (!validateForm()) return;
 
-  pendingSubmit=true;
+  pendingSubmit = true;
   openCodeModal();
 });
 
-confirmCodeBtn.addEventListener("click", async ()=>{
-  if(!pendingSubmit) return;
+confirmCodeBtn.addEventListener("click", async () => {
+  if (!pendingSubmit) return;
 
-  if(codeInput.value !== "2026"){
+  if (codeInput.value !== "2026") {
     codeError.classList.add("show");
     codeInput.focus();
     codeInput.select();
@@ -1013,30 +1049,30 @@ confirmCodeBtn.addEventListener("click", async ()=>{
 
   codeError.classList.remove("show");
   codeModal.classList.remove("show");
-  pendingSubmit=false;
+  pendingSubmit = false;
 
   await sendForm();
 });
 
 cancelCodeBtn.addEventListener("click", closeCodeModal);
 
-codeInput.addEventListener("input", ()=>{
+codeInput.addEventListener("input", () => {
   codeError.classList.remove("show");
 });
 
-codeInput.addEventListener("keydown", (e)=>{
-  if(e.key === "Enter"){
+codeInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
     e.preventDefault();
     confirmCodeBtn.click();
   }
 
-  if(e.key === "Escape"){
+  if (e.key === "Escape") {
     closeCodeModal();
   }
 });
 
-codeModal.addEventListener("click", (e)=>{
-  if(e.target === codeModal){
+codeModal.addEventListener("click", (e) => {
+  if (e.target === codeModal) {
     closeCodeModal();
   }
 });
