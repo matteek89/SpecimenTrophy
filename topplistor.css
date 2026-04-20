@@ -20,6 +20,7 @@ body{
   justify-content:center;
   align-items:flex-start;
   padding:10px 8px;
+  min-height:100vh;
   background:
     linear-gradient(rgba(4,8,16,.34),rgba(4,8,16,.56)),
     url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed;
@@ -43,13 +44,16 @@ body::before{
   z-index:1;
   width:100%;
   max-width:430px;
+  min-height:calc(100vh - 20px);
   display:flex;
   justify-content:center;
+  align-items:flex-start;
 }
 
 .app-shell{
   width:100%;
   max-width:370px;
+  min-height:calc(100vh - 20px);
   padding:4px;
   border-radius:26px;
   position:relative;
@@ -59,7 +63,7 @@ body::before{
     0 0 10px rgba(255,145,0,.28),
     0 0 20px rgba(255,106,0,.10),
     0 14px 28px rgba(0,0,0,.24);
-  overflow:hidden;
+  overflow:visible;
 }
 
 .app-shell::before{
@@ -85,6 +89,7 @@ body::before{
     inset 0 1px 0 rgba(255,255,255,.04),
     0 8px 20px rgba(0,0,0,.20);
   z-index:0;
+  min-height:calc(100% - 8px);
 }
 
 .page-switch{
@@ -120,13 +125,13 @@ body::before{
 }
 
 .page-header{
-  padding-top:46px;
+  padding-top:42px;
 }
 
 .logo-wrap{
   display:flex;
   justify-content:center;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
 .logo{
@@ -166,7 +171,7 @@ body::before{
 }
 
 .filter-card{
-  padding:12px 10px 14px;
+  padding:10px 10px 12px;
   margin-bottom:10px;
   z-index:20;
 }
@@ -184,6 +189,7 @@ body::before{
   position:relative;
   z-index:50;
   width:100%;
+  margin-bottom:2px;
 }
 
 .dropdown-button{
@@ -258,7 +264,7 @@ body::before{
   box-shadow:
     0 0 14px rgba(255,138,0,.12),
     0 10px 24px rgba(0,0,0,.24);
-  max-height:240px;
+  max-height:min(240px, 50vh);
   overflow-y:auto;
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
@@ -308,7 +314,7 @@ body::before{
 }
 
 .leaderboard-card{
-  padding:12px 10px 14px;
+  padding:10px 10px 12px;
   margin-bottom:10px;
 }
 
