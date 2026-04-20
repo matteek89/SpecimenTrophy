@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   const authHeader = req.headers.authorization || "";
-  const expectedToken = `Specimen2025Topplista`;
+  const expectedToken = `SpecimenTrophy`;
 
   if (authHeader !== expectedToken) {
     return res.status(401).json({
