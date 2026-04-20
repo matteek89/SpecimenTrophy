@@ -51,7 +51,7 @@ body::before{
 .app-shell{
   width:100%;
   max-width:370px;
-  min-height:760px; /* samma grundhöjd som registrera-sidan */
+  min-height:760px;
   padding:4px;
   border-radius:26px;
   position:relative;
@@ -97,21 +97,25 @@ body::before{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:108px;
-  height:38px;
-  padding:0 14px;
-  border-radius:14px;
+  min-width:84px;
+  height:32px;
+  padding:0 10px;
+  border-radius:12px;
   text-decoration:none;
   color:#ffffff;
-  font-size:14px;
+  font-size:12px;
   font-weight:700;
   letter-spacing:.2px;
-  border:1px solid rgba(255,153,0,.35);
-  background:linear-gradient(180deg, rgba(2,11,23,.96), rgba(3,18,38,.90));
+  border:1px solid rgba(255,153,0,.30);
+  background:linear-gradient(
+    180deg,
+    rgba(2,11,23,.96),
+    rgba(3,18,38,.90)
+  );
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.04),
-    0 6px 14px rgba(0,0,0,.18),
-    0 0 10px rgba(255,145,0,.10);
+    0 4px 10px rgba(0,0,0,.16),
+    0 0 8px rgba(255,145,0,.08);
 }
 
 .page-header,
@@ -195,7 +199,12 @@ body::before{
   padding:11px 12px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.06);
-  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88));
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2,11,23,.95),
+      rgba(3,18,38,.88)
+    );
   color:var(--text);
   display:grid;
   grid-template-columns:1fr 20px;
@@ -206,6 +215,20 @@ body::before{
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.03),
     0 6px 14px rgba(0,0,0,.14);
+  transition:
+    box-shadow .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.dropdown-button:hover{
+  border-color:rgba(255,153,0,.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 8px 18px rgba(0,0,0,.16),
+    0 0 12px rgba(255,145,0,.08);
+  transform:translateY(-1px);
 }
 
 .dropdown-left{
@@ -467,8 +490,10 @@ tbody tr:nth-child(odd){
   .page-switch{
     top:10px;
     right:10px;
-    min-width:102px;
-    font-size:13px;
+    min-width:80px;
+    height:30px;
+    font-size:11px;
+    padding:0 8px;
   }
 
   thead th{
