@@ -42,6 +42,7 @@ function setActiveDropdownItem(value) {
   dropdownItems.forEach((item) => {
     const active = item.dataset.value === value;
     item.classList.toggle("active", active);
+    item.setAttribute("aria-selected", active ? "true" : "false");
   });
 }
 
@@ -154,6 +155,10 @@ dropdownButton.addEventListener("click", (event) => {
   toggleDropdown();
 });
 
+dropdownButton.addEventListener("touchstart", (event) => {
+  event.stopPropagation();
+}, { passive: true });
+
 dropdownItems.forEach((item) => {
   item.addEventListener("click", (event) => {
     event.preventDefault();
@@ -165,6 +170,12 @@ dropdownItems.forEach((item) => {
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".custom-dropdown")) {
+    closeDropdown();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
     closeDropdown();
   }
 });
