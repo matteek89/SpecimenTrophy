@@ -1,32 +1,4 @@
-const leaderboardData = {
-  "Björkna": [
-    { placering: 1, namn: "Mattias", vikt: "1450", datum: "2026-04-10", poang: 102 },
-    { placering: 2, namn: "Anders Wimmerstedt", vikt: "1380", datum: "2026-04-09", poang: 96 },
-    { placering: 3, namn: "Johan", vikt: "1320", datum: "2026-04-08", poang: 91 }
-  ],
-  "Brax": [
-    { placering: 1, namn: "Mattias", vikt: "3820", datum: "2026-04-05", poang: 114 },
-    { placering: 2, namn: "Peter", vikt: "3610", datum: "2026-04-03", poang: 108 }
-  ],
-  "Id": [
-    { placering: 1, namn: "Anders Wimmerstedt", vikt: "2750", datum: "2026-04-04", poang: 98 }
-  ],
-  "Mört": [
-    { placering: 1, namn: "Johan", vikt: "920", datum: "2026-04-01", poang: 85 }
-  ],
-  "Ruda": [],
-  "Sarv": [],
-  "Sutare": [],
-  "Vimma": [],
-  "Bäste poängplockare": [
-    { placering: 1, namn: "Mattias", poang: 420, antal: 6 },
-    { placering: 2, namn: "Anders Wimmerstedt", poang: 310, antal: 4 },
-    { placering: 3, namn: "Johan", poang: 85, antal: 1 },
-    { placering: 4, namn: "Peter", poang: 0, antal: 0 },
-    { placering: 5, namn: "Kalle", poang: 0, antal: 0 },
-    { placering: 6, namn: "Anna", poang: 0, antal: 0 }
-  ]
-};
+let leaderboardData = {};
 
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
@@ -149,6 +121,34 @@ function toggleDropdown() {
   }
 }
 
+async function loadLeaderboardData() {
+  try {
+    const response = await fetch("https://matteek89-specimentrophy.vercel.app/api/topplistor");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Kunde inte läsa topplistor");
+    }
+
+    leaderboardData = data;
+    renderSelected("Björkna");
+  } catch (error) {
+    console.error("Fel vid hämtning av topplistor:", error);
+
+    leaderboardHead.innerHTML = `
+      <tr>
+        <th>Meddelande</th>
+      </tr>
+    `;
+
+    leaderboardBody.innerHTML = `
+      <tr class="empty-row">
+        <td>Kunde inte läsa topplistor just nu.</td>
+      </tr>
+    `;
+  }
+}
+
 dropdownButton.addEventListener("click", (event) => {
   event.preventDefault();
   event.stopPropagation();
@@ -180,4 +180,4 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-renderSelected("Björkna");
+loadLeaderboardData();
