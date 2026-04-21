@@ -1,3 +1,5 @@
+import { put } from '@vercel/blob';
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -17,17 +19,28 @@ export default async function handler(req, res) {
   try {
     const data = req.body;
 
-    if (!data || typeof data !== "object") {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
       return res.status(400).json({
         error: "Invalid JSON"
       });
     }
 
-    console.log("Topplistor mottagna:", data);
+    const json = JSON.stringify(data, null, 2);
+
+    const blob = await put(
+      "topplistor/latest.json",
+      json,
+      {
+        access: "public",
+        allowOverwrite: true,
+        contentType: "application/json; charset=utf-8"
+      }
+    );
 
     return res.status(200).json({
       success: true,
-      message: "Topplistor mottagna från Excel"
+      message: "Topplistor sparade i Blob",
+      url: blob.url
     });
 
   } catch (error) {
