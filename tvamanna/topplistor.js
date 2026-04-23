@@ -1,24 +1,22 @@
-let leaderboardData = {
-  "Lax": [],
-  "Regnbåge": [],
-  "Totalen": []
-};
+let leaderboardData = {};
 
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
 const selectedValue = document.getElementById("selectedValue");
-const dropdownItems = document.querySelectorAll(".dropdown-item");
 
 const leaderboardHead = document.getElementById("leaderboardHead");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
 
-// Byt denna senare till din Två-manna Vercel endpoint
-const API_URL = "https://DIN-TVAMANNA-VERCEL.vercel.app/api/topplistor";
+const API_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor-tvaman";
+
+function getDropdownItems() {
+  return dropdownMenu.querySelectorAll(".dropdown-item");
+}
 
 function setActiveDropdownItem(value) {
-  dropdownItems.forEach((item) => {
+  getDropdownItems().forEach((item) => {
     const active = item.dataset.value === value;
     item.classList.toggle("active", active);
     item.setAttribute("aria-selected", active ? "true" : "false");
@@ -50,7 +48,7 @@ function renderSpeciesTable(species, rows) {
   }
 
   leaderboardBody.innerHTML = rows
-    .slice(0, 12)
+    .slice(0, 10)
     .map((row) => `
       <tr>
         <td>${row.placering ?? ""}</td>
@@ -98,6 +96,38 @@ function renderTotalTable(rows) {
     .join("");
 }
 
+function renderPointPickerTable(rows) {
+  tableTitle.textContent = "Bäste poängplockare";
+  leaderboardTable.className = "total-table";
+
+  leaderboardHead.innerHTML = `
+    <tr>
+      <th>#</th>
+      <th>Deltagare</th>
+      <th>Poäng</th>
+    </tr>
+  `;
+
+  if (!rows || rows.length === 0) {
+    leaderboardBody.innerHTML = `
+      <tr class="empty-row">
+        <td colspan="3">Ingen data ännu.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  leaderboardBody.innerHTML = rows
+    .map((row) => `
+      <tr>
+        <td>${row.placering ?? ""}</td>
+        <td>${row.namn ?? ""}</td>
+        <td>${row.poang ?? 0}</td>
+      </tr>
+    `)
+    .join("");
+}
+
 function renderSelected(value) {
   const rows = leaderboardData[value] || [];
   selectedValue.textContent = value;
@@ -105,6 +135,8 @@ function renderSelected(value) {
 
   if (value === "Totalen") {
     renderTotalTable(rows);
+  } else if (value === "Bäste poängplockare") {
+    renderPointPickerTable(rows);
   } else {
     renderSpeciesTable(value, rows);
   }
@@ -123,11 +155,37 @@ function closeDropdown() {
 }
 
 function toggleDropdown() {
-  if (dropdownMenu.classList.contains("active")) {
-    closeDropdown();
-  } else {
-    openDropdown();
-  }
+  dropdownMenu.classList.contains("active") ? closeDropdown() : openDropdown();
+}
+
+function buildDropdownFromData(data) {
+  dropdownMenu.innerHTML = "";
+
+  const keys = Object.keys(data || {});
+  const special = ["Totalen", "Bäste poängplockare"];
+  const species = keys.filter((key) => !special.includes(key));
+  const orderedKeys = [
+    ...species,
+    ...special.filter((key) => keys.includes(key))
+  ];
+
+  orderedKeys.forEach((key, index) => {
+    const div = document.createElement("div");
+    div.className = "dropdown-item";
+    if (index === 0) div.classList.add("active");
+    div.dataset.value = key;
+    div.setAttribute("role", "option");
+    div.textContent = key;
+
+    div.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      renderSelected(key);
+      closeDropdown();
+    });
+
+    dropdownMenu.appendChild(div);
+  });
 }
 
 async function loadLeaderboardData() {
@@ -140,7 +198,17 @@ async function loadLeaderboardData() {
     }
 
     leaderboardData = data;
-    renderSelected("Lax");
+    buildDropdownFromData(leaderboardData);
+
+    const firstKey =
+      Object.keys(leaderboardData).find(
+        (key) => key !== "Totalen" && key !== "Bäste poängplockare"
+      ) ||
+      Object.keys(leaderboardData)[0];
+
+    if (firstKey) {
+      renderSelected(firstKey);
+    }
   } catch (error) {
     console.error("Fel vid hämtning av topplistor:", error);
 
@@ -167,15 +235,6 @@ dropdownButton.addEventListener("click", (event) => {
 dropdownButton.addEventListener("touchstart", (event) => {
   event.stopPropagation();
 }, { passive: true });
-
-dropdownItems.forEach((item) => {
-  item.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    renderSelected(item.dataset.value);
-    closeDropdown();
-  });
-});
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".custom-dropdown")) {
