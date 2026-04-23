@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Två-manna Topplistor</title>
+  <link rel="stylesheet" href="topplistor.css?v=1" />
+</head>
+<body>
+  <div class="page-wrap">
+    <main class="app-shell">
+      <a href="index.html" class="page-switch">Registrera</a>
 
+      <header class="page-header">
+        <div class="logo-wrap">
+          <img src="images/logo_tvamanna.png" alt="Två-manna" class="logo" />
+        </div>
+      </header>
+
+      <section class="filter-card">
+        <div class="custom-dropdown" id="customDropdown">
+          <button
+            type="button"
+            class="dropdown-button"
+            id="dropdownButton"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+          >
+            <span class="dropdown-left">
+              <span class="dropdown-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 12s3-4 9-4 9 4 9 4-3 4-9 4-9-4-9-4Z"></path>
+                  <path d="M7 8 4 5"></path>
+                  <path d="M7 16 4 19"></path>
+                  <path d="M17 8l3-3"></path>
+                  <path d="M17 16l3 3"></path>
+                </svg>
+              </span>
+
+              <span class="dropdown-body">
+                <span class="dropdown-field-label">Välj topplista</span>
+                <span id="selectedValue">Lax</span>
+              </span>
+            </span>
+
+            <span class="dropdown-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </span>
+          </button>
+
+          <div class="dropdown-menu" id="dropdownMenu" role="listbox">
+            <div class="dropdown-item active" data-value="Lax" role="option">Lax</div>
+            <div class="dropdown-item" data-value="Regnbåge" role="option">Regnbåge</div>
+            <div class="dropdown-item" data-value="Totalen" role="option">Totalen</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card leaderboard-card">
+        <div class="leaderboard-header">
+          <h2 id="tableTitle">Lax</h2>
+        </div>
+
+        <div class="table-wrap">
+          <table id="leaderboardTable">
+            <thead id="leaderboardHead"></thead>
+            <tbody id="leaderboardBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="topplistor.js?v=1"></script>
+</body>
+</html>
