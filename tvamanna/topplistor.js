@@ -63,22 +63,21 @@ function renderSpeciesTable(species, rows) {
 }
 
 function renderTotalTable(rows) {
-  tableTitle.textContent = "Bästa Lag";
-  leaderboardTable.className = "total-table";
+  tableTitle.textContent = "Bäste Lag";
+  leaderboardTable.className = "best-team-table";
 
   leaderboardHead.innerHTML = `
     <tr>
       <th>#</th>
       <th>Lag</th>
       <th>Poäng</th>
-      <th>Antal</th>
     </tr>
   `;
 
   if (!rows || rows.length === 0) {
     leaderboardBody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="4">Ingen totaldata ännu.</td>
+        <td colspan="3">Ingen lagdata ännu.</td>
       </tr>
     `;
     return;
@@ -90,7 +89,6 @@ function renderTotalTable(rows) {
         <td>${row.placering ?? ""}</td>
         <td>${row.lag ?? row.namn ?? ""}</td>
         <td>${row.poang ?? 0}</td>
-        <td>${row.antal ?? 0}</td>
       </tr>
     `)
     .join("");
