@@ -98,7 +98,7 @@ function renderTotalTable(rows) {
 
 function renderPointPickerTable(rows) {
   tableTitle.textContent = "Bäste poängplockare";
-  leaderboardTable.className = "total-table";
+  leaderboardTable.className = "point-picker-table";
 
   leaderboardHead.innerHTML = `
     <tr>
@@ -130,6 +130,7 @@ function renderPointPickerTable(rows) {
 
 function renderSelected(value) {
   const rows = leaderboardData[value] || [];
+
   selectedValue.textContent = value;
   setActiveDropdownItem(value);
 
@@ -155,42 +156,59 @@ function closeDropdown() {
 }
 
 function toggleDropdown() {
-  dropdownMenu.classList.contains("active") ? closeDropdown() : openDropdown();
+  if (dropdownMenu.classList.contains("active")) {
+    closeDropdown();
+  } else {
+    openDropdown();
+  }
 }
 
 function buildDropdownFromData(data) {
   dropdownMenu.innerHTML = "";
 
   const keys = Object.keys(data || {});
-  const special = ["Totalen", "Bäste poängplockare"];
-  const species = keys.filter((key) => !special.includes(key));
+  const specialKeys = ["Totalen", "Bäste poängplockare"];
+
+  const speciesKeys = keys.filter((key) => !specialKeys.includes(key));
   const orderedKeys = [
-    ...species,
-    ...special.filter((key) => keys.includes(key))
+    ...speciesKeys,
+    ...specialKeys.filter((key) => keys.includes(key))
   ];
 
   orderedKeys.forEach((key, index) => {
-    const div = document.createElement("div");
-    div.className = "dropdown-item";
-    if (index === 0) div.classList.add("active");
-    div.dataset.value = key;
-    div.setAttribute("role", "option");
-    div.textContent = key;
+    const item = document.createElement("div");
 
-    div.addEventListener("click", (event) => {
+    item.className = "dropdown-item";
+    item.dataset.value = key;
+    item.setAttribute("role", "option");
+    item.textContent = key;
+
+    if (index === 0) {
+      item.classList.add("active");
+      item.setAttribute("aria-selected", "true");
+    } else {
+      item.setAttribute("aria-selected", "false");
+    }
+
+    item.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       renderSelected(key);
       closeDropdown();
     });
 
-    dropdownMenu.appendChild(div);
+    dropdownMenu.appendChild(item);
   });
+
+  return orderedKeys;
 }
 
 async function loadLeaderboardData() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      cache: "no-store"
+    });
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -198,19 +216,37 @@ async function loadLeaderboardData() {
     }
 
     leaderboardData = data;
-    buildDropdownFromData(leaderboardData);
+
+    const orderedKeys = buildDropdownFromData(leaderboardData);
 
     const firstKey =
-      Object.keys(leaderboardData).find(
-        (key) => key !== "Totalen" && key !== "Bäste poängplockare"
-      ) ||
-      Object.keys(leaderboardData)[0];
+      orderedKeys.find((key) => key !== "Totalen" && key !== "Bäste poängplockare") ||
+      orderedKeys[0];
 
     if (firstKey) {
       renderSelected(firstKey);
+    } else {
+      selectedValue.textContent = "Ingen data";
+      tableTitle.textContent = "Ingen data";
+
+      leaderboardHead.innerHTML = `
+        <tr>
+          <th>Meddelande</th>
+        </tr>
+      `;
+
+      leaderboardBody.innerHTML = `
+        <tr class="empty-row">
+          <td>Ingen topplistedata uppladdad ännu.</td>
+        </tr>
+      `;
     }
+
   } catch (error) {
     console.error("Fel vid hämtning av topplistor:", error);
+
+    selectedValue.textContent = "Fel";
+    tableTitle.textContent = "Fel";
 
     leaderboardHead.innerHTML = `
       <tr>
