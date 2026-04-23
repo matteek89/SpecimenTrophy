@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Två-manna Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css?v=1" />
+  <link rel="stylesheet" href="topplistor.css?v=2" />
 </head>
+
 <body>
   <div class="page-wrap">
     <main class="app-shell">
+
       <a href="index.html" class="page-switch">Registrera</a>
 
       <header class="page-header">
@@ -39,7 +41,7 @@
 
               <span class="dropdown-body">
                 <span class="dropdown-field-label">Välj topplista</span>
-                <span id="selectedValue">Lax</span>
+                <span id="selectedValue">Laddar...</span>
               </span>
             </span>
 
@@ -50,17 +52,13 @@
             </span>
           </button>
 
-          <div class="dropdown-menu" id="dropdownMenu" role="listbox">
-            <div class="dropdown-item active" data-value="Lax" role="option">Lax</div>
-            <div class="dropdown-item" data-value="Regnbåge" role="option">Regnbåge</div>
-            <div class="dropdown-item" data-value="Totalen" role="option">Totalen</div>
-          </div>
+          <div class="dropdown-menu" id="dropdownMenu" role="listbox"></div>
         </div>
       </section>
 
       <section class="card leaderboard-card">
         <div class="leaderboard-header">
-          <h2 id="tableTitle">Lax</h2>
+          <h2 id="tableTitle">Laddar...</h2>
         </div>
 
         <div class="table-wrap">
@@ -70,9 +68,10 @@
           </table>
         </div>
       </section>
+
     </main>
   </div>
 
-  <script src="topplistor.js?v=1"></script>
+  <script src="topplistor.js?v=2"></script>
 </body>
 </html>
