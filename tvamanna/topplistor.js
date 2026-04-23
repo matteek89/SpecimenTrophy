@@ -63,7 +63,7 @@ function renderSpeciesTable(species, rows) {
 }
 
 function renderTotalTable(rows) {
-  tableTitle.textContent = "Totalen";
+  tableTitle.textContent = "Bästa Lag";
   leaderboardTable.className = "total-table";
 
   leaderboardHead.innerHTML = `
@@ -134,7 +134,7 @@ function renderSelected(value) {
   selectedValue.textContent = value;
   setActiveDropdownItem(value);
 
-  if (value === "Totalen") {
+  if (value === "Bästa Lag") {
     renderTotalTable(rows);
   } else if (value === "Bäste poängplockare") {
     renderPointPickerTable(rows);
@@ -167,7 +167,7 @@ function buildDropdownFromData(data) {
   dropdownMenu.innerHTML = "";
 
   const keys = Object.keys(data || {});
-  const specialKeys = ["Totalen", "Bäste poängplockare"];
+  const specialKeys = ["Bästa Lag", "Bäste poängplockare"];
 
   const speciesKeys = keys.filter((key) => !specialKeys.includes(key));
   const orderedKeys = [
@@ -220,7 +220,7 @@ async function loadLeaderboardData() {
     const orderedKeys = buildDropdownFromData(leaderboardData);
 
     const firstKey =
-      orderedKeys.find((key) => key !== "Totalen" && key !== "Bäste poängplockare") ||
+      orderedKeys.find((key) => key !== "Bästa Lag" && key !== "Bäste poängplockare") ||
       orderedKeys[0];
 
     if (firstKey) {
