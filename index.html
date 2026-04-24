@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Tävlingar</title>
+
 <style>
 :root{
   --text:#f3f4f6;
@@ -11,7 +12,11 @@
   --bg:#02070f;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
   min-height:100vh;
@@ -73,7 +78,11 @@ body::before{
   min-height:240px;
   border-radius:28px;
   text-decoration:none;
-  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  background:linear-gradient(
+    180deg,
+    rgba(5,14,30,.92),
+    rgba(1,7,18,.97)
+  );
   border:1px solid rgba(51,181,255,.18);
   box-shadow:
     0 0 0 1px rgba(58,186,255,.18),
@@ -90,25 +99,24 @@ body::before{
     0 0 26px rgba(51,181,255,.18);
 }
 
+.card-inner{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
 .big-card img{
   width:100%;
   max-width:240px;
   border-radius:22px;
   display:block;
-}
-
-.label{
-  margin-top:14px;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-}
-
-.card-inner{
-  width:100%;
+  margin:0 auto;
 }
 
 @media (max-width:600px){
+
   .big-card{
     min-height:210px;
     padding:20px;
@@ -117,32 +125,43 @@ body::before{
   .title h1{
     font-size:24px;
   }
+
 }
 </style>
 </head>
+
 <body>
-  <div class="wrapper">
-    <div class="title">
-      <h1>Välj tävling</h1>
-      <p>Registrering & topplistor</p>
-    </div>
 
-    <div class="grid">
-      <a class="big-card" href="specimentrophy/index.html">
-        <div class="card-inner">
-          <img src="specimentrophy/images/Specimenlogo2.png" alt="Specimen Trophy" />
-          
-        </div>
-      </a>
+<div class="wrapper">
 
-      <a class="big-card" href="tvamanna/index.html">
-        <div class="card-inner">
-          <img src="tvamanna/images/logo_tvamanna.png" alt="Två-Manna" />
-          
-        </div>
-      </a>
-    </div>
+  <div class="title">
+    <h1>Välj tävling</h1>
+    <p>Registrering & Topplistor</p>
   </div>
+
+  <div class="grid">
+
+    <a class="big-card" href="specimentrophy/index.html">
+      <div class="card-inner">
+        <img
+          src="specimentrophy/images/Specimenlogo2.png"
+          alt="Specimen Trophy"
+        />
+      </div>
+    </a>
+
+    <a class="big-card" href="tvamanna/index.html">
+      <div class="card-inner">
+        <img
+          src="tvamanna/images/logo_tvamanna.png"
+          alt="Två-Manna"
+        />
+      </div>
+    </a>
+
+  </div>
+
+</div>
+
 </body>
 </html>
-
