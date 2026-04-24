@@ -113,6 +113,21 @@ body::before{
   border-radius:22px;
   display:block;
   margin:0 auto;
+  filter:
+    drop-shadow(0 0 8px rgba(51,181,255,.28))
+    drop-shadow(0 0 18px rgba(51,181,255,.18))
+    drop-shadow(0 0 32px rgba(10,132,255,.14));
+  transition:
+    transform .2s ease,
+    filter .2s ease;
+}
+
+.big-card:hover img{
+  transform:scale(1.03);
+  filter:
+    drop-shadow(0 0 12px rgba(51,181,255,.40))
+    drop-shadow(0 0 24px rgba(51,181,255,.28))
+    drop-shadow(0 0 42px rgba(10,132,255,.22));
 }
 
 @media (max-width:600px){
