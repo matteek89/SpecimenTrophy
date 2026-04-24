@@ -1,9 +1,8 @@
 :root{
   --text:#f3f4f6;
   --muted:rgba(255,255,255,.58);
-  --green:#9eff00;
-  --green-2:#5cff00;
-  --green-3:#00ff88;
+  --accent:#33b5ff;
+  --accent-2:#0a84ff;
 }
 
 *{box-sizing:border-box}
@@ -24,9 +23,9 @@ body{
   padding:10px 8px;
   min-height:100vh;
   background:
-    linear-gradient(rgba(0,0,0,.48),rgba(0,0,0,.72)),
+    linear-gradient(rgba(0,8,18,.42),rgba(0,8,18,.68)),
     url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed,
-    #020500;
+    #02070f;
 }
 
 body::before{
@@ -36,10 +35,10 @@ body::before{
   pointer-events:none;
   z-index:0;
   background:
-    radial-gradient(circle at 50% 0%, rgba(158,255,0,.18), transparent 25%),
-    radial-gradient(circle at 80% 25%, rgba(0,255,136,.10), transparent 20%),
-    radial-gradient(circle at 20% 20%, rgba(158,255,0,.08), transparent 24%),
-    linear-gradient(to bottom, rgba(158,255,0,.035), transparent 28%);
+    radial-gradient(circle at 50% 0%, rgba(51,181,255,.14), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.10), transparent 18%),
+    radial-gradient(circle at 20% 20%, rgba(120,210,255,.05), transparent 24%),
+    linear-gradient(to bottom, rgba(10,132,255,.03), transparent 25%);
 }
 
 .page-wrap{
@@ -58,13 +57,12 @@ body::before{
   padding:4px;
   border-radius:26px;
   position:relative;
-  background:linear-gradient(180deg, rgba(158,255,0,.98), rgba(0,255,136,.72));
+  background:linear-gradient(180deg, rgba(58,186,255,.96), rgba(0,92,184,.86));
   box-shadow:
-    0 0 0 1px rgba(158,255,0,.95),
-    0 0 12px rgba(158,255,0,.45),
-    0 0 26px rgba(92,255,0,.24),
-    0 0 48px rgba(0,255,136,.12),
-    0 16px 34px rgba(0,0,0,.34);
+    0 0 0 1px rgba(58,186,255,.96),
+    0 0 10px rgba(51,181,255,.30),
+    0 0 20px rgba(10,132,255,.14),
+    0 14px 28px rgba(0,0,0,.28);
   overflow:visible;
 }
 
@@ -75,8 +73,8 @@ body::before{
   border-radius:26px;
   pointer-events:none;
   box-shadow:
-    inset 0 0 0 1px rgba(220,255,170,.85),
-    0 0 10px rgba(158,255,0,.24);
+    inset 0 0 0 1px rgba(164,230,255,.92),
+    0 0 8px rgba(51,181,255,.14);
 }
 
 .app-shell::after{
@@ -85,12 +83,11 @@ body::before{
   inset:4px;
   border-radius:22px;
   background:
-    linear-gradient(180deg, rgba(6,13,8,.94), rgba(1,5,3,.98));
-  border:1px solid rgba(158,255,0,.18);
+    linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  border:1px solid rgba(51,181,255,.14);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    inset 0 0 20px rgba(158,255,0,.025),
-    0 8px 22px rgba(0,0,0,.28);
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 20px rgba(0,0,0,.20);
   z-index:0;
 }
 
@@ -107,26 +104,26 @@ body::before{
   padding:0 10px;
   border-radius:12px;
   text-decoration:none;
-  color:#eaffd3;
+  color:#ffffff;
   font-size:12px;
-  font-weight:800;
+  font-weight:700;
   letter-spacing:.2px;
-  border:1px solid rgba(158,255,0,.45);
-  background:linear-gradient(180deg, rgba(8,18,8,.98), rgba(3,12,5,.94));
+  border:1px solid rgba(51,181,255,.34);
+  background:linear-gradient(180deg, rgba(2,11,23,.96), rgba(3,18,38,.90));
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 4px 10px rgba(0,0,0,.20),
-    0 0 10px rgba(158,255,0,.18);
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 4px 10px rgba(0,0,0,.16),
+    0 0 8px rgba(51,181,255,.10);
   transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 
 .page-switch:hover{
   transform:translateY(-1px);
-  border-color:rgba(158,255,0,.85);
+  border-color:rgba(51,181,255,.58);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 8px 18px rgba(0,0,0,.22),
-    0 0 18px rgba(158,255,0,.35);
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 18px rgba(0,0,0,.18),
+    0 0 12px rgba(51,181,255,.16);
 }
 
 .page-header,
@@ -151,9 +148,8 @@ body::before{
   display:block;
   border-radius:24px;
   box-shadow:
-    0 0 14px rgba(158,255,0,.32),
-    0 0 30px rgba(92,255,0,.22),
-    0 0 52px rgba(0,255,136,.10);
+    0 0 12px rgba(51,181,255,.24),
+    0 0 26px rgba(10,132,255,.16);
 }
 
 .filter-card{
@@ -185,8 +181,8 @@ body::before{
   min-height:66px;
   padding:11px 12px;
   border-radius:16px;
-  border:1px solid rgba(158,255,0,.16);
-  background:linear-gradient(90deg, rgba(3,13,8,.96), rgba(5,22,10,.90));
+  border:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88));
   color:var(--text);
   display:grid;
   grid-template-columns:1fr 20px;
@@ -195,9 +191,8 @@ body::before{
   font-size:16px;
   cursor:pointer;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.035),
-    0 6px 14px rgba(0,0,0,.18),
-    0 0 10px rgba(158,255,0,.07);
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 6px 14px rgba(0,0,0,.14);
   transition:
     box-shadow .18s ease,
     border-color .18s ease,
@@ -206,11 +201,11 @@ body::before{
 }
 
 .dropdown-button:hover{
-  border-color:rgba(158,255,0,.42);
+  border-color:rgba(51,181,255,.18);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    0 8px 18px rgba(0,0,0,.20),
-    0 0 16px rgba(158,255,0,.18);
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 8px 18px rgba(0,0,0,.16),
+    0 0 12px rgba(51,181,255,.08);
   transform:translateY(-1px);
 }
 
@@ -227,9 +222,8 @@ body::before{
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  color:var(--green);
+  color:var(--accent);
   padding-top:2px;
-  filter:drop-shadow(0 0 5px rgba(158,255,0,.45));
 }
 
 .dropdown-icon svg{
@@ -252,7 +246,7 @@ body::before{
 
 .dropdown-field-label{
   font-size:11px;
-  font-weight:800;
+  font-weight:700;
   color:rgba(255,255,255,.92);
   margin-bottom:4px;
   line-height:1;
@@ -261,7 +255,7 @@ body::before{
 #selectedValue{
   font-size:16px;
   line-height:1.2;
-  font-weight:600;
+  font-weight:500;
   color:var(--text);
   min-width:0;
   overflow:hidden;
@@ -276,10 +270,9 @@ body::before{
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  color:var(--green);
+  color:var(--accent);
   padding-top:2px;
   transition:transform .2s ease;
-  filter:drop-shadow(0 0 5px rgba(158,255,0,.45));
 }
 
 .dropdown-arrow svg{
@@ -302,13 +295,13 @@ body::before{
   left:0;
   right:0;
   top:calc(100% + 6px);
-  background:rgba(4,12,7,.98);
-  border:1px solid rgba(158,255,0,.30);
+  background:rgba(6,15,28,.98);
+  border:1px solid rgba(51,181,255,.24);
   border-radius:14px;
   z-index:9999;
   box-shadow:
-    0 0 18px rgba(158,255,0,.18),
-    0 12px 28px rgba(0,0,0,.30);
+    0 0 14px rgba(51,181,255,.12),
+    0 10px 24px rgba(0,0,0,.24);
   max-height:min(240px, 50vh);
   overflow-y:auto;
   backdrop-filter:blur(10px);
@@ -333,10 +326,10 @@ body::before{
   padding:10px 12px;
   font-size:14px;
   color:#f3f4f6;
-  border-top:1px solid rgba(255,255,255,.055);
+  border-top:1px solid rgba(255,255,255,.05);
   text-align:center;
   cursor:pointer;
-  transition:background .14s ease, color .14s ease;
+  transition:background .14s ease;
   -webkit-tap-highlight-color:transparent;
 }
 
@@ -346,8 +339,7 @@ body::before{
 
 .dropdown-item:hover,
 .dropdown-item.active{
-  background:rgba(158,255,0,.13);
-  color:#eaffd3;
+  background:rgba(51,181,255,.12);
 }
 
 .dropdown-menu::-webkit-scrollbar{
@@ -355,7 +347,7 @@ body::before{
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb{
-  background:rgba(158,255,0,.38);
+  background:rgba(51,181,255,.35);
   border-radius:999px;
 }
 
@@ -363,15 +355,12 @@ body::before{
   width:calc(100% - 16px);
   margin-left:8px;
   margin-right:8px;
-  background:
-    linear-gradient(180deg, rgba(6,13,8,.94), rgba(1,5,3,.98));
-  border:1px solid rgba(158,255,0,.18);
+  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  border:1px solid rgba(51,181,255,.14);
   border-radius:22px;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.045),
-    inset 0 0 20px rgba(158,255,0,.025),
-    0 8px 22px rgba(0,0,0,.28),
-    0 0 14px rgba(158,255,0,.08);
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 20px rgba(0,0,0,.20);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   position:relative;
@@ -385,7 +374,7 @@ body::before{
   pointer-events:none;
   border-radius:22px;
   background:
-    linear-gradient(135deg, rgba(255,255,255,.045), transparent 18%, transparent 82%, rgba(158,255,0,.04));
+    linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(51,181,255,.03));
 }
 
 .leaderboard-card{
@@ -404,11 +393,8 @@ body::before{
   color:#ffffff;
   font-size:18px;
   line-height:1.2;
-  font-weight:800;
+  font-weight:700;
   text-align:center;
-  text-shadow:
-    0 0 8px rgba(158,255,0,.25),
-    0 0 18px rgba(158,255,0,.10);
 }
 
 .table-wrap{
@@ -417,12 +403,11 @@ body::before{
   width:100%;
   overflow:hidden;
   border-radius:16px;
-  background:linear-gradient(90deg, rgba(3,13,8,.96), rgba(5,22,10,.90));
-  border:1px solid rgba(158,255,0,.14);
+  background:linear-gradient(90deg, rgba(2,11,23,.95), rgba(3,18,38,.88));
+  border:1px solid rgba(255,255,255,.06);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.035),
-    0 6px 14px rgba(0,0,0,.18),
-    0 0 12px rgba(158,255,0,.06);
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 6px 14px rgba(0,0,0,.14);
 }
 
 table{
@@ -434,10 +419,10 @@ table{
 thead th{
   padding:10px 4px 8px;
   font-size:12px;
-  font-weight:800;
-  color:rgba(234,255,211,.95);
+  font-weight:700;
+  color:rgba(255,255,255,.92);
   text-align:center;
-  border-bottom:1px solid rgba(158,255,0,.13);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 tbody td{
@@ -445,7 +430,7 @@ tbody td{
   font-size:13px;
   color:var(--text);
   text-align:center;
-  border-top:1px solid rgba(255,255,255,.055);
+  border-top:1px solid rgba(255,255,255,.05);
   line-height:1.25;
 }
 
@@ -454,7 +439,7 @@ tbody tr:first-child td{
 }
 
 tbody tr:nth-child(odd){
-  background:rgba(158,255,0,.025);
+  background:rgba(255,255,255,.015);
 }
 
 .empty-row td{
