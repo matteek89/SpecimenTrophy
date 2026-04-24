@@ -538,6 +538,16 @@ tbody tr:nth-child(odd){
     font-size:11px;
     padding:0 8px;
   }
+  @media (max-width:420px){
+  .page-back{
+    top:10px;
+    left:10px;
+    min-width:84px;
+    height:30px;
+    font-size:11px;
+    padding:0 8px;
+  }
+}
 
   thead th{
     font-size:11px;
