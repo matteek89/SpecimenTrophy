@@ -158,11 +158,26 @@ body::before{
   width:min(100%,180px);
   display:block;
   border-radius:22px;
-  box-shadow:
-    0 0 12px rgba(51,181,255,.24),
-    0 0 26px rgba(10,132,255,.16);
+
+  filter:
+    drop-shadow(0 0 8px rgba(51,181,255,.30))
+    drop-shadow(0 0 18px rgba(51,181,255,.20))
+    drop-shadow(0 0 34px rgba(10,132,255,.16));
+
+  transition:
+    transform .2s ease,
+    filter .2s ease;
 }
 
+.logo:hover{
+  transform:scale(1.03);
+
+  filter:
+    drop-shadow(0 0 12px rgba(51,181,255,.42))
+    drop-shadow(0 0 24px rgba(51,181,255,.30))
+    drop-shadow(0 0 42px rgba(10,132,255,.22));
+}
+  
 form{
   display:flex;
   flex-direction:column;
