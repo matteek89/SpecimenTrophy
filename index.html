@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fishing Competitions</title>
+<style>
+:root{
+  --text:#f3f4f6;
+  --accent:#33b5ff;
+  --bg:#02070f;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  color:var(--text);
+  background:
+    linear-gradient(rgba(0,8,18,.18), rgba(0,8,18,.32)),
+    url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed,
+    var(--bg);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(51,181,255,.06), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%);
+}
+
+.wrapper{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:520px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.title h1{
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.title p{
+  opacity:.8;
+  font-size:15px;
+}
+
+.grid{
+  display:grid;
+  gap:22px;
+}
+
+.big-card{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:26px;
+  min-height:240px;
+  border-radius:28px;
+  text-decoration:none;
+  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  border:1px solid rgba(51,181,255,.18);
+  box-shadow:
+    0 0 0 1px rgba(58,186,255,.18),
+    0 10px 30px rgba(0,0,0,.25),
+    0 0 18px rgba(51,181,255,.10);
+  transition:.2s ease;
+}
+
+.big-card:hover{
+  transform:translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(58,186,255,.30),
+    0 18px 40px rgba(0,0,0,.30),
+    0 0 26px rgba(51,181,255,.18);
+}
+
+.big-card img{
+  width:100%;
+  max-width:240px;
+  border-radius:22px;
+  display:block;
+}
+
+.label{
+  margin-top:14px;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+}
+
+.card-inner{
+  width:100%;
+}
+
+@media (max-width:600px){
+  .big-card{
+    min-height:210px;
+    padding:20px;
+  }
+
+  .title h1{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="title">
+      <h1>Välj tävling</h1>
+      <p>Registrering & topplistor</p>
+    </div>
+
+    <div class="grid">
+      <a class="big-card" href="specimentrophy/index.html">
+        <div class="card-inner">
+          <img src="specimentrophy/images/Specimenlogo2.png" alt="Specimen Trophy" />
+          
+        </div>
+      </a>
+
+      <a class="big-card" href="tvamanna/index.html">
+        <div class="card-inner">
+          <img src="tvamanna/images/logo.png" alt="Två-Manna" />
+          
+        </div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
 
