@@ -109,7 +109,40 @@ body::before{
   background:
     linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(51,181,255,.03));
 }
+.page-home{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:50;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:84px;
+  height:32px;
+  padding:0 10px;
+  border-radius:12px;
+  text-decoration:none;
+  color:#ffffff;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.2px;
+  border:1px solid rgba(51,181,255,.34);
+  background:linear-gradient(180deg, rgba(2,11,23,.96), rgba(3,18,38,.90));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 4px 10px rgba(0,0,0,.16),
+    0 0 8px rgba(51,181,255,.10);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
 
+.page-home:hover{
+  transform:translateY(-1px);
+  border-color:rgba(51,181,255,.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 8px 18px rgba(0,0,0,.18),
+    0 0 12px rgba(51,181,255,.16);
+}
 .page-switch{
   position:absolute;
   top:10px;
@@ -640,10 +673,11 @@ input[type=number]::-webkit-outer-spin-button{
   <div class="frame">
     <div class="panel">
 
+      <a href="../index.html" class="page-home">← Start</a>
       <a href="topplistor.html" class="page-switch">Topplistor</a>
 
       <div class="logo-wrap">
-        <img src="images/logo_tvamanna.png" alt="Två-manna" class="logo">
+        <img src="images/logo_tvamanna2.png" alt="Två-manna" class="logo">
       </div>
 
       <form id="form" novalidate>
