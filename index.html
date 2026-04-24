@@ -27,7 +27,7 @@ body{
   padding:20px;
   color:var(--text);
   background:
-    linear-gradient(rgba(0,8,18,.18), rgba(0,8,18,.32)),
+    linear-gradient(rgba(0,8,18,.22), rgba(0,8,18,.38)),
     url("specimentrophy/images/sunset_background_for_github.jpg") center center / cover no-repeat fixed,
     var(--bg);
 }
@@ -38,8 +38,8 @@ body::before{
   inset:0;
   pointer-events:none;
   background:
-    radial-gradient(circle at 50% 0%, rgba(51,181,255,.06), transparent 24%),
-    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%);
+    radial-gradient(circle at 50% 0%, rgba(51,181,255,.08), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.05), transparent 18%);
 }
 
 .wrapper{
@@ -55,14 +55,22 @@ body::before{
 }
 
 .title h1{
-  font-size:30px;
-  font-weight:800;
+  font-size:34px;
+  font-weight:900;
   margin-bottom:8px;
+  color:#ffffff;
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.65),
+    0 0 18px rgba(51,181,255,.28);
 }
 
 .title p{
-  opacity:.8;
-  font-size:15px;
+  color:#d9f3ff;
+  font-size:16px;
+  font-weight:700;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.65),
+    0 0 12px rgba(51,181,255,.22);
 }
 
 .grid{
@@ -74,8 +82,8 @@ body::before{
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:26px;
-  min-height:240px;
+  height:280px;
+  padding:24px;
   border-radius:28px;
   text-decoration:none;
   background:linear-gradient(
@@ -83,64 +91,78 @@ body::before{
     rgba(5,14,30,.92),
     rgba(1,7,18,.97)
   );
-  border:1px solid rgba(51,181,255,.18);
+  border:1px solid rgba(51,181,255,.22);
   box-shadow:
     0 0 0 1px rgba(58,186,255,.18),
     0 10px 30px rgba(0,0,0,.25),
-    0 0 18px rgba(51,181,255,.10);
+    0 0 18px rgba(51,181,255,.12);
   transition:.2s ease;
 }
 
 .big-card:hover{
   transform:translateY(-4px);
   box-shadow:
-    0 0 0 1px rgba(58,186,255,.30),
-    0 18px 40px rgba(0,0,0,.30),
-    0 0 26px rgba(51,181,255,.18);
+    0 0 0 1px rgba(58,186,255,.34),
+    0 18px 40px rgba(0,0,0,.32),
+    0 0 30px rgba(51,181,255,.22);
 }
 
 .card-inner{
   width:100%;
+  height:100%;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
 }
 
 .big-card img{
   width:100%;
-  max-width:240px;
+  height:100%;
+  max-width:260px;
+  max-height:205px;
+  object-fit:contain;
   border-radius:22px;
   display:block;
   margin:0 auto;
   filter:
-    drop-shadow(0 0 8px rgba(51,181,255,.28))
-    drop-shadow(0 0 18px rgba(51,181,255,.18))
-    drop-shadow(0 0 32px rgba(10,132,255,.14));
+    drop-shadow(0 0 8px rgba(51,181,255,.30))
+    drop-shadow(0 0 18px rgba(51,181,255,.20))
+    drop-shadow(0 0 34px rgba(10,132,255,.16));
   transition:
     transform .2s ease,
     filter .2s ease;
 }
 
 .big-card:hover img{
-  transform:scale(1.03);
+  transform:scale(1.04);
   filter:
-    drop-shadow(0 0 12px rgba(51,181,255,.40))
-    drop-shadow(0 0 24px rgba(51,181,255,.28))
-    drop-shadow(0 0 42px rgba(10,132,255,.22));
+    drop-shadow(0 0 12px rgba(51,181,255,.45))
+    drop-shadow(0 0 26px rgba(51,181,255,.32))
+    drop-shadow(0 0 46px rgba(10,132,255,.25));
 }
 
 @media (max-width:600px){
+  .wrapper{
+    max-width:100%;
+  }
 
   .big-card{
-    min-height:210px;
-    padding:20px;
+    height:250px;
+    padding:22px;
+  }
+
+  .big-card img{
+    max-width:250px;
+    max-height:185px;
   }
 
   .title h1{
-    font-size:24px;
+    font-size:30px;
   }
 
+  .title p{
+    font-size:15px;
+  }
 }
 </style>
 </head>
