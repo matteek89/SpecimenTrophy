@@ -8,7 +8,7 @@
 <style>
 :root{
   --text:#f3f4f6;
-  --muted:rgba(255,255,255,.62);
+  --muted:rgba(255,255,255,.68);
   --accent:#33b5ff;
   --bg:#02070f;
 }
@@ -105,7 +105,7 @@ body::before{
 
 .title{
   text-align:center;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .title h1{
@@ -121,26 +121,86 @@ body::before{
 
 .gallery{
   display:grid;
-  gap:14px;
+  grid-template-columns:1fr;
+  gap:16px;
   position:relative;
   z-index:2;
 }
 
-.card{
+.post{
   overflow:hidden;
-  border-radius:20px;
-  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
-  border:1px solid rgba(51,181,255,.18);
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(4,13,28,.94), rgba(1,7,18,.98));
+  border:1px solid rgba(51,181,255,.20);
   box-shadow:
-    0 8px 20px rgba(0,0,0,.22),
-    0 0 14px rgba(51,181,255,.08);
+    0 10px 26px rgba(0,0,0,.28),
+    0 0 18px rgba(51,181,255,.10);
+}
+
+.post-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 12px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  background:linear-gradient(180deg, rgba(51,181,255,.28), rgba(10,132,255,.10));
+  border:1px solid rgba(51,181,255,.32);
+  box-shadow:0 0 12px rgba(51,181,255,.14);
+}
+
+.profile-text{
+  min-width:0;
+}
+
+.name{
+  font-size:14px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.date{
+  margin-top:2px;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.badge{
+  flex:0 0 auto;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  color:#e6f7ff;
+  background:rgba(51,181,255,.12);
+  border:1px solid rgba(51,181,255,.20);
 }
 
 .image-wrap{
   width:100%;
-  aspect-ratio:4 / 3;
-  background:rgba(0,0,0,.25);
+  aspect-ratio:1 / 1;
+  background:rgba(0,0,0,.30);
   overflow:hidden;
+  position:relative;
+  cursor:pointer;
 }
 
 .image-wrap img{
@@ -148,35 +208,60 @@ body::before{
   height:100%;
   object-fit:cover;
   display:block;
+  transition:transform .25s ease, filter .25s ease;
 }
 
-.info{
-  padding:12px;
+.image-wrap:hover img{
+  transform:scale(1.035);
+  filter:brightness(1.05);
 }
 
-.info-top{
+.image-gradient{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:48px 12px 12px;
+  background:linear-gradient(to top, rgba(0,0,0,.72), transparent);
+  pointer-events:none;
+}
+
+.overlay-title{
   display:flex;
+  align-items:flex-end;
   justify-content:space-between;
   gap:10px;
-  margin-bottom:8px;
 }
 
 .fish{
-  font-size:18px;
-  font-weight:800;
+  font-size:21px;
+  font-weight:900;
+  text-shadow:0 2px 10px rgba(0,0,0,.65);
 }
 
 .weight{
-  font-size:15px;
-  font-weight:800;
+  font-size:18px;
+  font-weight:900;
   color:#d9f3ff;
+  text-shadow:0 2px 10px rgba(0,0,0,.65);
 }
 
-.meta{
+.caption{
+  padding:12px;
   display:grid;
-  gap:4px;
-  font-size:13px;
+  gap:8px;
+}
+
+.caption-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
   color:var(--muted);
+  font-size:13px;
+}
+
+.caption strong{
+  color:#ffffff;
 }
 
 .loading,
@@ -188,12 +273,72 @@ body::before{
   font-size:14px;
 }
 
+.lightbox{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.lightbox.show{
+  display:flex;
+}
+
+.lightbox-inner{
+  width:100%;
+  max-width:720px;
+  position:relative;
+}
+
+.lightbox-close{
+  position:absolute;
+  top:-44px;
+  right:0;
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  border:1px solid rgba(51,181,255,.34);
+  background:rgba(2,11,23,.96);
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.lightbox img{
+  width:100%;
+  max-height:80vh;
+  object-fit:contain;
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px rgba(51,181,255,.25),
+    0 0 30px rgba(51,181,255,.18),
+    0 18px 50px rgba(0,0,0,.45);
+}
+
 @media (max-width:420px){
   .page-back{
     min-width:84px;
     height:30px;
     font-size:11px;
     padding:0 8px;
+  }
+
+  .gallery{
+    gap:14px;
+  }
+
+  .fish{
+    font-size:20px;
+  }
+
+  .weight{
+    font-size:17px;
   }
 }
 </style>
@@ -223,9 +368,19 @@ body::before{
   </div>
 </div>
 
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightboxClose" type="button">×</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</div>
+
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSmQto2auLW0HnvmEJtgbICMDLfICicsHbEleftelti_EcU7LI2zDdWloVGAOPW4e2Zw/exec";
 const galleryEl = document.getElementById("gallery");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxClose = document.getElementById("lightboxClose");
 
 function escapeHtml(value){
   return String(value ?? "")
@@ -236,15 +391,35 @@ function escapeHtml(value){
     .replaceAll("'", "&#039;");
 }
 
+function openLightbox(url, alt){
+  lightboxImg.src = url;
+  lightboxImg.alt = alt || "";
+  lightbox.classList.add("show");
+}
+
+function closeLightbox(){
+  lightbox.classList.remove("show");
+  lightboxImg.src = "";
+}
+
+lightboxClose.addEventListener("click", closeLightbox);
+
+lightbox.addEventListener("click", (event) => {
+  if(event.target === lightbox){
+    closeLightbox();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if(event.key === "Escape"){
+    closeLightbox();
+  }
+});
+
 async function loadGallery(){
   try{
-   const response = await fetch(`${SCRIPT_URL}?mode=gallery&t=${Date.now()}`);
-
-const data = await response.json();
-
-if(!data.success){
-  throw new Error(data.error || "Kunde inte läsa galleri");
-}
+    const response = await fetch(`${SCRIPT_URL}?mode=gallery&t=${Date.now()}`);
+    const data = await response.json();
 
     const items = data.gallery || [];
 
@@ -253,27 +428,61 @@ if(!data.success){
       return;
     }
 
-    galleryEl.innerHTML = items.map(item => `
-      <article class="card">
-        <a href="${escapeHtml(item.imageUrl)}" target="_blank" rel="noopener">
-          <div class="image-wrap">
-            <img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art)} ${escapeHtml(item.vikt)}g">
-          </div>
-        </a>
-
-        <div class="info">
-          <div class="info-top">
-            <div class="fish">${escapeHtml(item.art)}</div>
-            <div class="weight">${escapeHtml(item.vikt)} g</div>
+    galleryEl.innerHTML = items.map((item, index) => `
+      <article class="post">
+        <div class="post-header">
+          <div class="profile">
+            <div class="avatar">🎣</div>
+            <div class="profile-text">
+              <div class="name">${escapeHtml(item.deltagare)}</div>
+              <div class="date">${escapeHtml(item.datum)}</div>
+            </div>
           </div>
 
-          <div class="meta">
-            <div>👤 ${escapeHtml(item.deltagare)}</div>
-            <div>📅 ${escapeHtml(item.datum)}</div>
+          <div class="badge">${escapeHtml(item.art)}</div>
+        </div>
+
+        <div
+          class="image-wrap"
+          data-index="${index}"
+          role="button"
+          tabindex="0"
+        >
+          <img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art)} ${escapeHtml(item.vikt)}g">
+          <div class="image-gradient">
+            <div class="overlay-title">
+              <div class="fish">${escapeHtml(item.art)}</div>
+              <div class="weight">${escapeHtml(item.vikt)} g</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="caption">
+          <div class="caption-row">
+            <span><strong>${escapeHtml(item.deltagare)}</strong></span>
+            <span>${escapeHtml(item.vikt)} g</span>
+          </div>
+          <div class="caption-row">
+            <span>${escapeHtml(item.art)}</span>
+            <span>${escapeHtml(item.datum)}</span>
           </div>
         </div>
       </article>
     `).join("");
+
+    document.querySelectorAll(".image-wrap").forEach((el) => {
+      el.addEventListener("click", () => {
+        const item = items[Number(el.dataset.index)];
+        openLightbox(item.imageUrl, `${item.art} ${item.vikt}g`);
+      });
+
+      el.addEventListener("keydown", (event) => {
+        if(event.key === "Enter"){
+          const item = items[Number(el.dataset.index)];
+          openLightbox(item.imageUrl, `${item.art} ${item.vikt}g`);
+        }
+      });
+    });
 
   }catch(error){
     console.error(error);
