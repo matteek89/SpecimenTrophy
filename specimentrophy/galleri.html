@@ -13,7 +13,11 @@
   --bg:#02070f;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
   min-height:100vh;
@@ -83,7 +87,11 @@ body::before{
   font-size:12px;
   font-weight:700;
   border:1px solid rgba(51,181,255,.34);
-  background:linear-gradient(180deg, rgba(2,11,23,.96), rgba(3,18,38,.90));
+  background:linear-gradient(
+    180deg,
+    rgba(2,11,23,.96),
+    rgba(3,18,38,.90)
+  );
   box-shadow:0 0 8px rgba(51,181,255,.10);
 }
 
@@ -105,7 +113,7 @@ body::before{
 
 .title{
   text-align:center;
-  margin-bottom:14px;
+  margin-bottom:16px;
 }
 
 .title h1{
@@ -121,85 +129,42 @@ body::before{
 
 .gallery{
   display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-  position:relative;
-  z-index:2;
+  grid-template-columns:repeat(2, 1fr);
+  gap:14px;
 }
 
-.post{
+.card{
+  border-radius:18px;
   overflow:hidden;
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(4,13,28,.94), rgba(1,7,18,.98));
-  border:1px solid rgba(51,181,255,.20);
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(51,181,255,.14);
   box-shadow:
-    0 10px 26px rgba(0,0,0,.28),
-    0 0 18px rgba(51,181,255,.10);
+    0 8px 20px rgba(0,0,0,.22),
+    0 0 14px rgba(51,181,255,.06);
 }
 
-.post-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:11px 12px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.profile{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  min-width:0;
-}
-
-.avatar{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:17px;
-  background:linear-gradient(180deg, rgba(51,181,255,.28), rgba(10,132,255,.10));
-  border:1px solid rgba(51,181,255,.32);
-  box-shadow:0 0 12px rgba(51,181,255,.14);
-}
-
-.profile-text{
-  min-width:0;
+.card-top{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .name{
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  margin-bottom:4px;
 }
 
-.date{
-  margin-top:2px;
+.meta{
   font-size:11px;
   color:var(--muted);
-}
-
-.badge{
-  flex:0 0 auto;
-  padding:6px 9px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  color:#e6f7ff;
-  background:rgba(51,181,255,.12);
-  border:1px solid rgba(51,181,255,.20);
+  line-height:1.5;
 }
 
 .image-wrap{
   width:100%;
   aspect-ratio:1 / 1;
-  background:rgba(0,0,0,.30);
+  background:rgba(0,0,0,.25);
   overflow:hidden;
-  position:relative;
   cursor:pointer;
 }
 
@@ -208,67 +173,19 @@ body::before{
   height:100%;
   object-fit:cover;
   display:block;
-  transition:transform .25s ease, filter .25s ease;
+  transition:.25s ease;
 }
 
 .image-wrap:hover img{
-  transform:scale(1.035);
-  filter:brightness(1.05);
-}
-
-.image-gradient{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  padding:48px 12px 12px;
-  background:linear-gradient(to top, rgba(0,0,0,.72), transparent);
-  pointer-events:none;
-}
-
-.overlay-title{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.fish{
-  font-size:21px;
-  font-weight:900;
-  text-shadow:0 2px 10px rgba(0,0,0,.65);
-}
-
-.weight{
-  font-size:18px;
-  font-weight:900;
-  color:#d9f3ff;
-  text-shadow:0 2px 10px rgba(0,0,0,.65);
-}
-
-.caption{
-  padding:12px;
-  display:grid;
-  gap:8px;
-}
-
-.caption-row{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.caption strong{
-  color:#ffffff;
+  transform:scale(1.04);
 }
 
 .loading,
 .empty,
 .error{
+  grid-column:1 / -1;
   text-align:center;
-  padding:18px 10px;
+  padding:20px 10px;
   color:var(--muted);
   font-size:14px;
 }
@@ -283,7 +200,6 @@ body::before{
   padding:18px;
   background:rgba(0,0,0,.82);
   backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
 }
 
 .lightbox.show{
@@ -322,6 +238,10 @@ body::before{
 }
 
 @media (max-width:420px){
+  .gallery{
+    gap:10px;
+  }
+
   .page-back{
     min-width:84px;
     height:30px;
@@ -329,27 +249,25 @@ body::before{
     padding:0 8px;
   }
 
-  .gallery{
-    gap:14px;
+  .name{
+    font-size:12px;
   }
 
-  .fish{
-    font-size:20px;
-  }
-
-  .weight{
-    font-size:17px;
+  .meta{
+    font-size:10px;
   }
 }
 </style>
 </head>
 
 <body>
+
 <div class="page">
   <div class="shell">
     <div class="panel">
 
-      <a href="index.html" class="page-back">← Tillbaka</a>
+      <!-- tillbaka till TOPPLISTOR -->
+      <a href="topplistor.html" class="page-back">← Tillbaka</a>
 
       <div class="logo-wrap">
         <img src="images/Specimenlogo3.png" alt="Specimen Trophy" class="logo">
@@ -357,7 +275,7 @@ body::before{
 
       <div class="title">
         <h1>Fångstgalleri</h1>
-        <p>Senaste bilderna från Specimen Trophy</p>
+        <p>Alla fångster i premium-grid</p>
       </div>
 
       <div id="gallery" class="gallery">
@@ -370,13 +288,14 @@ body::before{
 
 <div class="lightbox" id="lightbox">
   <div class="lightbox-inner">
-    <button class="lightbox-close" id="lightboxClose" type="button">×</button>
+    <button class="lightbox-close" id="lightboxClose">×</button>
     <img id="lightboxImg" src="" alt="">
   </div>
 </div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSmQto2auLW0HnvmEJtgbICMDLfICicsHbEleftelti_EcU7LI2zDdWloVGAOPW4e2Zw/exec";
+
 const galleryEl = document.getElementById("gallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightboxImg");
@@ -384,16 +303,15 @@ const lightboxClose = document.getElementById("lightboxClose");
 
 function escapeHtml(value){
   return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function openLightbox(url, alt){
+function openLightbox(url){
   lightboxImg.src = url;
-  lightboxImg.alt = alt || "";
   lightbox.classList.add("show");
 }
 
@@ -404,14 +322,14 @@ function closeLightbox(){
 
 lightboxClose.addEventListener("click", closeLightbox);
 
-lightbox.addEventListener("click", (event) => {
-  if(event.target === lightbox){
+lightbox.addEventListener("click", (e)=>{
+  if(e.target === lightbox){
     closeLightbox();
   }
 });
 
-document.addEventListener("keydown", (event) => {
-  if(event.key === "Escape"){
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
     closeLightbox();
   }
 });
@@ -429,58 +347,28 @@ async function loadGallery(){
     }
 
     galleryEl.innerHTML = items.map((item, index) => `
-      <article class="post">
-        <div class="post-header">
-          <div class="profile">
-            <div class="avatar">🎣</div>
-            <div class="profile-text">
-              <div class="name">${escapeHtml(item.deltagare)}</div>
-              <div class="date">${escapeHtml(item.datum)}</div>
-            </div>
-          </div>
-
-          <div class="badge">${escapeHtml(item.art)}</div>
-        </div>
-
-        <div
-          class="image-wrap"
-          data-index="${index}"
-          role="button"
-          tabindex="0"
-        >
-          <img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art)} ${escapeHtml(item.vikt)}g">
-          <div class="image-gradient">
-            <div class="overlay-title">
-              <div class="fish">${escapeHtml(item.art)}</div>
-              <div class="weight">${escapeHtml(item.vikt)} g</div>
-            </div>
+      <article class="card">
+        <div class="card-top">
+          <div class="name">${escapeHtml(item.deltagare)}</div>
+          <div class="meta">
+            ${escapeHtml(item.art)} • ${escapeHtml(item.vikt)} g<br>
+            ${escapeHtml(item.datum)}
           </div>
         </div>
 
-        <div class="caption">
-          <div class="caption-row">
-            <span><strong>${escapeHtml(item.deltagare)}</strong></span>
-            <span>${escapeHtml(item.vikt)} g</span>
-          </div>
-          <div class="caption-row">
-            <span>${escapeHtml(item.art)}</span>
-            <span>${escapeHtml(item.datum)}</span>
-          </div>
+        <div class="image-wrap" data-index="${index}">
+          <img
+            src="${escapeHtml(item.imageUrl)}"
+            alt="${escapeHtml(item.art)}"
+          >
         </div>
       </article>
     `).join("");
 
-    document.querySelectorAll(".image-wrap").forEach((el) => {
-      el.addEventListener("click", () => {
+    document.querySelectorAll(".image-wrap").forEach(el=>{
+      el.addEventListener("click", ()=>{
         const item = items[Number(el.dataset.index)];
-        openLightbox(item.imageUrl, `${item.art} ${item.vikt}g`);
-      });
-
-      el.addEventListener("keydown", (event) => {
-        if(event.key === "Enter"){
-          const item = items[Number(el.dataset.index)];
-          openLightbox(item.imageUrl, `${item.art} ${item.vikt}g`);
-        }
+        openLightbox(item.imageUrl);
       });
     });
 
@@ -492,5 +380,6 @@ async function loadGallery(){
 
 loadGallery();
 </script>
+
 </body>
 </html>
