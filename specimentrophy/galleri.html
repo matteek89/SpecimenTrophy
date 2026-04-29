@@ -238,15 +238,13 @@ function escapeHtml(value){
 
 async function loadGallery(){
   try{
-    const response = await fetch(`${SCRIPT_URL}?mode=gallery`, {
-      cache:"no-store"
-    });
+   const response = await fetch(`${SCRIPT_URL}?mode=gallery&t=${Date.now()}`);
 
-    const data = await response.json();
+const data = await response.json();
 
-    if(!response.ok || !data.success){
-      throw new Error(data.error || "Kunde inte läsa galleri");
-    }
+if(!data.success){
+  throw new Error(data.error || "Kunde inte läsa galleri");
+}
 
     const items = data.gallery || [];
 
