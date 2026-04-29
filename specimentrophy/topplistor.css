@@ -91,15 +91,14 @@ body::before{
   z-index:0;
 }
 
-.page-back{
+.page-back,
+.page-gallery{
   position:absolute;
   top:10px;
-  left:10px;
   z-index:60;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:90px;
   height:32px;
   padding:0 10px;
   border-radius:12px;
@@ -124,7 +123,18 @@ body::before{
     border-color .15s ease;
 }
 
-.page-back:hover{
+.page-back{
+  left:10px;
+  min-width:90px;
+}
+
+.page-gallery{
+  right:10px;
+  min-width:84px;
+}
+
+.page-back:hover,
+.page-gallery:hover{
   transform:translateY(-1px);
   border-color:rgba(51,181,255,.55);
   box-shadow:
@@ -154,12 +164,10 @@ body::before{
   width:min(100%,180px);
   display:block;
   border-radius:22px;
-
   filter:
     drop-shadow(0 0 8px rgba(51,181,255,.30))
     drop-shadow(0 0 18px rgba(51,181,255,.20))
     drop-shadow(0 0 34px rgba(10,132,255,.16));
-
   transition:
     transform .2s ease,
     filter .2s ease;
@@ -537,15 +545,6 @@ tbody tr:nth-child(odd){
     padding:11px 12px;
   }
 
-  .page-switch{
-    top:10px;
-    right:10px;
-    min-width:80px;
-    height:30px;
-    font-size:11px;
-    padding:0 8px;
-  }
-  @media (max-width:420px){
   .page-back{
     top:10px;
     left:10px;
@@ -554,7 +553,15 @@ tbody tr:nth-child(odd){
     font-size:11px;
     padding:0 8px;
   }
-}
+
+  .page-gallery{
+    top:10px;
+    right:10px;
+    min-width:72px;
+    height:30px;
+    font-size:11px;
+    padding:0 8px;
+  }
 
   thead th{
     font-size:11px;
