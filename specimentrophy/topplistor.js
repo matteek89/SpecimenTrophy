@@ -14,29 +14,22 @@ const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
 
-function normalizeDate(value) {
-  const s = String(value ?? "").trim();
-
-  if (!s) return "";
-
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    return s;
-  }
-
-  const d = new Date(s);
-
-  if (!isNaN(d.getTime())) {
-    return d.toISOString().slice(0, 10);
-  }
-
-  return s;
+function normalize(value) {
+  return String(value ?? "").trim().toLowerCase();
 }
 
 function normalizeWeight(value) {
-  return String(value ?? "").replace(/\s/g, "").replace(",", ".").trim();
+  return String(value ?? "")
+    .replace(/\s/g, "")
+    .replace("g", "")
+    .replace("gram", "")
+    .replace(",", ".")
+    .trim();
 }
 
 function findImageForRow(species, row) {
+  if (!row) return null;
+
   return galleryData.find((item) =>
     normalize(item.art) === normalize(species) &&
     normalize(item.deltagare) === normalize(row.namn) &&
@@ -80,13 +73,6 @@ function closeImageModal() {
     modal.querySelector(".image-modal-img").src = "";
   }
 }
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeImageModal();
-    closeDropdown();
-  }
-});
 
 function setActiveDropdownItem(value) {
   dropdownItems.forEach((item) => {
@@ -138,7 +124,8 @@ function renderSpeciesTable(species, rows) {
     .join("");
 
   leaderboardBody.querySelectorAll("tr").forEach((tr) => {
-    const row = rows[Number(tr.dataset.index)];
+    const rowIndex = Number(tr.dataset.index);
+    const row = rows[rowIndex];
     const imageMatch = findImageForRow(species, row);
 
     if (imageMatch) {
@@ -185,6 +172,7 @@ function renderTotalTable(rows) {
 
 function renderSelected(value) {
   const rows = leaderboardData[value] || [];
+
   selectedValue.textContent = value;
   setActiveDropdownItem(value);
 
@@ -219,7 +207,9 @@ async function loadGalleryData() {
   try {
     const response = await fetch(`${GALLERY_URL}&t=${Date.now()}`);
     const data = await response.json();
+
     galleryData = data.gallery || [];
+    console.log("Gallery loaded:", galleryData);
   } catch (error) {
     console.warn("Kunde inte läsa galleri-data:", error);
     galleryData = [];
@@ -230,7 +220,7 @@ async function loadLeaderboardData() {
   try {
     await loadGalleryData();
 
-    const response = await fetch(TOPPLISTOR_URL);
+    const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`);
     const data = await response.json();
 
     if (!response.ok) {
@@ -238,6 +228,8 @@ async function loadLeaderboardData() {
     }
 
     leaderboardData = data;
+    console.log("Topplistor loaded:", leaderboardData);
+
     renderSelected("Björkna");
   } catch (error) {
     console.error("Fel vid hämtning av topplistor:", error);
@@ -278,6 +270,13 @@ dropdownItems.forEach((item) => {
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".custom-dropdown")) {
     closeDropdown();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeDropdown();
+    closeImageModal();
   }
 });
 
