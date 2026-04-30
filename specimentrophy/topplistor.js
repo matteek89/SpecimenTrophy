@@ -14,8 +14,22 @@ const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
 
-function normalize(value) {
-  return String(value ?? "").trim().toLowerCase();
+function normalizeDate(value) {
+  const s = String(value ?? "").trim();
+
+  if (!s) return "";
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    return s;
+  }
+
+  const d = new Date(s);
+
+  if (!isNaN(d.getTime())) {
+    return d.toISOString().slice(0, 10);
+  }
+
+  return s;
 }
 
 function normalizeWeight(value) {
@@ -27,7 +41,7 @@ function findImageForRow(species, row) {
     normalize(item.art) === normalize(species) &&
     normalize(item.deltagare) === normalize(row.namn) &&
     normalizeWeight(item.vikt) === normalizeWeight(row.vikt) &&
-    normalize(item.datum) === normalize(row.datum)
+    normalizeDate(item.datum) === normalizeDate(row.datum)
   );
 }
 
