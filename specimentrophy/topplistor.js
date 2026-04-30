@@ -1,8 +1,6 @@
 let leaderboardData = {};
-let galleryData = [];
 
 const TOPPLISTOR_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor";
-const GALLERY_URL = "https://script.google.com/macros/s/AKfycbw4CR9H7Zl6E2K7Aip-5sfICD6kev5Ih-_1aokwMkGmGGeB4jDdkC6y7E3PfEPm8_Ne3w/exec?mode=gallery";
 
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
@@ -14,28 +12,8 @@ const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
 
-function normalize(value) {
-  return String(value ?? "").trim().toLowerCase();
-}
-
-function normalizeWeight(value) {
-  return String(value ?? "")
-    .replace(/\s/g, "")
-    .replace("g", "")
-    .replace("gram", "")
-    .replace(",", ".")
-    .trim();
-}
-
-function findImageForRow(species, row) {
-  return row.imageUrl || null;
-}
-
-  return galleryData.find((item) =>
-    normalize(item.art) === normalize(species) &&
-    normalize(item.deltagare) === normalize(row.namn) &&
-    normalizeWeight(item.vikt) === normalizeWeight(row.vikt)
-  );
+function findImageForRow(row) {
+  return row && row.imageUrl ? row.imageUrl : null;
 }
 
 function openImageModal(imageUrl) {
@@ -69,6 +47,7 @@ function openImageModal(imageUrl) {
 
 function closeImageModal() {
   const modal = document.getElementById("imageModal");
+
   if (modal) {
     modal.classList.remove("show");
     modal.querySelector(".image-modal-img").src = "";
@@ -109,8 +88,8 @@ function renderSpeciesTable(species, rows) {
   leaderboardBody.innerHTML = rows
     .slice(0, 12)
     .map((row, index) => {
-      const imageMatch = findImageForRow(species, row);
-      const clickableClass = imageMatch ? "clickable-row" : "";
+      const imageUrl = findImageForRow(row);
+      const clickableClass = imageUrl ? "clickable-row" : "";
 
       return `
         <tr class="${clickableClass}" data-index="${index}">
@@ -127,13 +106,13 @@ function renderSpeciesTable(species, rows) {
   leaderboardBody.querySelectorAll("tr").forEach((tr) => {
     const rowIndex = Number(tr.dataset.index);
     const row = rows[rowIndex];
-    const imageUrl = findImageForRow(species, row);
+    const imageUrl = findImageForRow(row);
 
-   if (imageUrl) {
-  tr.addEventListener("click", () => {
-    openImageModal(imageUrl);
-  });
-}
+    if (imageUrl) {
+      tr.addEventListener("click", () => {
+        openImageModal(imageUrl);
+      });
+    }
   });
 }
 
@@ -204,23 +183,8 @@ function toggleDropdown() {
   }
 }
 
-async function loadGalleryData() {
-  try {
-    const response = await fetch(`${GALLERY_URL}&t=${Date.now()}`);
-    const data = await response.json();
-
-    galleryData = data.gallery || [];
-    console.log("Gallery loaded:", galleryData);
-  } catch (error) {
-    console.warn("Kunde inte läsa galleri-data:", error);
-    galleryData = [];
-  }
-}
-
 async function loadLeaderboardData() {
   try {
-    await loadGalleryData();
-
     const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`);
     const data = await response.json();
 
@@ -229,9 +193,8 @@ async function loadLeaderboardData() {
     }
 
     leaderboardData = data;
-    console.log("Topplistor loaded:", leaderboardData);
-
     renderSelected("Björkna");
+
   } catch (error) {
     console.error("Fel vid hämtning av topplistor:", error);
 
