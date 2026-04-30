@@ -28,7 +28,8 @@ function normalizeWeight(value) {
 }
 
 function findImageForRow(species, row) {
-  if (!row) return null;
+  return row.imageUrl || null;
+}
 
   return galleryData.find((item) =>
     normalize(item.art) === normalize(species) &&
@@ -126,13 +127,13 @@ function renderSpeciesTable(species, rows) {
   leaderboardBody.querySelectorAll("tr").forEach((tr) => {
     const rowIndex = Number(tr.dataset.index);
     const row = rows[rowIndex];
-    const imageMatch = findImageForRow(species, row);
+    const imageUrl = findImageForRow(species, row);
 
-    if (imageMatch) {
-      tr.addEventListener("click", () => {
-        openImageModal(imageMatch.imageUrl);
-      });
-    }
+   if (imageUrl) {
+  tr.addEventListener("click", () => {
+    openImageModal(imageUrl);
+  });
+}
   });
 }
 
