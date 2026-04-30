@@ -294,7 +294,7 @@ body::before{
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4CR9H7Zl6E2K7Aip-5sfICD6kev5Ih-_1aokwMkGmGGeB4jDdkC6y7E3PfEPm8_Ne3w/exec";
+const TOPPLISTOR_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor";
 
 const galleryEl = document.getElementById("gallery");
 const lightbox = document.getElementById("lightbox");
@@ -336,13 +336,29 @@ document.addEventListener("keydown", (e)=>{
 
 async function loadGallery(){
   try{
-    const response = await fetch(`${SCRIPT_URL}?mode=gallery&t=${Date.now()}`);
+    const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`);
     const data = await response.json();
 
-    const items = data.gallery || [];
+    const items = [];
+
+    Object.keys(data).forEach(art => {
+      if (art === "Bäste poängplockare") return;
+
+      (data[art] || []).forEach(row => {
+        if (row.imageUrl) {
+          items.push({
+            deltagare: row.namn,
+            art: art,
+            vikt: row.vikt,
+            datum: row.datum,
+            imageUrl: row.imageUrl
+          });
+        }
+      });
+    });
 
     if(items.length === 0){
-      galleryEl.innerHTML = `<div class="empty">Inga bilder uppladdade ännu.</div>`;
+      galleryEl.innerHTML = `<div class="empty">Inga godkända bilder finns ännu.</div>`;
       return;
     }
 
