@@ -40,8 +40,7 @@ function findImageForRow(species, row) {
   return galleryData.find((item) =>
     normalize(item.art) === normalize(species) &&
     normalize(item.deltagare) === normalize(row.namn) &&
-    normalizeWeight(item.vikt) === normalizeWeight(row.vikt) &&
-    normalizeDate(item.datum) === normalizeDate(row.datum)
+    normalizeWeight(item.vikt) === normalizeWeight(row.vikt)
   );
 }
 
