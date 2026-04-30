@@ -2,7 +2,7 @@ let leaderboardData = {};
 let galleryData = [];
 
 const TOPPLISTOR_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor";
-const GALLERY_URL = "https://script.google.com/macros/s/AKfycbwSmQto2auLW0HnvmEJtgbICMDLfICicsHbEleftelti_EcU7LI2zDdWloVGAOPW4e2Zw/exec?mode=gallery";
+const GALLERY_URL = "https://script.google.com/macros/s/AKfycbw4CR9H7Zl6E2K7Aip-5sfICD6kev5Ih-_1aokwMkGmGGeB4jDdkC6y7E3PfEPm8_Ne3w/exec?mode=gallery";
 
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
