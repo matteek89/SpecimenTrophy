@@ -1,1 +1,75 @@
+/* =========================
+   GLOBAL BUTTON STYLE
+========================= */
 
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:34px;
+  padding:0 12px;
+
+  border-radius:12px;
+  text-decoration:none;
+
+  font-size:12px;
+  font-weight:700;
+  color:#fff;
+
+  border:1px solid rgba(51,181,255,.34);
+
+  background:linear-gradient(
+    180deg,
+    rgba(2,11,23,.96),
+    rgba(3,18,38,.90)
+  );
+
+  box-shadow:
+    0 0 8px rgba(51,181,255,.10);
+
+  transition: all .2s ease;
+  cursor:pointer;
+}
+
+/* Hover */
+.btn:hover{
+  background:linear-gradient(
+    180deg,
+    rgba(3,18,38,1),
+    rgba(5,30,70,.95)
+  );
+
+  border-color:rgba(51,181,255,.6);
+
+  box-shadow:
+    0 0 10px rgba(51,181,255,.35),
+    0 0 20px rgba(10,132,255,.25);
+
+  transform:translateY(-1px);
+}
+
+/* Active (klick) */
+.btn:active{
+  transform:translateY(1px) scale(.98);
+  box-shadow:
+    0 0 6px rgba(51,181,255,.25);
+}
+
+/* =========================
+   POSITION HELPERS
+========================= */
+
+.btn-left{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:50;
+}
+
+.btn-right{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:50;
+}
