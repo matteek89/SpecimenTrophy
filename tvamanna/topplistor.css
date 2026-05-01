@@ -378,6 +378,13 @@ body::before{
   position:relative;
   overflow:visible;
 }
+.card:hover{
+  transform:translateY(-3px);
+  transition:.2s;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.35),
+    0 0 18px rgba(51,181,255,.18);
+}
 
 .card::before{
   content:"";
