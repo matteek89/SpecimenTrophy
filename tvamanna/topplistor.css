@@ -572,3 +572,58 @@ tbody tr:nth-child(odd){
     font-size:11px;
   }
 }
+.clickable-row{
+  cursor:pointer;
+}
+
+.clickable-row:hover td{
+  background:rgba(51,181,255,.12);
+}
+
+#imageModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  padding:18px;
+}
+
+#imageModal.show{
+  display:flex;
+}
+
+.image-modal-backdrop{
+  position:relative;
+  width:100%;
+  max-width:720px;
+}
+
+.image-modal-close{
+  position:absolute;
+  top:-44px;
+  right:0;
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  border:1px solid rgba(51,181,255,.34);
+  background:rgba(2,11,23,.96);
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.image-modal-img{
+  width:100%;
+  max-height:80vh;
+  object-fit:contain;
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px rgba(51,181,255,.25),
+    0 0 30px rgba(51,181,255,.18),
+    0 18px 50px rgba(0,0,0,.45);
+}
