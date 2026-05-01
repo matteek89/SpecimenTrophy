@@ -11,6 +11,48 @@ const leaderboardTable = document.getElementById("leaderboardTable");
 
 const API_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor-tvaman";
 
+function findImageForRow(row) {
+  return row && row.imageUrl ? row.imageUrl : null;
+}
+
+function openImageModal(imageUrl) {
+  let modal = document.getElementById("imageModal");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "imageModal";
+    modal.innerHTML = `
+      <div class="image-modal-backdrop">
+        <button class="image-modal-close" type="button">×</button>
+        <img class="image-modal-img" src="" alt="Fångstbild">
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", (event) => {
+      if (
+        event.target.id === "imageModal" ||
+        event.target.classList.contains("image-modal-backdrop") ||
+        event.target.classList.contains("image-modal-close")
+      ) {
+        closeImageModal();
+      }
+    });
+  }
+
+  modal.querySelector(".image-modal-img").src = imageUrl;
+  modal.classList.add("show");
+}
+
+function closeImageModal() {
+  const modal = document.getElementById("imageModal");
+
+  if (modal) {
+    modal.classList.remove("show");
+    modal.querySelector(".image-modal-img").src = "";
+  }
+}
+
 function getDropdownItems() {
   return dropdownMenu.querySelectorAll(".dropdown-item");
 }
@@ -49,17 +91,34 @@ function renderSpeciesTable(species, rows) {
 
   leaderboardBody.innerHTML = rows
     .slice(0, 10)
-    .map((row) => `
-      <tr>
-        <td>${row.placering ?? ""}</td>
-        <td>${row.namn ?? ""}</td>
-        <td>${row.lag ?? ""}</td>
-        <td>${row.vikt ?? ""}</td>
-        <td>${row.datum ?? ""}</td>
-        <td>${row.poang ?? ""}</td>
-      </tr>
-    `)
+    .map((row, index) => {
+      const imageUrl = findImageForRow(row);
+      const clickableClass = imageUrl ? "clickable-row" : "";
+
+      return `
+        <tr class="${clickableClass}" data-index="${index}">
+          <td>${row.placering ?? ""}</td>
+          <td>${row.namn ?? ""}</td>
+          <td>${row.lag ?? ""}</td>
+          <td>${row.vikt ?? ""}</td>
+          <td>${row.datum ?? ""}</td>
+          <td>${row.poang ?? ""}</td>
+        </tr>
+      `;
+    })
     .join("");
+
+  leaderboardBody.querySelectorAll("tr").forEach((tr) => {
+    const rowIndex = Number(tr.dataset.index);
+    const row = rows[rowIndex];
+    const imageUrl = findImageForRow(row);
+
+    if (imageUrl) {
+      tr.addEventListener("click", () => {
+        openImageModal(imageUrl);
+      });
+    }
+  });
 }
 
 function renderTotalTable(rows) {
@@ -166,8 +225,8 @@ function buildDropdownFromData(data) {
 
   const keys = Object.keys(data || {});
   const specialKeys = ["Bästa Lag", "Bäste poängplockare"];
-
   const speciesKeys = keys.filter((key) => !specialKeys.includes(key));
+
   const orderedKeys = [
     ...speciesKeys,
     ...specialKeys.filter((key) => keys.includes(key))
@@ -203,7 +262,7 @@ function buildDropdownFromData(data) {
 
 async function loadLeaderboardData() {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}?t=${Date.now()}`, {
       cache: "no-store"
     });
 
@@ -279,6 +338,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeDropdown();
+    closeImageModal();
   }
 });
 
