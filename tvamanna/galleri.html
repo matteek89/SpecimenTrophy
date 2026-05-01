@@ -1,1 +1,387 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Två-manna Galleri</title>
 
+<style>
+:root{
+  --text:#f3f4f6;
+  --muted:rgba(255,255,255,.68);
+  --accent:#33b5ff;
+  --bg:#02070f;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--text);
+  padding:10px 8px;
+  background:
+    linear-gradient(rgba(0,8,18,.18),rgba(0,8,18,.32)),
+    url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed,
+    var(--bg);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(51,181,255,.06), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%);
+}
+
+.page{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+}
+
+.shell{
+  position:relative;
+  min-height:760px;
+  padding:4px;
+  border-radius:26px;
+  background:linear-gradient(180deg, rgba(58,186,255,.96), rgba(0,92,184,.86));
+  box-shadow:
+    0 0 0 1px rgba(58,186,255,.96),
+    0 0 10px rgba(51,181,255,.30),
+    0 0 20px rgba(10,132,255,.14),
+    0 14px 28px rgba(0,0,0,.28);
+}
+
+.panel{
+  min-height:752px;
+  border-radius:22px;
+  padding:12px 10px 14px;
+  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  border:1px solid rgba(51,181,255,.14);
+  position:relative;
+}
+
+.page-back{
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:50;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:90px;
+  height:32px;
+  padding:0 10px;
+  border-radius:12px;
+  text-decoration:none;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid rgba(51,181,255,.34);
+  background:linear-gradient(
+    180deg,
+    rgba(2,11,23,.96),
+    rgba(3,18,38,.90)
+  );
+  box-shadow:0 0 8px rgba(51,181,255,.10);
+}
+
+.logo-wrap{
+  display:flex;
+  justify-content:center;
+  padding-top:42px;
+  margin-bottom:12px;
+}
+
+.logo{
+  width:min(100%,180px);
+  border-radius:22px;
+  filter:
+    drop-shadow(0 0 8px rgba(51,181,255,.30))
+    drop-shadow(0 0 18px rgba(51,181,255,.20))
+    drop-shadow(0 0 34px rgba(10,132,255,.16));
+}
+
+.title{
+  text-align:center;
+  margin-bottom:16px;
+}
+
+.title h1{
+  font-size:20px;
+  font-weight:800;
+}
+
+.title p{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:14px;
+}
+
+.card{
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(51,181,255,.14);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.22),
+    0 0 14px rgba(51,181,255,.06);
+}
+
+.card-top{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.name{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.meta{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.image-wrap{
+  width:100%;
+  aspect-ratio:1 / 1;
+  background:rgba(0,0,0,.25);
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.image-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:.25s ease;
+}
+
+.image-wrap:hover img{
+  transform:scale(1.04);
+}
+
+.loading,
+.empty,
+.error{
+  grid-column:1 / -1;
+  text-align:center;
+  padding:20px 10px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.lightbox{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(8px);
+}
+
+.lightbox.show{
+  display:flex;
+}
+
+.lightbox-inner{
+  width:100%;
+  max-width:720px;
+  position:relative;
+}
+
+.lightbox-close{
+  position:absolute;
+  top:-44px;
+  right:0;
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  border:1px solid rgba(51,181,255,.34);
+  background:rgba(2,11,23,.96);
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.lightbox img{
+  width:100%;
+  max-height:80vh;
+  object-fit:contain;
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px rgba(51,181,255,.25),
+    0 0 30px rgba(51,181,255,.18),
+    0 18px 50px rgba(0,0,0,.45);
+}
+
+@media (max-width:420px){
+  .gallery{
+    gap:10px;
+  }
+
+  .page-back{
+    min-width:84px;
+    height:30px;
+    font-size:11px;
+    padding:0 8px;
+  }
+
+  .name{
+    font-size:12px;
+  }
+
+  .meta{
+    font-size:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="shell">
+    <div class="panel">
+
+      <a href="topplistor.html" class="page-back">← Tillbaka</a>
+
+      <div class="logo-wrap">
+        <img src="images/logo_tvamanna2.png" alt="Två-manna" class="logo">
+      </div>
+
+      <div class="title">
+        <h1>Fångstgalleri</h1>
+        <p>Alla fångster hittils - Stora som små</p>
+      </div>
+
+      <div id="gallery" class="gallery">
+        <div class="loading">Laddar galleri...</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightboxClose">×</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</div>
+
+<script>
+const API_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor-tvaman";
+
+const galleryEl = document.getElementById("gallery");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxClose = document.getElementById("lightboxClose");
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function openLightbox(url){
+  lightboxImg.src = url;
+  lightbox.classList.add("show");
+}
+
+function closeLightbox(){
+  lightbox.classList.remove("show");
+  lightboxImg.src = "";
+}
+
+lightboxClose.addEventListener("click", closeLightbox);
+
+lightbox.addEventListener("click", (e)=>{
+  if(e.target === lightbox){
+    closeLightbox();
+  }
+});
+
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    closeLightbox();
+  }
+});
+
+async function loadGallery(){
+  try{
+    const response = await fetch(`${API_URL}?t=${Date.now()}`, {
+      cache: "no-store"
+    });
+
+    const data = await response.json();
+    const items = data.Galleri || [];
+
+    if(items.length === 0){
+      galleryEl.innerHTML = `<div class="empty">Inga godkända bilder finns ännu.</div>`;
+      return;
+    }
+
+    galleryEl.innerHTML = items.map((item, index) => `
+      <article class="card">
+        <div class="card-top">
+          <div class="name">${escapeHtml(item.deltagare)}</div>
+          <div class="meta">
+            ${escapeHtml(item.lag)}<br>
+            ${escapeHtml(item.art)} • ${escapeHtml(item.vikt)} g<br>
+            ${escapeHtml(item.datum)}
+          </div>
+        </div>
+
+        <div class="image-wrap" data-index="${index}">
+          <img
+            src="${escapeHtml(item.imageUrl)}"
+            alt="${escapeHtml(item.art)}"
+          >
+        </div>
+      </article>
+    `).join("");
+
+    document.querySelectorAll(".image-wrap").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const item = items[Number(el.dataset.index)];
+        openLightbox(item.imageUrl);
+      });
+    });
+
+  }catch(error){
+    console.error(error);
+    galleryEl.innerHTML = `<div class="error">Kunde inte läsa galleriet just nu.</div>`;
+  }
+}
+
+loadGallery();
+</script>
+
+</body>
+</html>
