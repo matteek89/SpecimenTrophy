@@ -93,6 +93,19 @@ body::before{
     rgba(3,18,38,.90)
   );
   box-shadow:0 0 8px rgba(51,181,255,.10);
+  transition: all .2s ease;
+}
+  .page-back:hover{
+  background:linear-gradient(
+    180deg,
+    rgba(3,18,38,1),
+    rgba(5,30,70,0.95)
+  );
+  border-color:rgba(51,181,255,.6);
+  box-shadow:
+    0 0 10px rgba(51,181,255,.35),
+    0 0 20px rgba(10,132,255,.25);
+  transform:translateY(-1px);
 }
 
 .logo-wrap{
@@ -141,13 +154,6 @@ body::before{
   box-shadow:
     0 8px 20px rgba(0,0,0,.22),
     0 0 14px rgba(51,181,255,.06);
-}
-  .card:hover{
-  transform:translateY(-3px);
-  transition:.2s;
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.35),
-    0 0 18px rgba(51,181,255,.18);
 }
 
 .card-top{
