@@ -339,23 +339,7 @@ async function loadGallery(){
     const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`);
     const data = await response.json();
 
-    const items = [];
-
-    Object.keys(data).forEach(art => {
-      if (art === "Bäste poängplockare") return;
-
-      (data[art] || []).forEach(row => {
-        if (row.imageUrl) {
-          items.push({
-            deltagare: row.namn,
-            art: art,
-            vikt: row.vikt,
-            datum: row.datum,
-            imageUrl: row.imageUrl
-          });
-        }
-      });
-    });
+    const items = data.Galleri || [];
 
     if(items.length === 0){
       galleryEl.innerHTML = `<div class="empty">Inga godkända bilder finns ännu.</div>`;
@@ -373,10 +357,7 @@ async function loadGallery(){
         </div>
 
         <div class="image-wrap" data-index="${index}">
-          <img
-            src="${escapeHtml(item.imageUrl)}"
-            alt="${escapeHtml(item.art)}"
-          >
+          <img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art)}">
         </div>
       </article>
     `).join("");
