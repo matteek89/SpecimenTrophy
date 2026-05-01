@@ -275,7 +275,7 @@ body::before{
 
       <div class="title">
         <h1>Fångstgalleri</h1>
-        <p>Alla fångster i premium-grid</p>
+        <p>Alla fångster hittills - Stora som små!</p>
       </div>
 
       <div id="gallery" class="gallery">
@@ -342,7 +342,7 @@ async function loadGallery(){
     const items = data.Galleri || [];
 
     if(items.length === 0){
-      galleryEl.innerHTML = `<div class="empty">Inga godkända bilder finns ännu.</div>`;
+      galleryEl.innerHTML = `<div class="empty">Inga fångster registrerade ännu.</div>`;
       return;
     }
 
