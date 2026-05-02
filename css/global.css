@@ -74,8 +74,8 @@
   z-index:50;
 }
 .btn-center{
-  position:static;
+  position:absolute;
   display:flex;
-  margin:0px auto;
+  margin:10px auto;
   width:fit-content;
 }
