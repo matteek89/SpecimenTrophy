@@ -73,3 +73,9 @@
   right:10px;
   z-index:50;
 }
+.btn-center{
+  position:static;
+  display:flex;
+  margin:20px auto;
+  width:fit-content;
+}
