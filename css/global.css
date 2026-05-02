@@ -76,6 +76,6 @@
 .btn-center{
   position:static;
   display:flex;
-  margin:2px auto;
+  margin:0px auto;
   width:fit-content;
 }
