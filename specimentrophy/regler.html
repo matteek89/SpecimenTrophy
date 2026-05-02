@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regler</title>
 
+<link rel="stylesheet" href="../css/global.css">
+
+<style>
+:root{
+  --text:#f3f4f6;
+  --muted:rgba(255,255,255,.68);
+  --accent:#33b5ff;
+  --bg:#02070f;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body{
+  min-height:100%;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+body{
+  min-height:100vh;
+  padding:10px 8px;
+  background:
+    linear-gradient(rgba(0,8,18,.18),rgba(0,8,18,.32)),
+    url("images/sunset_background_for_github.jpg") center center / cover no-repeat fixed,
+    var(--bg);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(51,181,255,.06), transparent 24%),
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%);
+}
+
+.page{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+}
+
+.shell{
+  position:relative;
+  min-height:760px;
+  padding:4px;
+  border-radius:26px;
+  background:linear-gradient(180deg, rgba(58,186,255,.96), rgba(0,92,184,.86));
+  box-shadow:
+    0 0 0 1px rgba(58,186,255,.96),
+    0 0 10px rgba(51,181,255,.30),
+    0 0 20px rgba(10,132,255,.14),
+    0 14px 28px rgba(0,0,0,.28);
+}
+
+.panel{
+  min-height:752px;
+  border-radius:22px;
+  padding:12px 10px 18px;
+  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  border:1px solid rgba(51,181,255,.14);
+  position:relative;
+}
+
+.logo-wrap{
+  display:flex;
+  justify-content:center;
+  padding-top:42px;
+  margin-bottom:14px;
+}
+
+.logo{
+  width:min(100%,180px);
+  border-radius:22px;
+  filter:
+    drop-shadow(0 0 8px rgba(51,181,255,.30))
+    drop-shadow(0 0 18px rgba(51,181,255,.20))
+    drop-shadow(0 0 34px rgba(10,132,255,.16));
+}
+
+.title{
+  text-align:center;
+  margin-bottom:14px;
+}
+
+.title h1{
+  font-size:22px;
+  font-weight:900;
+}
+
+.title p{
+  margin-top:5px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.rules-card{
+  background:linear-gradient(180deg, rgba(4,13,28,.94), rgba(1,7,18,.98));
+  border:1px solid rgba(51,181,255,.18);
+  border-radius:20px;
+  padding:14px;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.22),
+    0 0 14px rgba(51,181,255,.08);
+}
+
+.rule{
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.rule:last-child{
+  border-bottom:0;
+}
+
+.rule-title{
+  font-size:15px;
+  font-weight:800;
+  color:#ffffff;
+  margin-bottom:5px;
+}
+
+.rule-text{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+
+.note{
+  margin-top:14px;
+  padding:12px;
+  border-radius:16px;
+  background:rgba(51,181,255,.08);
+  border:1px solid rgba(51,181,255,.16);
+  font-size:13px;
+  line-height:1.5;
+  color:#d9f3ff;
+}
+
+@media (max-width:420px){
+  body{
+    padding:10px 8px;
+  }
+
+  .shell{
+    min-height:760px;
+  }
+
+  .logo{
+    width:min(100%,182px);
+  }
+
+  .title h1{
+    font-size:20px;
+  }
+
+  .rule-title{
+    font-size:14px;
+  }
+
+  .rule-text,
+  .note{
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+  <div class="shell">
+    <div class="panel">
+
+      <a href="index.html" class="btn btn-left">← Tillbaka</a>
+
+      <div class="logo-wrap">
+        <img src="images/Specimenlogo3.png" alt="Specimen Trophy" class="logo">
+      </div>
+
+      <div class="title">
+        <h1>Regler</h1>
+        <p>Regler för tävlingen</p>
+      </div>
+
+      <div class="rules-card">
+
+        <div class="rule">
+          <div class="rule-title">1. Godkänd fångst</div>
+          <div class="rule-text">Endast fångster som registreras korrekt och godkänns räknas i tävlingen.</div>
+        </div>
+
+        <div class="rule">
+          <div class="rule-title">2. Bildkrav</div>
+          <div class="rule-text">Fångsten ska registreras med bild för att kunna visas i galleri och kopplas till topplistor.</div>
+        </div>
+
+        <div class="rule">
+          <div class="rule-title">3. Vikt</div>
+          <div class="rule-text">Vikten ska anges i gram och vara korrekt ifylld vid registrering.</div>
+        </div>
+
+        <div class="rule">
+          <div class="rule-title">4. Datum</div>
+          <div class="rule-text">Fångstdatum ska anges korrekt och fångsten måste vara tagen under tävlingsperioden.</div>
+        </div>
+
+        <div class="rule">
+          <div class="rule-title">5. Kontroll</div>
+          <div class="rule-text">Tävlingsledningen har rätt att kontrollera, justera eller neka en fångst vid tveksamheter.</div>
+        </div>
+
+        <div class="note">
+          Vid frågor eller oklarheter gäller tävlingsledningens beslut.
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
