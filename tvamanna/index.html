@@ -619,6 +619,33 @@ input[type=number]::-webkit-outer-spin-button{
 .confirm-btn{
   background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
 }
+  .modal-ok-btn{
+  display:none;
+  width:100%;
+  height:54px;
+  margin-top:16px;
+  border:0;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:900;
+  color:#ffffff;
+  cursor:pointer;
+  background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 16px rgba(28,209,79,.28),
+    0 8px 18px rgba(0,0,0,.22);
+}
+
+.modal-ok-btn.show{
+  display:block;
+}
+
+.modal-success{
+  color:#19d458 !important;
+  font-weight:800;
+  text-shadow:0 0 10px rgba(25,212,88,.25);
+}
 
 @media (max-width:420px){
   body{
