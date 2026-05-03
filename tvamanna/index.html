@@ -841,17 +841,19 @@ input[type=number]::-webkit-outer-spin-button{
 
 <div id="codeModal" class="modal">
   <div class="modal-box">
-    <h3>Bekräfta med kod</h3>
-    <p>Skriv in den 4-siffriga koden för att spara.</p>
+    <h3 id="modalTitle">Bekräfta med kod</h3>
+    <p id="modalText">Skriv in den 4-siffriga koden för att spara.</p>
 
     <input type="password" id="codeInput" class="code-input" maxlength="4" inputmode="numeric" placeholder="0000">
 
     <div id="codeError" class="code-error">Fel kod</div>
 
-    <div class="modal-actions">
+    <div class="modal-actions" id="codeActions">
       <button type="button" class="modal-btn cancel-btn" id="cancelCodeBtn">Avbryt</button>
       <button type="button" class="modal-btn confirm-btn" id="confirmCodeBtn">Bekräfta</button>
     </div>
+
+    <button type="button" class="modal-ok-btn" id="modalOkBtn">OK</button>
   </div>
 </div>
 
@@ -879,6 +881,10 @@ const codeInput = document.getElementById("codeInput");
 const codeError = document.getElementById("codeError");
 const confirmCodeBtn = document.getElementById("confirmCodeBtn");
 const cancelCodeBtn = document.getElementById("cancelCodeBtn");
+const modalTitle = document.getElementById("modalTitle");
+const modalText = document.getElementById("modalText");
+const codeActions = document.getElementById("codeActions");
+const modalOkBtn = document.getElementById("modalOkBtn");
 
 let pendingSubmit = false;
 let isSubmitting = false;
@@ -979,11 +985,26 @@ function validateForm(){
 function openCodeModal(){
   codeInput.value = "";
   codeError.classList.remove("show");
+
+  modalTitle.textContent = "Bekräfta med kod";
+  modalText.textContent = "Skriv in den 4-siffriga koden för att spara.";
+  modalText.classList.remove("modal-success");
+  modalText.style.color = "";
+
+  codeInput.style.display = "flex";
+  codeActions.style.display = "flex";
+  modalOkBtn.classList.remove("show");
+
+  confirmCodeBtn.disabled = false;
+  cancelCodeBtn.disabled = false;
+
   codeModal.classList.add("show");
   setTimeout(() => codeInput.focus(), 50);
 }
 
 function closeCodeModal(){
+  if(isSubmitting) return;
+
   codeModal.classList.remove("show");
   codeInput.value = "";
   codeError.classList.remove("show");
@@ -991,7 +1012,7 @@ function closeCodeModal(){
 }
 
 async function sendForm(){
-  if (isSubmitting) return;
+  if (isSubmitting) return false;
   isSubmitting = true;
 
   try {
@@ -1036,9 +1057,12 @@ async function sendForm(){
     document.querySelector("input[name='Art']").value = "";
     clearInvalidStates();
 
+    return true;
+
   } catch (error) {
     console.error("Fel vid sparning:", error);
     showMessage("⚠ Kunde inte spara", "#ff6b6b");
+    return false;
   } finally {
     isSubmitting = false;
   }
@@ -1148,6 +1172,7 @@ form.addEventListener("submit", e => {
   e.preventDefault();
   hideMessage();
 
+  if(isSubmitting) return;
   if(!validateForm()) return;
 
   pendingSubmit = true;
@@ -1155,7 +1180,7 @@ form.addEventListener("submit", e => {
 });
 
 confirmCodeBtn.addEventListener("click", async () => {
-  if(!pendingSubmit) return;
+  if(!pendingSubmit || isSubmitting) return;
 
   if(codeInput.value !== "2026"){
     codeError.classList.add("show");
@@ -1165,13 +1190,34 @@ confirmCodeBtn.addEventListener("click", async () => {
   }
 
   codeError.classList.remove("show");
-  codeModal.classList.remove("show");
+
+  modalTitle.textContent = "Sparar...";
+  modalText.textContent = "Vänta medan fångsten sparas.";
+  modalText.classList.remove("modal-success");
+  modalText.style.color = "";
+
+  codeInput.style.display = "none";
+  codeActions.style.display = "none";
   pendingSubmit = false;
 
-  await sendForm();
+  const saved = await sendForm();
+
+  if(saved){
+    modalTitle.textContent = "Sparat!";
+    modalText.textContent = "Fångsten är registrerad.";
+    modalText.classList.add("modal-success");
+  }else{
+    modalTitle.textContent = "Fel";
+    modalText.textContent = "Kunde inte spara fångsten. Försök igen.";
+    modalText.classList.remove("modal-success");
+    modalText.style.color = "#ff6b6b";
+  }
+
+  modalOkBtn.classList.add("show");
 });
 
 cancelCodeBtn.addEventListener("click", closeCodeModal);
+modalOkBtn.addEventListener("click", closeCodeModal);
 
 codeInput.addEventListener("input", () => {
   codeError.classList.remove("show");
