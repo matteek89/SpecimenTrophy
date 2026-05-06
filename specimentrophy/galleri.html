@@ -61,6 +61,19 @@
         0 0 10px rgba(51,181,255,.30),
         0 0 20px rgba(10,132,255,.14),
         0 14px 28px rgba(0,0,0,.28);
+      animation:pageEnter .28s ease both;
+    }
+
+    @keyframes pageEnter{
+      from{
+        opacity:0;
+        transform:translateY(8px) scale(.985);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
     }
 
     .panel{
@@ -86,11 +99,23 @@
         drop-shadow(0 0 8px rgba(51,181,255,.30))
         drop-shadow(0 0 18px rgba(51,181,255,.20))
         drop-shadow(0 0 34px rgba(10,132,255,.16));
+      transition:
+        transform .28s ease,
+        filter .28s ease;
+    }
+
+    .logo:hover{
+      transform:scale(1.025);
+      filter:
+        drop-shadow(0 0 10px rgba(51,181,255,.36))
+        drop-shadow(0 0 22px rgba(51,181,255,.24))
+        drop-shadow(0 0 38px rgba(10,132,255,.18));
     }
 
     .title{
       text-align:center;
       margin-bottom:18px;
+      animation:softFadeUp .32s ease both;
     }
 
     .title h1{
@@ -103,6 +128,18 @@
       margin-top:5px;
       color:var(--muted);
       font-size:13px;
+    }
+
+    @keyframes softFadeUp{
+      from{
+        opacity:0;
+        transform:translateY(6px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
     }
 
     .gallery{
@@ -119,7 +156,30 @@
       box-shadow:
         0 8px 20px rgba(0,0,0,.24),
         0 0 14px rgba(51,181,255,.07);
-      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      transition:
+        transform .24s ease,
+        box-shadow .24s ease,
+        border-color .24s ease;
+      animation:cardIn .26s ease both;
+    }
+
+    .card:nth-child(1){ animation-delay:.02s; }
+    .card:nth-child(2){ animation-delay:.04s; }
+    .card:nth-child(3){ animation-delay:.06s; }
+    .card:nth-child(4){ animation-delay:.08s; }
+    .card:nth-child(5){ animation-delay:.10s; }
+    .card:nth-child(6){ animation-delay:.12s; }
+
+    @keyframes cardIn{
+      from{
+        opacity:0;
+        transform:translateY(8px) scale(.985);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
     }
 
     .card:hover{
@@ -143,7 +203,9 @@
       height:100%;
       object-fit:cover;
       display:block;
-      transition:transform .25s ease, filter .25s ease;
+      transition:
+        transform .28s ease,
+        filter .28s ease;
     }
 
     .image-wrap:hover img{
@@ -189,6 +251,7 @@
       border-radius:16px;
       background:rgba(255,255,255,.035);
       border:1px solid rgba(51,181,255,.12);
+      animation:softFadeUp .25s ease both;
     }
 
     .lightbox{
@@ -201,16 +264,41 @@
       padding:18px;
       background:rgba(0,0,0,.82);
       backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
     }
 
     .lightbox.show{
       display:flex;
+      animation:modalFade .18s ease both;
+    }
+
+    @keyframes modalFade{
+      from{
+        opacity:0;
+      }
+
+      to{
+        opacity:1;
+      }
     }
 
     .lightbox-inner{
       width:100%;
       max-width:720px;
       position:relative;
+      animation:modalImageIn .22s ease both;
+    }
+
+    @keyframes modalImageIn{
+      from{
+        opacity:0;
+        transform:scale(.965);
+      }
+
+      to{
+        opacity:1;
+        transform:scale(1);
+      }
     }
 
     .lightbox-close{
@@ -225,6 +313,16 @@
       color:#fff;
       font-size:24px;
       cursor:pointer;
+      transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .lightbox-close:hover{
+      transform:scale(1.06);
+      border-color:rgba(51,181,255,.62);
+      box-shadow:0 0 14px rgba(51,181,255,.18);
     }
 
     .lightbox img{
@@ -249,6 +347,17 @@
 
       .meta{
         font-size:10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *,
+      *::before,
+      *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
       }
     }
   </style>
