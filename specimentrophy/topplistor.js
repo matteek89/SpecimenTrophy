@@ -5,12 +5,13 @@ const TOPPLISTOR_URL = "https://matteek89-specimentrophy.vercel.app/api/topplist
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
 const selectedValue = document.getElementById("selectedValue");
-const dropdownItems = document.querySelectorAll(".dropdown-item");
 
 const leaderboardHead = document.getElementById("leaderboardHead");
 const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
+
+const DEFAULT_LIST = "Bäste poängplockare";
 
 function findImageForRow(row) {
   return row && row.imageUrl ? row.imageUrl : null;
@@ -54,8 +55,12 @@ function closeImageModal() {
   }
 }
 
+function getDropdownItems() {
+  return dropdownMenu.querySelectorAll(".dropdown-item");
+}
+
 function setActiveDropdownItem(value) {
-  dropdownItems.forEach((item) => {
+  getDropdownItems().forEach((item) => {
     const active = item.dataset.value === value;
     item.classList.toggle("active", active);
     item.setAttribute("aria-selected", active ? "true" : "false");
@@ -156,7 +161,7 @@ function renderSelected(value) {
   selectedValue.textContent = value;
   setActiveDropdownItem(value);
 
-  if (value === "Bäste poängplockare") {
+  if (value === DEFAULT_LIST) {
     renderTotalTable(rows);
   } else {
     renderSpeciesTable(value, rows);
@@ -183,9 +188,56 @@ function toggleDropdown() {
   }
 }
 
+function buildDropdownFromData(data) {
+  dropdownMenu.innerHTML = "";
+
+  const keys = Object.keys(data || {});
+  const specialKeys = [DEFAULT_LIST];
+  const excludedKeys = ["Galleri"];
+
+  const speciesKeys = keys.filter(
+    (key) => !specialKeys.includes(key) && !excludedKeys.includes(key)
+  );
+
+  const orderedKeys = [
+    ...specialKeys.filter((key) => keys.includes(key)),
+    ...speciesKeys
+  ];
+
+  orderedKeys.forEach((key, index) => {
+    const item = document.createElement("div");
+
+    item.className = "dropdown-item";
+    item.dataset.value = key;
+    item.setAttribute("role", "option");
+    item.textContent = key;
+
+    if (index === 0) {
+      item.classList.add("active");
+      item.setAttribute("aria-selected", "true");
+    } else {
+      item.setAttribute("aria-selected", "false");
+    }
+
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      renderSelected(key);
+      closeDropdown();
+    });
+
+    dropdownMenu.appendChild(item);
+  });
+
+  return orderedKeys;
+}
+
 async function loadLeaderboardData() {
   try {
-    const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`);
+    const response = await fetch(`${TOPPLISTOR_URL}?t=${Date.now()}`, {
+      cache: "no-store"
+    });
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -193,10 +245,33 @@ async function loadLeaderboardData() {
     }
 
     leaderboardData = data;
-    renderSelected("Björkna");
 
+    const orderedKeys = buildDropdownFromData(leaderboardData);
+    const firstKey = orderedKeys[0];
+
+    if (firstKey) {
+      renderSelected(firstKey);
+    } else {
+      selectedValue.textContent = "Ingen data";
+      tableTitle.textContent = "Ingen data";
+
+      leaderboardHead.innerHTML = `
+        <tr>
+          <th>Meddelande</th>
+        </tr>
+      `;
+
+      leaderboardBody.innerHTML = `
+        <tr class="empty-row">
+          <td>Ingen topplistedata uppladdad ännu.</td>
+        </tr>
+      `;
+    }
   } catch (error) {
     console.error("Fel vid hämtning av topplistor:", error);
+
+    selectedValue.textContent = "Fel";
+    tableTitle.textContent = "Fel";
 
     leaderboardHead.innerHTML = `
       <tr>
@@ -221,15 +296,6 @@ dropdownButton.addEventListener("click", (event) => {
 dropdownButton.addEventListener("touchstart", (event) => {
   event.stopPropagation();
 }, { passive: true });
-
-dropdownItems.forEach((item) => {
-  item.addEventListener("click", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    renderSelected(item.dataset.value);
-    closeDropdown();
-  });
-});
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".custom-dropdown")) {
