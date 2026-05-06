@@ -72,6 +72,19 @@ body::before{
     0 0 10px rgba(51,181,255,.30),
     0 0 20px rgba(10,132,255,.14),
     0 14px 28px rgba(0,0,0,.28);
+  animation:pageEnter .28s ease both;
+}
+
+@keyframes pageEnter{
+  from{
+    opacity:0;
+    transform:translateY(8px) scale(.985);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 
 .frame::before{
@@ -87,8 +100,7 @@ body::before{
 
 .panel{
   width:100%;
-  background:
-    linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
+  background:linear-gradient(180deg, rgba(5,14,30,.92), rgba(1,7,18,.97));
   border:1px solid rgba(51,181,255,.14);
   border-radius:22px;
   padding:12px 10px 14px;
@@ -128,20 +140,42 @@ body::before{
     drop-shadow(0 0 8px rgba(51,181,255,.30))
     drop-shadow(0 0 18px rgba(51,181,255,.20))
     drop-shadow(0 0 34px rgba(10,132,255,.16));
+  transition:transform .28s ease, filter .28s ease;
 }
-  .title{
+
+.logo:hover{
+  transform:scale(1.025);
+}
+
+.title{
   text-align:center;
   margin-bottom:14px;
+  position:relative;
+  z-index:1;
+  animation:softFadeUp .3s ease both;
 }
 
 .title h1{
   font-size:22px;
+  margin:0;
 }
 
 .title p{
   margin-top:4px;
   font-size:13px;
   color:var(--muted);
+}
+
+@keyframes softFadeUp{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
 form{
@@ -167,7 +201,31 @@ form{
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.03),
     0 6px 14px rgba(0,0,0,.14);
-  transition:.18s ease;
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    background .22s ease;
+  animation:fieldIn .24s ease both;
+}
+
+form > *:nth-child(1){animation-delay:.02s}
+form > *:nth-child(3){animation-delay:.04s}
+form > *:nth-child(5){animation-delay:.06s}
+form > *:nth-child(6){animation-delay:.08s}
+form > *:nth-child(7){animation-delay:.10s}
+form > *:nth-child(9){animation-delay:.12s}
+
+@keyframes fieldIn{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
 .field.compact-rightless{
@@ -176,17 +234,27 @@ form{
 
 .field:hover,
 .custom-select:hover{
-  border-color:rgba(51,181,255,.18);
+  border-color:rgba(51,181,255,.22);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.03),
     0 8px 18px rgba(0,0,0,.16),
     0 0 12px rgba(51,181,255,.08);
-  transform:translateY(-1px);
+  transform:translateY(-2px);
 }
 
-.custom-select{
+.field:focus-within,
+.custom-select.open{
+  border-color:rgba(51,181,255,.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 8px 18px rgba(0,0,0,.18),
+    0 0 16px rgba(51,181,255,.16);
+}
+
+.custom-select,
+.date-field,
+.upload-field{
   cursor:pointer;
-  z-index:20;
 }
 
 .custom-select.open{
@@ -201,6 +269,7 @@ form{
   color:var(--accent);
   align-self:flex-start;
   padding-top:2px;
+  pointer-events:none;
 }
 
 .field-body{
@@ -246,7 +315,7 @@ form{
   padding:0;
   margin:0;
   font-weight:500;
-  min-height:20px;
+  min-height:24px;
   display:flex;
   align-items:center;
   appearance:none;
@@ -254,9 +323,16 @@ form{
   box-shadow:none;
 }
 
+.field input[type="number"],
+.field input[type="text"],
+.field input[type="date"]{
+  cursor:text;
+}
+
 .field input[type="date"]{
   color-scheme:dark;
   text-align:left;
+  cursor:pointer;
 }
 
 .field input::placeholder,
@@ -275,6 +351,7 @@ input[type=number]::-webkit-outer-spin-button{
   color:var(--muted);
   cursor:pointer;
   user-select:none;
+  pointer-events:none;
 }
 
 .selected.active{
@@ -282,7 +359,7 @@ input[type=number]::-webkit-outer-spin-button{
 }
 
 .custom-select .field-end{
-  transition:transform .2s ease;
+  transition:transform .24s ease;
 }
 
 .custom-select.open .field-end{
@@ -304,28 +381,44 @@ input[type=number]::-webkit-outer-spin-button{
     0 10px 24px rgba(0,0,0,.24);
   max-height:190px;
   overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
-  opacity:0;
-  transform:translateY(-6px);
-  animation:dropdownIn .18s ease forwards;
+}
+
+.custom-select.open .options{
+  display:block;
+  animation:dropdownIn .2s ease both;
 }
 
 @keyframes dropdownIn{
+  from{
+    opacity:0;
+    transform:translateY(-6px) scale(.985);
+  }
+
   to{
     opacity:1;
-    transform:translateY(0);
+    transform:translateY(0) scale(1);
   }
 }
 
 .options div{
+  width:100%;
   padding:10px 12px;
   font-size:14px;
   color:#f3f4f6;
   border-top:1px solid rgba(255,255,255,.05);
   text-align:center;
   cursor:pointer;
-  transition:background .14s ease;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:
+    background .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
 }
 
 .options div:first-child{
@@ -334,14 +427,11 @@ input[type=number]::-webkit-outer-spin-button{
 
 .options div:hover{
   background:rgba(51,181,255,.12);
+  box-shadow:inset 0 0 12px rgba(51,181,255,.08);
 }
 
 .file-input{
   display:none;
-}
-
-.upload-field{
-  cursor:pointer;
 }
 
 .upload-text{
@@ -375,7 +465,10 @@ input[type=number]::-webkit-outer-spin-button{
     inset 0 1px 0 rgba(255,255,255,.18),
     0 0 12px rgba(28,209,79,.22),
     0 8px 18px rgba(0,0,0,.22);
-  transition:.15s ease;
+  transition:
+    transform .22s ease,
+    filter .22s ease,
+    box-shadow .22s ease;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -385,8 +478,16 @@ input[type=number]::-webkit-outer-spin-button{
 }
 
 .submit-btn:hover{
-  transform:translateY(-1px);
-  filter:brightness(1.03);
+  transform:translateY(-2px);
+  filter:brightness(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 18px rgba(28,209,79,.30),
+    0 10px 22px rgba(0,0,0,.26);
+}
+
+.submit-btn:active{
+  transform:translateY(0) scale(.99);
 }
 
 .success{
@@ -406,10 +507,7 @@ input[type=number]::-webkit-outer-spin-button{
 
 .success.show{
   display:flex;
-}
-
-.date-field{
-  cursor:pointer;
+  animation:softFadeUp .22s ease both;
 }
 
 .date-field input[type=date]::-webkit-calendar-picker-indicator{
@@ -428,6 +526,13 @@ input[type=number]::-webkit-outer-spin-button{
     0 0 0 1px rgba(255,107,107,.20),
     0 0 14px rgba(255,107,107,.18),
     inset 0 1px 0 rgba(255,255,255,.03) !important;
+  animation:shake .18s ease;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-3px)}
+  75%{transform:translateX(3px)}
 }
 
 .error-text{
@@ -457,6 +562,12 @@ input[type=number]::-webkit-outer-spin-button{
 
 .modal.show{
   display:flex;
+  animation:modalFade .18s ease both;
+}
+
+@keyframes modalFade{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 .modal-box{
@@ -470,6 +581,19 @@ input[type=number]::-webkit-outer-spin-button{
     0 0 18px rgba(51,181,255,.16),
     0 14px 30px rgba(0,0,0,.35);
   text-align:center;
+  animation:modalBoxIn .22s ease both;
+}
+
+@keyframes modalBoxIn{
+  from{
+    opacity:0;
+    transform:scale(.965) translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1) translateY(0);
+  }
 }
 
 .modal-box h3{
@@ -521,6 +645,12 @@ input[type=number]::-webkit-outer-spin-button{
   height:46px;
   font-size:15px;
   font-weight:700;
+  transition:transform .2s ease, filter .2s ease;
+}
+
+.modal-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.04);
 }
 
 .cancel-btn{
@@ -579,8 +709,8 @@ input[type=number]::-webkit-outer-spin-button{
 
   .field,
   .custom-select{
-    min-height:66px;
-    padding:11px 12px;
+    min-height:68px;
+    padding:12px 12px;
     gap:10px;
   }
 
@@ -593,8 +723,19 @@ input[type=number]::-webkit-outer-spin-button{
   }
 
   .submit-btn{
-    height:54px;
+    height:56px;
     font-size:18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+    transition-duration:.01ms !important;
   }
 }
 </style>
@@ -612,10 +753,11 @@ input[type=number]::-webkit-outer-spin-button{
       <div class="logo-wrap">
         <img src="images/Specimenlogo3.png" alt="Specimen Trophy" class="logo">
       </div>
+
       <div class="title">
-  <h1>Registrera Fångst</h1>
-  <p>Fyll i uppgifter och ladda upp din fångst</p>
-</div>
+        <h1>Registrera Fångst</h1>
+        <p>Fyll i uppgifter och ladda upp din fångst</p>
+      </div>
 
       <form id="form" novalidate>
 
@@ -664,7 +806,7 @@ input[type=number]::-webkit-outer-spin-button{
         </div>
         <input type="hidden" name="Art">
 
-        <div class="field" id="viktField">
+        <div class="field compact-rightless" id="viktField">
           <div class="field-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M6 5h12"></path>
@@ -678,7 +820,6 @@ input[type=number]::-webkit-outer-spin-button{
             <input type="number" name="Vikt" id="viktInput" placeholder="Ange vikt">
             <div class="error-text">Fyll i detta fält</div>
           </div>
-          <div></div>
         </div>
 
         <label class="field date-field compact-rightless" id="datumField">
@@ -793,10 +934,8 @@ function toBase64(file){
 }
 
 function closeAllSelects(){
-  document.querySelectorAll(".custom-select").forEach(s => {
-    s.classList.remove("open");
-    const options = s.querySelector(".options");
-    if(options) options.style.display = "none";
+  document.querySelectorAll(".custom-select").forEach(select => {
+    select.classList.remove("open");
   });
 }
 
@@ -845,6 +984,7 @@ function openCodeModal(){
   modalTitle.textContent = "Bekräfta med kod";
   modalText.textContent = "Skriv in den 4-siffriga koden för att spara.";
   modalText.classList.remove("modal-success");
+  modalText.style.color = "";
 
   codeInput.style.display = "flex";
   codeActions.style.display = "flex";
@@ -952,37 +1092,47 @@ function initializeCustomSelects(){
     const hidden = document.querySelector(`input[name="${select.dataset.name}"]`);
     const placeholder = select.dataset.placeholder || select.dataset.name;
 
-    function toggleSelect(e){
-      e.stopPropagation();
+    selected.textContent = placeholder;
+
+    select.addEventListener("click", (event) => {
+      if(event.target.closest(".options div")) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
       const isOpen = select.classList.contains("open");
       closeAllSelects();
+
       if(!isOpen){
         select.classList.add("open");
-        options.style.display = "block";
       }
-    }
-
-    selected.addEventListener("click", toggleSelect);
-    select.querySelector(".field-end").addEventListener("click", toggleSelect);
+    });
 
     options.querySelectorAll("div").forEach(option => {
-      option.onclick = () => {
+      option.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         selected.textContent = option.textContent;
         selected.classList.add("active");
         hidden.value = option.textContent;
+
         select.classList.remove("invalid-field");
         select.classList.remove("open");
-        options.style.display = "none";
-      };
+      });
     });
-
-    selected.textContent = placeholder;
   });
 }
 
 document.addEventListener("click", e => {
   if(!e.target.closest(".custom-select")){
     closeAllSelects();
+  }
+});
+
+viktField.addEventListener("click", (event) => {
+  if(event.target !== viktInput){
+    viktInput.focus();
   }
 });
 
@@ -1038,6 +1188,7 @@ confirmCodeBtn.addEventListener("click", async () => {
   modalTitle.textContent = "Sparar...";
   modalText.textContent = "Vänta medan fångsten sparas.";
   modalText.classList.remove("modal-success");
+  modalText.style.color = "";
 
   codeInput.style.display = "none";
   codeActions.style.display = "none";
