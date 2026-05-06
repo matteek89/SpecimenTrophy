@@ -164,10 +164,20 @@ body::before{
   box-shadow:0 0 14px rgba(51,181,255,.08);
 }
 
-@media (max-width:420px){
+@media (min-width:768px){
+
+  .frame,
+  .app-shell,
   .shell{
-    min-height:760px;
+    max-width:450px;
   }
+
+  .page,
+  .page-wrap{
+    max-width:520px;
+  }
+
+}
 
   .logo{
     width:min(100%,182px);
