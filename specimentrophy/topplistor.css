@@ -358,6 +358,26 @@ body::before{
   overscroll-behavior:contain;
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(51,181,255,.45) rgba(6,15,28,.98);
+}
+
+.dropdown-menu::-webkit-scrollbar{
+  width:8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track{
+  background:rgba(6,15,28,.98);
+  border-radius:999px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb{
+  background:rgba(51,181,255,.45);
+  border-radius:999px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover{
+  background:rgba(51,181,255,.65);
 }
 
 .dropdown-menu.active{
@@ -408,15 +428,6 @@ body::before{
   background:rgba(51,181,255,.16);
   color:#ffffff;
   box-shadow:inset 0 0 14px rgba(51,181,255,.10);
-}
-
-.dropdown-menu::-webkit-scrollbar{
-  width:8px;
-}
-
-.dropdown-menu::-webkit-scrollbar-thumb{
-  background:rgba(51,181,255,.35);
-  border-radius:999px;
 }
 
 .card{
