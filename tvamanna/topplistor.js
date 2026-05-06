@@ -227,10 +227,10 @@ function buildDropdownFromData(data) {
   const specialKeys = ["Bästa Lag", "Bäste poängplockare"];
   const speciesKeys = keys.filter((key) => !specialKeys.includes(key));
 
-  const orderedKeys = [
-    ...speciesKeys,
-    ...specialKeys.filter((key) => keys.includes(key))
-  ];
+ const orderedKeys = [
+  ...specialKeys.filter((key) => keys.includes(key)),
+  ...speciesKeys
+];
 
   orderedKeys.forEach((key, index) => {
     const item = document.createElement("div");
@@ -276,9 +276,7 @@ async function loadLeaderboardData() {
 
     const orderedKeys = buildDropdownFromData(leaderboardData);
 
-    const firstKey =
-      orderedKeys.find((key) => key !== "Bästa Lag" && key !== "Bäste poängplockare") ||
-      orderedKeys[0];
+    const firstKey = orderedKeys[0];
 
     if (firstKey) {
       renderSelected(firstKey);
