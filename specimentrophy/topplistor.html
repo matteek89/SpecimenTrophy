@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <link rel="stylesheet" href="../css/global.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Topplistor</title>
-  <link rel="stylesheet" href="topplistor.css?v=40" />
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="topplistor.css?v=41" />
 </head>
+
 <body>
   <div class="page-wrap">
     <main class="app-shell">
@@ -40,8 +43,8 @@
               </span>
 
               <span class="dropdown-body">
-                <span class="dropdown-field-label">Välj Topplista</span>
-                <span id="selectedValue">Bäste poängplockare</span>
+                <span class="dropdown-field-label">Välj topplista</span>
+                <span id="selectedValue">Laddar...</span>
               </span>
             </span>
 
@@ -52,35 +55,29 @@
             </span>
           </button>
 
-          <div class="dropdown-menu" id="dropdownMenu" role="listbox">
-            <div class="dropdown-item active" data-value="Bäste poängplockare" role="option">Bäste poängplockare</div>
-            <div class="dropdown-item" data-value="Björkna" role="option">Björkna</div>
-            <div class="dropdown-item" data-value="Braxen" role="option">Braxen</div>
-            <div class="dropdown-item" data-value="Id" role="option">Id</div>
-            <div class="dropdown-item" data-value="Mört" role="option">Mört</div>
-            <div class="dropdown-item" data-value="Ruda" role="option">Ruda</div>
-            <div class="dropdown-item" data-value="Sarv" role="option">Sarv</div>
-            <div class="dropdown-item" data-value="Sutare" role="option">Sutare</div>
-            <div class="dropdown-item" data-value="Vimma" role="option">Vimma</div>
-          </div>
+          <div class="dropdown-menu" id="dropdownMenu" role="listbox"></div>
         </div>
       </section>
-      
+
       <section class="card leaderboard-card">
         <div class="leaderboard-header">
-          <h2 id="tableTitle">Björkna</h2>
+          <h2 id="tableTitle">Laddar...</h2>
         </div>
 
         <div class="table-wrap">
           <table id="leaderboardTable">
             <thead id="leaderboardHead"></thead>
-            <tbody id="leaderboardBody"></tbody>
+            <tbody id="leaderboardBody">
+              <tr class="empty-row">
+                <td>Laddar topplistor...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="topplistor.js?v=40"></script>
+  <script src="topplistor.js?v=41"></script>
 </body>
 </html>
