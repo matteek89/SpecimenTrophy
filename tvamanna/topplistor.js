@@ -225,12 +225,16 @@ function buildDropdownFromData(data) {
 
   const keys = Object.keys(data || {});
   const specialKeys = ["Bästa Lag", "Bäste poängplockare"];
-  const speciesKeys = keys.filter((key) => !specialKeys.includes(key));
+  const excludedKeys = ["Galleri"];
 
- const orderedKeys = [
-  ...specialKeys.filter((key) => keys.includes(key)),
-  ...speciesKeys
-];
+  const speciesKeys = keys.filter(
+    (key) => !specialKeys.includes(key) && !excludedKeys.includes(key)
+  );
+
+  const orderedKeys = [
+    ...specialKeys.filter((key) => keys.includes(key)),
+    ...speciesKeys
+  ];
 
   orderedKeys.forEach((key, index) => {
     const item = document.createElement("div");
