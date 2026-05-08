@@ -1,6 +1,6 @@
 let leaderboardData = {};
 
-const TOPPLISTOR_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor";
+const TOPPLISTOR_URL = "https://api.specimentrophy.se/api/topplistor";
 
 const dropdownButton = document.getElementById("dropdownButton");
 const dropdownMenu = document.getElementById("dropdownMenu");
