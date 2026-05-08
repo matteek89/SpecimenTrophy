@@ -9,7 +9,7 @@ const leaderboardBody = document.getElementById("leaderboardBody");
 const tableTitle = document.getElementById("tableTitle");
 const leaderboardTable = document.getElementById("leaderboardTable");
 
-const API_URL = "https://matteek89-specimentrophy.vercel.app/api/topplistor-tvaman";
+const API_URL = "https://api.specimentrophy.se/api/topplistor-tvaman";
 
 function findImageForRow(row) {
   return row && row.imageUrl ? row.imageUrl : null;
