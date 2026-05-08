@@ -1,20 +1,41 @@
 import { head } from '@vercel/blob';
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "https://matteek89.github.io",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type"
-};
+const ALLOWED_ORIGINS = [
+  "https://matteek89.github.io",
+  "https://www.specimentrophy.se",
+  "https://specimentrophy.se"
+];
+
+function getCorsHeaders(req) {
+  const origin = req.headers.origin;
+
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : "https://www.specimentrophy.se";
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+}
 
 export default async function handler(req, res) {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
-    res.writeHead(204, CORS_HEADERS);
+    res.writeHead(204, corsHeaders);
     return res.end();
   }
 
   if (req.method !== "GET") {
-    res.setHeader("Access-Control-Allow-Origin", CORS_HEADERS["Access-Control-Allow-Origin"]);
-    return res.status(405).json({ error: "Method not allowed" });
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
+
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
   }
 
   try {
@@ -22,14 +43,17 @@ export default async function handler(req, res) {
     const response = await fetch(blob.url);
     const data = await response.json();
 
-    res.setHeader("Access-Control-Allow-Origin", CORS_HEADERS["Access-Control-Allow-Origin"]);
-    res.setHeader("Access-Control-Allow-Methods", CORS_HEADERS["Access-Control-Allow-Methods"]);
-    res.setHeader("Access-Control-Allow-Headers", CORS_HEADERS["Access-Control-Allow-Headers"]);
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
 
     return res.status(200).json(data);
 
   } catch (error) {
-    res.setHeader("Access-Control-Allow-Origin", CORS_HEADERS["Access-Control-Allow-Origin"]);
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
+
     return res.status(404).json({
       error: "Ingen Två-manna topplistedata uppladdad ännu"
     });
