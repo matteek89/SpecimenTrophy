@@ -710,6 +710,85 @@ input[type=number]::-webkit-outer-spin-button{
   text-shadow:0 0 10px rgba(25,212,88,.25);
 }
 
+
+.save-progress{
+  display:none;
+  width:100%;
+  margin:4px 0 2px;
+  flex-direction:column;
+  align-items:center;
+}
+
+.save-progress.show{
+  display:flex;
+}
+
+.save-icon{
+  width:48px;
+  height:48px;
+  margin:0 auto 7px;
+  filter:drop-shadow(0 0 8px rgba(51,181,255,.35));
+}
+
+.save-icon svg{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+.save-time{
+  color:#ff7a00;
+  font-size:34px;
+  line-height:1;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.5px;
+  text-shadow:0 0 10px rgba(255,122,0,.28);
+  margin:0 0 12px;
+}
+
+.save-progress-track{
+  width:100%;
+  height:12px;
+  overflow:hidden;
+  border-radius:999px;
+  border:1px solid rgba(255,122,0,.28);
+  background:rgba(255,255,255,.05);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.35), 0 0 10px rgba(255,122,0,.08);
+}
+
+.save-progress-bar{
+  width:100%;
+  height:100%;
+  border-radius:inherit;
+  background:repeating-linear-gradient(
+    -45deg,
+    #ff7a00 0,
+    #ff7a00 10px,
+    #ff9b3d 10px,
+    #ff9b3d 20px
+  );
+  background-size:40px 40px;
+  animation:saveStripes .7s linear infinite;
+  box-shadow:0 0 12px rgba(255,122,0,.28);
+}
+
+@keyframes saveStripes{
+  from{background-position:0 0}
+  to{background-position:40px 0}
+}
+
+@media (max-width:420px){
+  .modal{
+    padding:12px;
+  }
+
+  .modal-box{
+    width:100%;
+    max-width:320px;
+  }
+}
+
 @media (max-width:420px){
   body{
     padding:10px 8px;
@@ -914,6 +993,22 @@ input[type=number]::-webkit-outer-spin-button{
       <button type="button" class="modal-btn confirm-btn" id="confirmCodeBtn">Bekräfta</button>
     </div>
 
+    <div id="saveProgress" class="save-progress" aria-live="polite">
+      <div class="save-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 8h36l8 8v40H11V8Z" fill="#0b5fa8" stroke="#33b5ff" stroke-width="2"/>
+          <path d="M18 8h25v15H18V8Z" fill="#33b5ff"/>
+          <path d="M22 11h17v8H22v-8Z" fill="#0b2d4d"/>
+          <path d="M19 34h26v14H19V34Z" fill="#06203a" stroke="#33b5ff" stroke-width="2"/>
+          <circle cx="45" cy="29" r="3" fill="#33b5ff"/>
+        </svg>
+      </div>
+      <div id="saveTime" class="save-time">0.0s</div>
+      <div class="save-progress-track" aria-hidden="true">
+        <div class="save-progress-bar"></div>
+      </div>
+    </div>
+
     <button type="button" class="modal-ok-btn" id="modalOkBtn">OK</button>
   </div>
 </div>
@@ -943,9 +1038,13 @@ const modalTitle = document.getElementById("modalTitle");
 const modalText = document.getElementById("modalText");
 const codeActions = document.getElementById("codeActions");
 const modalOkBtn = document.getElementById("modalOkBtn");
+const saveProgress = document.getElementById("saveProgress");
+const saveTime = document.getElementById("saveTime");
 
 let pendingSubmit = false;
 let isSubmitting = false;
+let saveTimerInterval = null;
+let saveTimerStartedAt = 0;
 
 function showMessage(text, color = "#19d458") {
   success.textContent = text;
@@ -957,6 +1056,30 @@ function hideMessage() {
   success.classList.remove("show");
   success.textContent = "✔ Sparat!";
   success.style.color = "";
+}
+
+function startSaveProgress(){
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+  }
+
+  saveProgress.classList.add("show");
+  saveTimerStartedAt = performance.now();
+  saveTime.textContent = "0.0s";
+
+  saveTimerInterval = setInterval(() => {
+    const elapsed = (performance.now() - saveTimerStartedAt) / 1000;
+    saveTime.textContent = `${elapsed.toFixed(1)}s`;
+  }, 100);
+}
+
+function stopSaveProgress(){
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+    saveTimerInterval = null;
+  }
+
+  saveProgress.classList.remove("show");
 }
 
 function toBase64(file){
@@ -1229,7 +1352,9 @@ confirmCodeBtn.addEventListener("click", async () => {
   codeActions.style.display = "none";
   pendingSubmit = false;
 
+  startSaveProgress();
   const saved = await sendForm();
+  stopSaveProgress();
 
   if(saved){
     modalTitle.textContent = "Sparat!";
