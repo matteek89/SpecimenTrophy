@@ -608,7 +608,7 @@
 
     .modal-box{
       width:100%;
-      max-width:320px;
+      max-width:min(320px, calc(100vw - 32px));
       background:linear-gradient(180deg, rgba(5,16,34,.97), rgba(2,10,22,.99));
       border:1px solid rgba(51,181,255,.22);
       border-radius:18px;
@@ -717,6 +717,85 @@
 
     .modal-ok-btn.show{
       display:block;
+    }
+
+    /* Sparprogress - endast under pågående sparning */
+    .save-progress{
+      display:none;
+      width:100%;
+      min-width:0;
+      margin:16px 0 2px;
+      align-items:center;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .save-progress.show{
+      display:flex;
+      animation:softFadeUp .2s ease both;
+    }
+
+    .save-icon{
+      width:54px;
+      height:54px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#33b5ff;
+      filter:drop-shadow(0 0 8px rgba(51,181,255,.28));
+    }
+
+    .save-icon svg{
+      width:54px;
+      height:54px;
+      display:block;
+    }
+
+    .save-time{
+      width:100%;
+      color:#ff7a00;
+      font-size:32px;
+      line-height:1;
+      font-weight:900;
+      font-variant-numeric:tabular-nums;
+      letter-spacing:.4px;
+      text-shadow:
+        0 0 8px rgba(255,122,0,.28),
+        0 0 18px rgba(255,122,0,.16);
+    }
+
+    .save-progress-track{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,122,0,.10);
+      border:1px solid rgba(255,122,0,.24);
+      box-shadow:
+        inset 0 1px 2px rgba(0,0,0,.35),
+        0 0 10px rgba(255,122,0,.08);
+    }
+
+    .save-progress-bar{
+      width:100%;
+      height:100%;
+      border-radius:inherit;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          #ff7a00 0,
+          #ff7a00 9px,
+          #ff9b3d 9px,
+          #ff9b3d 18px
+        );
+      background-size:36px 36px;
+      animation:saveStripeMove .75s linear infinite;
+      box-shadow:0 0 10px rgba(255,122,0,.28);
+    }
+
+    @keyframes saveStripeMove{
+      from{background-position:0 0}
+      to{background-position:36px 0}
     }
 
     .modal-success{
@@ -948,6 +1027,21 @@
       <button type="button" class="modal-btn confirm-btn" id="confirmCodeBtn">Bekräfta</button>
     </div>
 
+    <div id="saveProgress" class="save-progress" aria-live="polite">
+      <div class="save-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 8h38l8 8v40H7V8h4Z" fill="#0b5fa8" stroke="#33b5ff" stroke-width="2"/>
+          <path d="M17 8v18h30V8" fill="#06203a" stroke="#33b5ff" stroke-width="2"/>
+          <path d="M20 39h24v12H20z" fill="#0b2d4d" stroke="#33b5ff" stroke-width="2"/>
+          <circle cx="45" cy="29" r="3" fill="#33b5ff"/>
+        </svg>
+      </div>
+      <div id="saveTime" class="save-time">0.0s</div>
+      <div class="save-progress-track" aria-hidden="true">
+        <div class="save-progress-bar"></div>
+      </div>
+    </div>
+
     <button type="button" class="modal-ok-btn" id="modalOkBtn">OK</button>
   </div>
 </div>
@@ -980,10 +1074,35 @@ const modalTitle = document.getElementById("modalTitle");
 const modalText = document.getElementById("modalText");
 const codeActions = document.getElementById("codeActions");
 const modalOkBtn = document.getElementById("modalOkBtn");
+const saveProgress = document.getElementById("saveProgress");
+const saveTime = document.getElementById("saveTime");
 
 let pendingSubmit = false;
 let isSubmitting = false;
 let lagMap = {};
+let saveTimerInterval = null;
+let saveTimerStartedAt = 0;
+
+function startSaveProgress(){
+  if(saveTimerInterval) clearInterval(saveTimerInterval);
+
+  saveProgress.classList.add("show");
+  saveTimerStartedAt = performance.now();
+  saveTime.textContent = "0.0s";
+
+  saveTimerInterval = setInterval(() => {
+    const elapsed = (performance.now() - saveTimerStartedAt) / 1000;
+    saveTime.textContent = `${elapsed.toFixed(1)}s`;
+  }, 100);
+}
+
+function stopSaveProgress(){
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+    saveTimerInterval = null;
+  }
+  saveProgress.classList.remove("show");
+}
 
 function showMessage(text, color = "#19d458") {
   success.textContent = text;
@@ -1086,6 +1205,11 @@ function openCodeModal(){
 
   codeInput.style.display = "flex";
   codeActions.style.display = "flex";
+  saveProgress.classList.remove("show");
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+    saveTimerInterval = null;
+  }
   modalOkBtn.classList.remove("show");
 
   confirmCodeBtn.disabled = false;
@@ -1099,6 +1223,7 @@ function closeCodeModal(){
   if(isSubmitting) return;
 
   codeModal.classList.remove("show");
+  stopSaveProgress();
   codeInput.value = "";
   codeError.classList.remove("show");
   pendingSubmit = false;
@@ -1300,7 +1425,9 @@ confirmCodeBtn.addEventListener("click", async () => {
   codeActions.style.display = "none";
   pendingSubmit = false;
 
+  startSaveProgress();
   const saved = await sendForm();
+  stopSaveProgress();
 
   if(saved){
     modalTitle.textContent = "Sparat!";
