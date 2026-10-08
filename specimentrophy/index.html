@@ -710,85 +710,6 @@ input[type=number]::-webkit-outer-spin-button{
   text-shadow:0 0 10px rgba(25,212,88,.25);
 }
 
-
-.save-progress{
-  display:none;
-  width:100%;
-  margin:4px 0 2px;
-  flex-direction:column;
-  align-items:center;
-}
-
-.save-progress.show{
-  display:flex;
-}
-
-.save-icon{
-  width:48px;
-  height:48px;
-  margin:0 auto 7px;
-  filter:drop-shadow(0 0 8px rgba(51,181,255,.35));
-}
-
-.save-icon svg{
-  display:block;
-  width:100%;
-  height:100%;
-}
-
-.save-time{
-  color:#ff7a00;
-  font-size:34px;
-  line-height:1;
-  font-weight:900;
-  font-variant-numeric:tabular-nums;
-  letter-spacing:.5px;
-  text-shadow:0 0 10px rgba(255,122,0,.28);
-  margin:0 0 12px;
-}
-
-.save-progress-track{
-  width:100%;
-  height:12px;
-  overflow:hidden;
-  border-radius:999px;
-  border:1px solid rgba(255,122,0,.28);
-  background:rgba(255,255,255,.05);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.35), 0 0 10px rgba(255,122,0,.08);
-}
-
-.save-progress-bar{
-  width:100%;
-  height:100%;
-  border-radius:inherit;
-  background:repeating-linear-gradient(
-    -45deg,
-    #ff7a00 0,
-    #ff7a00 10px,
-    #ff9b3d 10px,
-    #ff9b3d 20px
-  );
-  background-size:40px 40px;
-  animation:saveStripes .7s linear infinite;
-  box-shadow:0 0 12px rgba(255,122,0,.28);
-}
-
-@keyframes saveStripes{
-  from{background-position:0 0}
-  to{background-position:40px 0}
-}
-
-@media (max-width:420px){
-  .modal{
-    padding:12px;
-  }
-
-  .modal-box{
-    width:100%;
-    max-width:320px;
-  }
-}
-
 @media (max-width:420px){
   body{
     padding:10px 8px;
@@ -852,6 +773,68 @@ input[type=number]::-webkit-outer-spin-button{
   }
 
 }
+/* =========================================================
+   SPARAR-ANIMATION
+   Endast visuell statusindikering – övrig design orörd.
+   ========================================================= */
+.save-progress{
+  display:none;
+  text-align:center;
+  margin-top:14px;
+}
+.save-spinner{
+  width:42px;
+  height:42px;
+  margin:0 auto 10px;
+  border:4px solid rgba(255,255,255,.15);
+  border-top-color:#ff7a00;
+  border-radius:50%;
+  animation:saveSpin .8s linear infinite;
+}
+.save-lock .modal-box{pointer-events:none;}
+.save-lock{pointer-events:auto;}
+
+.save-timer{
+  font-family:monospace;
+  font-size:20px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+@keyframes saveSpin{
+  to{transform:rotate(360deg)}
+}
+@media (prefers-reduced-motion:reduce){
+  .save-spinner{animation:none}
+}
+
+
+
+#smartQueueStatus{
+  display:none !important;
+  position:fixed !important;
+  left:50% !important;
+  right:auto !important;
+  top:auto !important;
+  bottom:16px !important;
+  transform:translateX(-50%) !important;
+  z-index:99999 !important;
+  background:rgba(0,0,0,.94);
+  border:1px solid #2d7cff;
+  color:#ff9f1c;
+  border-radius:14px;
+  padding:9px 14px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+  text-align:center;
+  white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,0,0,.45);
+  max-width:calc(100vw - 28px);
+  pointer-events:none;
+}
+#smartQueueStatus.show{display:block !important}
+@media (max-width:420px){#smartQueueStatus{bottom:12px !important;max-width:calc(100vw - 20px);font-size:12px;padding:8px 12px}}
+
 </style>
 </head>
 
@@ -984,6 +967,11 @@ input[type=number]::-webkit-outer-spin-button{
     <h3 id="modalTitle">Bekräfta med kod</h3>
     <p id="modalText">Skriv in den 4-siffriga koden för att spara.</p>
 
+    <div id="saveProgress" class="save-progress" aria-live="polite">
+      <div class="save-spinner" aria-hidden="true"></div>
+      <div id="saveTimer" class="save-timer">00,0 s</div>
+    </div>
+
     <input type="password" id="codeInput" class="code-input" maxlength="4" inputmode="numeric" placeholder="0000">
 
     <div id="codeError" class="code-error">Fel kod</div>
@@ -993,26 +981,11 @@ input[type=number]::-webkit-outer-spin-button{
       <button type="button" class="modal-btn confirm-btn" id="confirmCodeBtn">Bekräfta</button>
     </div>
 
-    <div id="saveProgress" class="save-progress" aria-live="polite">
-      <div class="save-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 8h36l8 8v40H11V8Z" fill="#0b5fa8" stroke="#33b5ff" stroke-width="2"/>
-          <path d="M18 8h25v15H18V8Z" fill="#33b5ff"/>
-          <path d="M22 11h17v8H22v-8Z" fill="#0b2d4d"/>
-          <path d="M19 34h26v14H19V34Z" fill="#06203a" stroke="#33b5ff" stroke-width="2"/>
-          <circle cx="45" cy="29" r="3" fill="#33b5ff"/>
-        </svg>
-      </div>
-      <div id="saveTime" class="save-time">0.0s</div>
-      <div class="save-progress-track" aria-hidden="true">
-        <div class="save-progress-bar"></div>
-      </div>
-    </div>
-
     <button type="button" class="modal-ok-btn" id="modalOkBtn">OK</button>
   </div>
 </div>
 
+<div id="smartQueueStatus" style="display:none" aria-live="polite"></div>
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4CR9H7Zl6E2K7Aip-5sfICD6kev5Ih-_1aokwMkGmGGeB4jDdkC6y7E3PfEPm8_Ne3w/exec";
 
@@ -1038,13 +1011,38 @@ const modalTitle = document.getElementById("modalTitle");
 const modalText = document.getElementById("modalText");
 const codeActions = document.getElementById("codeActions");
 const modalOkBtn = document.getElementById("modalOkBtn");
+
 const saveProgress = document.getElementById("saveProgress");
-const saveTime = document.getElementById("saveTime");
+const saveTimer = document.getElementById("saveTimer");
+
+let saveTimerInterval = null;
+let saveTimerStart = 0;
 
 let pendingSubmit = false;
 let isSubmitting = false;
-let saveTimerInterval = null;
-let saveTimerStartedAt = 0;
+let saveSequenceActive = false;
+
+
+/* SMART SAVE - SAFE SINGLE-ATTEMPT TEST
+   One network attempt per local catch. No automatic retry.
+   This prevents client-side duplicate submissions when Apps Script does not return a readable response.
+*/
+const SMART_DB_NAME="SpecimenTrophySmartSaveSafeTestV1",SMART_DB_VERSION=1,SMART_STORE="queue";
+let smartQueueBusy=false;
+
+function smartOpenDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(SMART_DB_NAME,SMART_DB_VERSION);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains(SMART_STORE))db.createObjectStore(SMART_STORE,{keyPath:"id",autoIncrement:true})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+function smartPut(x){return smartOpenDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction(SMART_STORE,"readwrite"),r=tx.objectStore(SMART_STORE).add(x);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
+function smartGetAll(){return smartOpenDB().then(db=>new Promise((res,rej)=>{const r=db.transaction(SMART_STORE,"readonly").objectStore(SMART_STORE).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)}))}
+function smartDelete(id){return smartOpenDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction(SMART_STORE,"readwrite");tx.objectStore(SMART_STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)}))}
+function smartSetStatus(t){const e=document.getElementById("smartQueueStatus");if(!e)return;e.textContent=t;e.classList.toggle("show",!!t)}
+function smartNewCatchId(){return "ST-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8).toUpperCase()}
+async function smartCompressImage(file){if(!file)return"";return new Promise((resolve,reject)=>{const r=new FileReader();r.onerror=reject;r.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{const max=1600,s=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(img.naturalWidth*s));c.height=Math.max(1,Math.round(img.naturalHeight*s));c.getContext("2d",{alpha:false}).drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",.78))};img.src=r.result};r.readAsDataURL(file)})}
+async function smartEnqueueCatch(fields,file){const image=await smartCompressImage(file);const catchId=smartNewCatchId();const id=await smartPut({createdAt:Date.now(),catchId,attemptedAt:0,data:{...fields,image}});smartUpdateStatus();smartProcessQueue();return id}
+async function smartSendItem(item){if(!navigator.onLine)throw new Error("offline");await fetch(SCRIPT_URL,{method:"POST",body:new URLSearchParams(item.data),mode:"no-cors",cache:"no-store"})}
+async function smartMarkAttempted(id){return smartOpenDB().then(db=>new Promise((res,rej)=>{const tx=db.transaction(SMART_STORE,"readwrite"),st=tx.objectStore(SMART_STORE),r=st.get(id);r.onsuccess=()=>{if(!r.result){res();return}r.result.attemptedAt=Date.now();st.put(r.result)};r.onerror=()=>rej(r.error);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)}))}
+async function smartProcessQueue(){if(smartQueueBusy||!navigator.onLine)return;smartQueueBusy=true;try{const items=(await smartGetAll()).filter(x=>!x.attemptedAt);if(!items.length){smartUpdateStatus();return}for(const item of items){await smartMarkAttempted(item.id);try{await smartSendItem(item);await smartDelete(item.id)}catch(e){console.warn("Smart Save: single upload attempt did not confirm",e);smartSetStatus("");break}}}catch(e){console.warn("Smart Save queue error",e)}finally{smartQueueBusy=false;smartUpdateStatus()}}
+async function smartUpdateStatus(){try{const items=await smartGetAll();const pending=items.filter(x=>!x.attemptedAt).length;const held=items.filter(x=>x.attemptedAt).length;if(pending&&navigator.onLine)smartSetStatus("");else if(pending)smartSetStatus("");else if(held)smartSetStatus("");else smartSetStatus("")}catch(e){}}
+window.addEventListener("online",smartProcessQueue);window.addEventListener("offline",smartUpdateStatus);
 
 function showMessage(text, color = "#19d458") {
   success.textContent = text;
@@ -1056,30 +1054,6 @@ function hideMessage() {
   success.classList.remove("show");
   success.textContent = "✔ Sparat!";
   success.style.color = "";
-}
-
-function startSaveProgress(){
-  if(saveTimerInterval){
-    clearInterval(saveTimerInterval);
-  }
-
-  saveProgress.classList.add("show");
-  saveTimerStartedAt = performance.now();
-  saveTime.textContent = "0.0s";
-
-  saveTimerInterval = setInterval(() => {
-    const elapsed = (performance.now() - saveTimerStartedAt) / 1000;
-    saveTime.textContent = `${elapsed.toFixed(1)}s`;
-  }, 100);
-}
-
-function stopSaveProgress(){
-  if(saveTimerInterval){
-    clearInterval(saveTimerInterval);
-    saveTimerInterval = null;
-  }
-
-  saveProgress.classList.remove("show");
 }
 
 function toBase64(file){
@@ -1139,6 +1113,13 @@ function openCodeModal(){
   codeInput.value = "";
   codeError.classList.remove("show");
 
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+    saveTimerInterval = null;
+  }
+  saveProgress.style.display = "none";
+  saveTimer.textContent = "00,0 s";
+
   modalTitle.textContent = "Bekräfta med kod";
   modalText.textContent = "Skriv in den 4-siffriga koden för att spara.";
   modalText.classList.remove("modal-success");
@@ -1156,7 +1137,13 @@ function openCodeModal(){
 }
 
 function closeCodeModal(){
-  if(isSubmitting) return;
+  if(isSubmitting || saveSequenceActive) return;
+
+  if(saveTimerInterval){
+    clearInterval(saveTimerInterval);
+    saveTimerInterval = null;
+  }
+  saveProgress.style.display = "none";
 
   codeModal.classList.remove("show");
   codeInput.value = "";
@@ -1165,58 +1152,17 @@ function closeCodeModal(){
 }
 
 async function sendForm(){
-  if (isSubmitting) return false;
-  isSubmitting = true;
-
-  try {
+  if(isSubmitting)return false; isSubmitting=true;
+  try{
     hideMessage();
-
-    const file = imageInput.files[0];
-    let imageBase64 = "";
-
-    if (file) {
-      imageBase64 = await toBase64(file);
-    }
-
-    const payload = new URLSearchParams({
-      Deltagare: form.Deltagare.value,
-      Art: form.Art.value,
-      Vikt: form.Vikt.value,
-      datum: form.datum.value,
-      image: imageBase64
-    });
-
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: payload,
-      mode: "no-cors"
-    });
-
-    showMessage("✔ Sparat!", "#19d458");
-
-    form.reset();
-    uploadText.textContent = "Välj bild från kameran eller galleri";
-
-    document.querySelectorAll(".custom-select").forEach(select => {
-      const selected = select.querySelector(".selected");
-      const placeholder = select.dataset.placeholder || select.dataset.name;
-      selected.textContent = placeholder;
-      selected.classList.remove("active");
-    });
-
-    document.querySelector("input[name='Deltagare']").value = "";
-    document.querySelector("input[name='Art']").value = "";
-    clearInvalidStates();
-
-    return true;
-
-  } catch (error) {
-    console.error("Fel vid sparning:", error);
-    showMessage("⚠ Kunde inte spara", "#ff6b6b");
-    return false;
-  } finally {
-    isSubmitting = false;
-  }
+    const fields={Deltagare:form.Deltagare.value,Art:form.Art.value,Vikt:form.Vikt.value,datum:form.datum.value};
+    await smartEnqueueCatch(fields,imageInput.files[0]);
+    showMessage("✔ Fångsten är sparad!","#19d458");
+    form.reset(); uploadText.textContent="Välj bild från kameran eller galleri";
+    
+    document.querySelectorAll(".custom-select").forEach(select=>{const selected=select.querySelector(".selected");const placeholder=select.dataset.placeholder||select.dataset.name;selected.textContent=placeholder;selected.classList.remove("active")});
+    document.querySelector("input[name='Deltagare']").value="";document.querySelector("input[name='Art']").value="";clearInvalidStates();return true;
+  }catch(error){console.error("Smart Save fel:",error);showMessage("⚠ Kunde inte köa fångsten","#ff6b6b");return false}finally{isSubmitting=false}
 }
 
 async function loadDropdownData() {
@@ -1332,42 +1278,10 @@ form.addEventListener("submit", e => {
 });
 
 confirmCodeBtn.addEventListener("click", async () => {
-  if(!pendingSubmit || isSubmitting) return;
-
-  if(codeInput.value !== "2026"){
-    codeError.classList.add("show");
-    codeInput.focus();
-    codeInput.select();
-    return;
-  }
-
-  codeError.classList.remove("show");
-
-  modalTitle.textContent = "Sparar...";
-  modalText.textContent = "Vänta medan fångsten sparas.";
-  modalText.classList.remove("modal-success");
-  modalText.style.color = "";
-
-  codeInput.style.display = "none";
-  codeActions.style.display = "none";
-  pendingSubmit = false;
-
-  startSaveProgress();
-  const saved = await sendForm();
-  stopSaveProgress();
-
-  if(saved){
-    modalTitle.textContent = "Sparat!";
-    modalText.textContent = "Fångsten är registrerad.";
-    modalText.classList.add("modal-success");
-  }else{
-    modalTitle.textContent = "Fel";
-    modalText.textContent = "Kunde inte spara fångsten. Försök igen.";
-    modalText.classList.remove("modal-success");
-    modalText.style.color = "#ff6b6b";
-  }
-
-  modalOkBtn.classList.add("show");
+  if(!pendingSubmit||isSubmitting||saveSequenceActive)return;
+  if(codeInput.value!=="2026"){codeError.classList.add("show");codeInput.focus();codeInput.select();return}
+  saveSequenceActive=true;codeModal.classList.add("save-lock");codeError.classList.remove("show");modalTitle.textContent="Sparar...";modalText.textContent="Förbereder fångsten...";codeInput.style.display="none";codeActions.style.display="none";modalOkBtn.classList.remove("show");saveProgress.style.display="block";saveTimerStart=Date.now();saveTimer.textContent="00,0 s";if(saveTimerInterval)clearInterval(saveTimerInterval);saveTimerInterval=setInterval(()=>{saveTimer.textContent=((Date.now()-saveTimerStart)/1000).toFixed(1).replace(".",",")+" s"},100);pendingSubmit=false;
+  try{const minTimer=5000; const started=Date.now(); const saved=await sendForm(); const remaining=minTimer-(Date.now()-started); if(remaining>0) await new Promise(r=>setTimeout(r,remaining)); if(saveTimerInterval){clearInterval(saveTimerInterval);saveTimerInterval=null}saveProgress.style.display="none";saveSequenceActive=false;codeModal.classList.remove("save-lock");if(saved){modalTitle.textContent="Fångsten är sparad! ✓";modalText.textContent="Din fångst är registrerad.";modalText.classList.add("modal-success");modalText.style.color=""}else{modalTitle.textContent="Kunde inte spara";modalText.textContent="Fångsten kunde inte läggas i kön.";modalText.style.color="#ff6b6b"}modalOkBtn.classList.add("show")}catch(e){if(saveTimerInterval){clearInterval(saveTimerInterval);saveTimerInterval=null}saveProgress.style.display="none";saveSequenceActive=false;codeModal.classList.remove("save-lock");modalTitle.textContent="Fel";modalText.textContent="Kunde inte lägga fångsten i kön.";modalText.style.color="#ff6b6b";modalOkBtn.classList.add("show")}
 });
 
 cancelCodeBtn.addEventListener("click", closeCodeModal);
@@ -1395,6 +1309,8 @@ codeModal.addEventListener("click", (e) => {
 });
 
 (async function startApp() {
+  smartUpdateStatus();
+  smartProcessQueue();
   await loadDropdownData();
   initializeCustomSelects();
 })();
