@@ -142,48 +142,6 @@
       }
     }
 
-    .gallery-controls{
-      margin:0 0 14px;
-    }
-
-    .gallery-view-btn{
-      width:100%;
-      height:54px;
-      margin-top:0;
-      border:0;
-      border-radius:16px;
-      font-size:18px;
-      font-weight:800;
-      color:#fff;
-      cursor:pointer;
-      background:linear-gradient(180deg, #29d454 0%, #12b341 50%, #079734 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 0 12px rgba(28,209,79,.22), 0 8px 18px rgba(0,0,0,.22);
-      transition:transform .22s ease, filter .22s ease, box-shadow .22s ease;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .gallery-view-btn:hover{
-      transform:translateY(-2px);
-      filter:brightness(1.04);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 0 18px rgba(28,209,79,.30), 0 10px 22px rgba(0,0,0,.26);
-    }
-
-    .gallery-view-btn:disabled{
-      opacity:.65;
-      cursor:wait;
-      transform:none;
-    }
-
-    .gallery-hint{
-      margin:9px 4px 0;
-      text-align:center;
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.4;
-    }
-
     .gallery{
       display:grid;
       grid-template-columns:repeat(2, 1fr);
@@ -411,7 +369,6 @@
       <div class="panel">
 
         <a href="topplistor.html" class="btn btn-left">← Tillbaka</a>
-        <a href="historik.html" class="btn btn-center">Historik</a>
         <a href="../index.html" class="btn btn-right">Huvudsidan →</a>
 
         <div class="logo-wrap">
@@ -423,13 +380,8 @@
           <p>Alla fångster hittills - stora som små!</p>
         </div>
 
-        <div class="gallery-controls">
-          <button id="viewGalleryBtn" class="gallery-view-btn" type="button">VISA</button>
-          <p id="galleryHint" class="gallery-hint">Tryck på VISA för att ladda den aktuella tävlingens fångstgalleri.</p>
-        </div>
-
-        <div id="gallery" class="gallery" aria-live="polite">
-          <div class="loading">Tryck på VISA för att visa fångsterna.</div>
+        <div id="gallery" class="gallery">
+          <div class="loading">Laddar galleri...</div>
         </div>
 
       </div>
@@ -450,8 +402,6 @@
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightboxImg");
     const lightboxClose = document.getElementById("lightboxClose");
-    const viewGalleryBtn = document.getElementById("viewGalleryBtn");
-    const galleryHint = document.getElementById("galleryHint");
 
     function escapeHtml(value){
       return String(value ?? "")
@@ -508,7 +458,7 @@
         galleryEl.innerHTML = items.map((item, index) => `
           <article class="card">
             <div class="image-wrap" data-index="${index}">
-              <img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art || "Fångstbild")}">
+              <img loading="lazy" src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art || "Fångstbild")}">
             </div>
 
             <div class="card-caption">
@@ -538,22 +488,7 @@
       }
     }
 
-    viewGalleryBtn.addEventListener("click", async () => {
-      viewGalleryBtn.disabled = true;
-      viewGalleryBtn.textContent = "LADDAR...";
-      galleryHint.textContent = "Hämtar fångsterna för den aktuella tävlingen...";
-      galleryEl.innerHTML = `<div class="loading">Laddar fångster...</div>`;
-
-      try {
-        await loadGallery();
-        galleryHint.textContent = galleryEl.querySelector(".error")
-          ? "Det gick inte att ladda galleriet. Försök igen."
-          : "Den aktuella tävlingens fångstgalleri visas nedan.";
-      } finally {
-        viewGalleryBtn.disabled = false;
-        viewGalleryBtn.textContent = "VISA IGEN";
-      }
-    });
+    loadGallery();
   </script>
 </body>
 </html>
