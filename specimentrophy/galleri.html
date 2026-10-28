@@ -498,7 +498,9 @@
           throw new Error(data.error || "Kunde inte läsa galleriet");
         }
 
-        const items = (data.Galleri || []).filter(item => item && item.imageUrl);
+        const items = (data.Galleri || []).filter(item =>
+          item && typeof item.imageUrl === "string" && item.imageUrl.trim() !== ""
+        );
 
         if(items.length === 0){
           galleryEl.innerHTML = `<div class="empty">Inga fångster registrerade ännu.</div>`;
