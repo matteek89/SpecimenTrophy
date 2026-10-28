@@ -138,6 +138,34 @@
       }
     }
 
+    .load-gallery-button{
+      display:block;
+      width:100%;
+      max-width:220px;
+      margin:0 auto 18px;
+      padding:13px 20px;
+      border:1px solid rgba(51,181,255,.65);
+      border-radius:14px;
+      background:linear-gradient(180deg, #1599e8, #0756a8);
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:.8px;
+      cursor:pointer;
+      box-shadow:0 0 16px rgba(51,181,255,.18);
+      transition:transform .2s ease, filter .2s ease, opacity .2s ease;
+    }
+
+    .load-gallery-button:hover:not(:disabled){
+      transform:translateY(-1px);
+      filter:brightness(1.08);
+    }
+
+    .load-gallery-button:disabled{
+      opacity:.7;
+      cursor:wait;
+    }
+
     .gallery{
       display:grid;
       grid-template-columns:repeat(2, 1fr);
@@ -396,8 +424,9 @@
           <p>Alla fångster hittills - stora som små!</p>
         </div>
 
+        <button id="loadGalleryButton" class="load-gallery-button" type="button">VISA</button>
         <div id="gallery" class="gallery">
-          <div class="loading">Laddar galleri...</div>
+          <div class="empty">Tryck på VISA för att visa fångsterna.</div>
         </div>
 
       </div>
@@ -418,6 +447,7 @@
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightboxImg");
     const lightboxClose = document.getElementById("lightboxClose");
+    const loadGalleryButton = document.getElementById("loadGalleryButton");
 
     function escapeHtml(value){
       return String(value ?? "")
@@ -453,6 +483,9 @@
     });
 
     async function loadGallery(){
+      loadGalleryButton.disabled = true;
+      loadGalleryButton.textContent = "LADDAR...";
+
       try{
         const response = await fetch(`${API_URL}?t=${Date.now()}`, {
           cache: "no-store"
@@ -464,7 +497,9 @@
           throw new Error(data.error || "Kunde inte läsa galleriet");
         }
 
-        const items = data.Galleri || [];
+        const items = (Array.isArray(data.Galleri) ? data.Galleri : []).filter(item =>
+          item && typeof item.imageUrl === "string" && item.imageUrl.trim() !== ""
+        );
 
         if(items.length === 0){
           galleryEl.innerHTML = `<div class="empty">Inga godkända bilder finns ännu.</div>`;
@@ -475,8 +510,9 @@
           <article class="card">
             <div class="image-wrap" data-index="${index}">
               <img
-                src="${escapeHtml(item.imageUrl)}"
+                src="${escapeHtml(item.imageUrl.trim())}"
                 alt="${escapeHtml(item.art || "Fångstbild")}"
+                loading="lazy"
               >
             </div>
 
@@ -496,19 +532,22 @@
           element.addEventListener("click", ()=>{
             const item = items[Number(element.dataset.index)];
 
-            if(item && item.imageUrl){
-              openLightbox(item.imageUrl);
+            if(item && typeof item.imageUrl === "string" && item.imageUrl.trim() !== ""){
+              openLightbox(item.imageUrl.trim());
             }
           });
         });
 
       }catch(error){
         console.error(error);
-        galleryEl.innerHTML = `<div class="error">Kunde inte läsa galleriet just nu.</div>`;
+        galleryEl.innerHTML = `<div class="error">Kunde inte läsa galleriet just nu. Försök igen.</div>`;
+      }finally{
+        loadGalleryButton.disabled = false;
+        loadGalleryButton.textContent = "VISA";
       }
     }
 
-    loadGallery();
+    loadGalleryButton.addEventListener("click", loadGallery);
   </script>
 </body>
 </html>
