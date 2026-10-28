@@ -62,7 +62,7 @@ body::before{
 
 .frame{
   width:100%;
-  max-width:370px;
+  max-width:430px;
   padding:4px;
   border-radius:26px;
   position:relative;
@@ -149,7 +149,7 @@ body::before{
 
 .title{
   text-align:center;
-  margin-bottom:14px;
+  margin-bottom:18px;
   position:relative;
   z-index:1;
   animation:softFadeUp .3s ease both;
@@ -157,6 +157,8 @@ body::before{
 
 .title h1{
   font-size:22px;
+  font-weight:900;
+  letter-spacing:.2px;
   margin:0;
 }
 
@@ -786,25 +788,33 @@ input[type=number]::-webkit-outer-spin-button{
 }
 
 .history-year-field{
+  position:relative;
+  cursor:pointer;
   animation:fieldIn .24s ease both;
 }
 
+/* Lägg själva select-kontrollen över hela rutan så även ikon och pil fungerar. */
 .history-year-field select{
+  position:absolute;
+  inset:0;
+  z-index:5;
   width:100%;
+  height:100%;
   border:0;
-  background:transparent !important;
+  opacity:0;
+  cursor:pointer;
+  color-scheme:dark;
+}
+
+.history-year-value{
   color:var(--text);
   font-size:16px;
   line-height:1.2;
-  outline:none;
-  padding:0;
-  margin:0;
   font-weight:500;
   min-height:24px;
-  appearance:none;
-  -webkit-appearance:none;
-  cursor:pointer;
-  color-scheme:dark;
+  display:flex;
+  align-items:center;
+  pointer-events:none;
 }
 
 .history-year-field select option{
@@ -816,6 +826,20 @@ input[type=number]::-webkit-outer-spin-button{
   width:min(220px, 100%);
   align-self:center;
   margin-top:0;
+  /* Mjukare grön färg, matchad mot Tvåmanna-galleriets VISA-knapp */
+  background:linear-gradient(180deg, #22c55e, #15803d);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 0 16px rgba(34,197,94,.24),
+    0 8px 18px rgba(0,0,0,.22);
+}
+
+.history-view-btn:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 0 18px rgba(34,197,94,.28),
+    0 10px 20px rgba(0,0,0,.24);
 }
 
 .history-view-btn:disabled{
@@ -826,6 +850,24 @@ input[type=number]::-webkit-outer-spin-button{
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.10),
     0 6px 14px rgba(0,0,0,.16);
+}
+
+.history-excel-btn{
+  width:100%;
+  min-height:50px;
+  margin-top:0;
+  padding:10px 14px;
+  font-size:14px;
+  line-height:1.25;
+  background:linear-gradient(180deg, rgba(4,25,47,.98), rgba(2,14,29,.98));
+  border:1px solid rgba(51,181,255,.32);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 6px 14px rgba(0,0,0,.18);
+}
+.history-excel-btn:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+  transform:none !important;
+  filter:none !important;
 }
 
 .history-hint{
@@ -900,6 +942,32 @@ input[type=number]::-webkit-outer-spin-button{
 }
 </style>
 
+
+<style>
+/* Historikens inbyggda galleri – samma kortstil som galleri.html */
+.history-gallery-wrap{display:none;margin-top:18px;position:relative;z-index:1;animation:softFadeUp .28s ease both}
+.history-gallery-wrap.show{display:block}
+.history-gallery-wrap.show ~ .history-hint{display:none}
+.history-gallery-heading{text-align:center;margin:0 0 12px;font-size:18px;font-weight:900}
+.history-gallery-count{text-align:center;color:var(--muted);font-size:12px;margin:-5px 0 13px}
+.history-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.history-gallery .card{min-width:0;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.025);border:1px solid rgba(51,181,255,.16);box-shadow:0 8px 20px rgba(0,0,0,.24),0 0 14px rgba(51,181,255,.07);animation:cardIn .26s ease both}
+.history-gallery .image-wrap{width:100%;aspect-ratio:1/1;background:rgba(0,0,0,.25);overflow:hidden;cursor:pointer}
+.history-gallery .image-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .28s ease,filter .28s ease}
+.history-gallery .image-wrap:hover img{transform:scale(1.045);filter:brightness(1.08)}
+.history-gallery .card-caption{padding:10px 7px 12px;text-align:center;background:linear-gradient(180deg,rgba(4,20,42,.96),rgba(1,9,22,.99));border-top:1px solid rgba(51,181,255,.16)}
+.history-gallery .name{font-size:12px;font-weight:900;margin-bottom:5px;color:#fff;line-height:1.2;overflow-wrap:anywhere}
+.history-gallery .meta{font-size:10px;color:var(--muted);line-height:1.45}
+.history-gallery .meta strong{color:var(--accent);font-weight:900}
+.history-gallery-message{grid-column:1/-1;text-align:center;padding:22px 10px;color:var(--muted);font-size:14px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(51,181,255,.12)}
+.history-lightbox{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.history-lightbox.show{display:flex;animation:modalFade .18s ease both}
+.history-lightbox-inner{width:100%;max-width:720px;position:relative}
+.history-lightbox-close{position:absolute;top:-44px;right:0;width:36px;height:36px;border-radius:999px;border:1px solid rgba(51,181,255,.34);background:rgba(2,11,23,.96);color:#fff;font-size:24px;cursor:pointer}
+.history-lightbox img{width:100%;max-height:80vh;object-fit:contain;border-radius:20px;box-shadow:0 0 0 1px rgba(51,181,255,.25),0 0 30px rgba(51,181,255,.18),0 18px 50px rgba(0,0,0,.45)}
+@media(max-width:420px){.history-gallery{gap:10px}}
+</style>
+
 </head>
 
 
@@ -908,8 +976,8 @@ input[type=number]::-webkit-outer-spin-button{
   <div class="frame">
     <div class="panel">
 
-      <a href="../index.html" class="btn btn-left">← Start</a>
-      <a href="topplistor.html" class="btn btn-right">Topplistor →</a>
+      <a href="galleri.html" class="btn btn-left">← Tillbaka</a>
+      <a href="../index.html" class="btn btn-right">Huvudsidan →</a>
       <a href="regler.html" class="btn btn-center" style="z-index:1000;">Regler</a>
 
       <div class="logo-wrap">
@@ -933,15 +1001,17 @@ input[type=number]::-webkit-outer-spin-button{
 
           <div class="field-body">
             <div class="field-label">Välj tävling</div>
-            <select id="year" aria-label="Välj tävling">
-              <option value="">Välj år</option>
-              <option value="2026">Tävling 2026</option>
-              <option value="2027">Tävling 2027</option>
-              <option value="2028">Tävling 2028</option>
-              <option value="2029">Tävling 2029</option>
-              <option value="2030">Tävling 2030</option>
-            </select>
+            <div id="yearDisplay" class="history-year-value" aria-hidden="true">Välj år</div>
           </div>
+
+          <select id="year" aria-label="Välj tävling">
+            <option value="">Välj år</option>
+            <option value="2026">Tävling 2026</option>
+            <option value="2027">Tävling 2027</option>
+            <option value="2028">Tävling 2028</option>
+            <option value="2029">Tävling 2029</option>
+            <option value="2030">Tävling 2030</option>
+          </select>
 
           <div class="field-end" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -954,19 +1024,42 @@ input[type=number]::-webkit-outer-spin-button{
           VISA
         </button>
 
+        <button id="excelBtn" class="submit-btn history-excel-btn" type="button" disabled>
+          Öppna Excel - Topplistor och sammanställning
+        </button>
+
         <div class="history-hint">
-          Välj ett tävlingsår och tryck på VISA för att öppna årets sparade Excel-dokument.
+          Välj ett tävlingsår och tryck på VISA för att visa årets fångstgalleri här nedanför.
         </div>
 
       </div>
+
+      <section id="historyGalleryWrap" class="history-gallery-wrap" aria-live="polite">
+        <h2 id="historyGalleryHeading" class="history-gallery-heading">Fångstgalleri 2026</h2>
+        <p id="historyGalleryCount" class="history-gallery-count"></p>
+        <div id="historyGallery" class="history-gallery"></div>
+      </section>
 
     </div>
   </div>
 </div>
 
+<div class="history-lightbox" id="historyLightbox" aria-label="Förstorad fångstbild">
+  <div class="history-lightbox-inner">
+    <button class="history-lightbox-close" id="historyLightboxClose" type="button" aria-label="Stäng">×</button>
+    <img id="historyLightboxImg" src="" alt="Förstorad fångstbild">
+  </div>
+</div>
+
 <script>
-  // Google Drive-länkar till respektive avslutad tävling.
-  // Läggs in när respektive år är klart.
+  // Offline-test: fångstdata är hämtade direkt från bladet "Fångster" i Excel-kopian för 2026.
+  // Övriga år aktiveras när respektive sparad Excel-kopia finns tillgänglig.
+  const galleryDataByYear = {"2026": [{"deltagare":"Charlotte Lund","art":"Id","vikt":"2300","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=1pt2smAiBbR1p3oG3CGFWilPTjv1HoNIB&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Vimma","vikt":"870","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=1wuuLy3wkIHzjKZXoFbR3yNdjzX9KxRsr&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Id","vikt":"1920","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=1h5LKHf8xNehSp5UN9E_401fzOknIVpZ4&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Björkna","vikt":"695","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=1aHgLvuzRH-mm-uVifxMP56438CdUkWDp&sz=w1000"},{"deltagare":"Emil Larsson","art":"Vimma","vikt":"1175","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=1eqYocSVi6y9AVQYhx7W86YKBLj63W4MT&sz=w1000"},{"deltagare":"Emil Larsson","art":"Vimma","vikt":"1019","datum":"2026-05-01","imageUrl":"https://drive.google.com/thumbnail?id=105ElCAYEdrhXIP_AQC5jsp0QxDyl-7Kj&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sarv","vikt":"1300","datum":"2026-05-03","imageUrl":"https://drive.google.com/thumbnail?id=18ybzGonprlYXoENEjoKkvr9Ely0wDb0w&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sarv","vikt":"1010","datum":"2026-05-03","imageUrl":"https://drive.google.com/thumbnail?id=1meh9kUIJiqPwyHyNXBvn1cUkeDZwGkeF&sz=w1000"},{"deltagare":"Lars Boström","art":"Sarv","vikt":"1009","datum":"2026-05-05","imageUrl":"https://drive.google.com/thumbnail?id=1n3wFmdabUUa0K2SZrTXIAabgqY7FZZjY&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sarv","vikt":"1330","datum":"2026-05-05","imageUrl":"https://drive.google.com/thumbnail?id=1F_PL54GdEHq530aaUClhdxNIiKsRBKsA&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"2197","datum":"2026-05-09","imageUrl":"https://drive.google.com/thumbnail?id=1a7cMBuc9SAJttLEf8uXzI8JT8UcSJs6u&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"1896","datum":"2026-05-09","imageUrl":"https://drive.google.com/thumbnail?id=1WQg5vs03oKxZI7cS17LFdOHPSmYbQCqz&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Sutare","vikt":"1623","datum":"2026-05-10","imageUrl":"https://drive.google.com/thumbnail?id=1crkrg_7IdweXuHD1h-X2pYpc-2e03n2y&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Mört","vikt":"674","datum":"2026-05-11","imageUrl":"https://drive.google.com/thumbnail?id=1wUA05QM2-024wNxLWIWA6f8veZmuZdMa&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Björkna","vikt":"499","datum":"2026-05-11","imageUrl":"https://drive.google.com/thumbnail?id=1NMAh2J2cnKJa28_UJDvmYg_ZzJesiWJd&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Björkna","vikt":"520","datum":"2026-05-07","imageUrl":"https://drive.google.com/thumbnail?id=18sLgjRScSxVsIZqzlP-gxNSNXb4On6bt&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Braxen","vikt":"2295","datum":"2026-05-05","imageUrl":"https://drive.google.com/thumbnail?id=1u6ETlfCId_ZjlJZO5XEmEHpPzATH77fY&sz=w1000"},{"deltagare":"Lars Boström","art":"Vimma","vikt":"900","datum":"2026-05-11","imageUrl":"https://drive.google.com/thumbnail?id=1aqRQ0UoS50jzKi9jD5qv5jGeRTxOE4PE&sz=w1000"},{"deltagare":"Kent Boström","art":"Sarv","vikt":"1347","datum":"2026-05-12","imageUrl":"https://drive.google.com/thumbnail?id=1Y3tZgkIXlfWmHTUnyqAFtp7QNUJd64UW&sz=w1000"},{"deltagare":"Kent Boström","art":"Sarv","vikt":"1147","datum":"2026-05-12","imageUrl":"https://drive.google.com/thumbnail?id=1rCcah-X-s6bNLYh830fB87OPdlUntRl4&sz=w1000"},{"deltagare":"Kent Boström","art":"Sutare","vikt":"2429","datum":"2026-05-12","imageUrl":"https://drive.google.com/thumbnail?id=1aGxi8OGRHI9SgYtSKeha1D0Z7ZD5RVf3&sz=w1000"},{"deltagare":"Kent Boström","art":"Sutare","vikt":"1999","datum":"2026-05-12","imageUrl":"https://drive.google.com/thumbnail?id=17hfcILaM0Irxfuay6v6CMoRRVfIjX6JJ&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Braxen","vikt":"2350","datum":"2026-05-14","imageUrl":"https://drive.google.com/thumbnail?id=1rpzQOX6M38kxRuukhObPuy7t03lLPNFs&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Sutare","vikt":"1529","datum":"2026-05-14","imageUrl":"https://drive.google.com/thumbnail?id=1tROXiFiNFf5e1epqbc_5ulY523bgHNkf&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Braxen","vikt":"2624","datum":"2026-05-15","imageUrl":"https://drive.google.com/thumbnail?id=13DH3ybI2ryk83Dl8b3pAyvyrBuHkq-AF&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Sutare","vikt":"2030","datum":"2026-05-15","imageUrl":"https://drive.google.com/thumbnail?id=1c6H9zHAU_Moco1tbK57Od1ElfSOGua5T&sz=w1000"},{"deltagare":"Patrik Byström","art":"Sutare","vikt":"2030","datum":"2026-05-17","imageUrl":"https://drive.google.com/thumbnail?id=1u2BFewOTO8bOdAFC8nM5yC-j0zGLByM7&sz=w1000"},{"deltagare":"Stefan Widh","art":"Sarv","vikt":"1278","datum":"2026-05-09","imageUrl":"https://drive.google.com/thumbnail?id=1EnxncT3dNT1ZPfg4AWR7eR9YXg172Quf&sz=w1000"},{"deltagare":"Stefan Widh","art":"Sarv","vikt":"1087","datum":"2026-05-09","imageUrl":"https://drive.google.com/thumbnail?id=1C_T2V86Siej9OptgmyLClJ4iclHhJGEa&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Vimma","vikt":"570","datum":"2026-05-20","imageUrl":"https://drive.google.com/thumbnail?id=1_2gp4RlXRX4bWq-2miiFjjcofO7B2C0X&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Mört","vikt":"620","datum":"2026-05-20","imageUrl":"https://drive.google.com/thumbnail?id=1GxicmM4Qvw954fxNta5ycOYrMeIv0YIZ&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Björkna","vikt":"620","datum":"2026-05-21","imageUrl":"https://drive.google.com/thumbnail?id=1Vj0vnj_GOXrkN4lozazzMjXyyv2GXxSa&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Björkna","vikt":"625","datum":"2026-05-21","imageUrl":"https://drive.google.com/thumbnail?id=1396XdGNEQ4nigUbmY7THJwmzbDEHxW1x&sz=w1000"},{"deltagare":"Kent Boström","art":"Ruda","vikt":"1788","datum":"2026-05-18","imageUrl":"https://drive.google.com/thumbnail?id=1OeFMLEb6MyayB62NLUgSE8v0gsnSoCGr&sz=w1000"},{"deltagare":"Lars Boström","art":"Ruda","vikt":"988","datum":"2026-05-18","imageUrl":"https://drive.google.com/thumbnail?id=1iOfxe2MO69aM15zSa0TdIBDwJRyXGtc8&sz=w1000"},{"deltagare":"Lars Boström","art":"Sarv","vikt":"901","datum":"2026-05-22","imageUrl":"https://drive.google.com/thumbnail?id=1qcK8i69ei8Egp7B4Gor80OhvMJb0zZ0J&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sarv","vikt":"839","datum":"2026-05-22","imageUrl":"https://drive.google.com/thumbnail?id=1aaEtY14_C6Zq6rxXzKJ5e9rceuBYxvAC&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sarv","vikt":"825","datum":"2026-05-22","imageUrl":"https://drive.google.com/thumbnail?id=1Msrh_HimXzmtUQURKSQ0eAYZGDnAOCTO&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"1748","datum":"2026-05-22","imageUrl":"https://drive.google.com/thumbnail?id=1woMEZ39SaoHWXkV5aKm1MOo52luyxaqJ&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"1919","datum":"2026-05-24","imageUrl":"https://drive.google.com/thumbnail?id=13PILTff-lY4pUIGvk_2Z9O1NpcHGkTW4&sz=w1000"},{"deltagare":"Lars Boström","art":"Sarv","vikt":"1415","datum":"2026-05-24","imageUrl":"https://drive.google.com/thumbnail?id=1Tgb90BoVXkAqcMCd6W_GIdmp2aCQTuCB&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Id","vikt":"1890","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=1E6P0fVyAzqysrYLRpTwyawdxo1JdNlam&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Mört","vikt":"475","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=12ZSIR5TyEwiU8mUPXlq0o2BKZGSPxQWJ&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Mört","vikt":"505","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=14x5WwHwlh_UASTdRZFU78v2Ckp5U-rUE&sz=w1000"},{"deltagare":"Kent Boström","art":"Björkna","vikt":"516","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=1Cfs_hSo48Bp2b6A_N5buiIb9pnRlr5Nt&sz=w1000"},{"deltagare":"Kent Boström","art":"Vimma","vikt":"725","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=1KOSNchxNQGHvCtHWAQXxFMV3zvJqQSGh&sz=w1000"},{"deltagare":"Roger Norling","art":"Braxen","vikt":"3323","datum":"2026-05-29","imageUrl":"https://drive.google.com/thumbnail?id=1Hnkvs1bThpjQimeZNkJsNXElSDtjt1MP&sz=w1000"},{"deltagare":"Roger Norling","art":"Braxen","vikt":"3505","datum":"2026-05-29","imageUrl":"https://drive.google.com/thumbnail?id=1vc0bLqAEvsKmwjutA5-GSD-zm4RYEg4S&sz=w1000"},{"deltagare":"Roger Norling","art":"Braxen","vikt":"3841","datum":"2026-05-29","imageUrl":"https://drive.google.com/thumbnail?id=1XEjzkbgbvPRRWhoec_ShDMGrjFC6oxKe&sz=w1000"},{"deltagare":"Roger Norling","art":"Sutare","vikt":"2267","datum":"2026-05-29","imageUrl":"https://drive.google.com/thumbnail?id=1Pq1ylQ1ObknVLnZCV5ZMqnDwDycE0nKB&sz=w1000"},{"deltagare":"Roger Norling","art":"Sutare","vikt":"2803","datum":"2026-05-29","imageUrl":"https://drive.google.com/thumbnail?id=1AnarMyYe6-1q0Mg3qzgx10fryDgGkPS-&sz=w1000"},{"deltagare":"Sonny Pettersson","art":"Sarv","vikt":"1104","datum":"2026-05-26","imageUrl":"https://drive.google.com/thumbnail?id=1z4v3GYnXKpzEqp4zNwOCiusyMRyzmwqo&sz=w1000"},{"deltagare":"Kent Boström","art":"Mört","vikt":"402","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=1XLqNQZaW0CNCSYuAsTT8L6cwSyhIWKyG&sz=w1000"},{"deltagare":"Kent Boström","art":"Mört","vikt":"411","datum":"2026-05-28","imageUrl":"https://drive.google.com/thumbnail?id=1dBJzaFNyguOntNvGendDR5uHax5LK9pE&sz=w1000"},{"deltagare":"Kent Boström","art":"Sutare","vikt":"2006","datum":"2026-06-03","imageUrl":"https://drive.google.com/thumbnail?id=1J5iUOfDvqdwmeQ-Wc6oPdBnW0AxIl5DB&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sutare","vikt":"2910","datum":"2026-06-05","imageUrl":"https://drive.google.com/thumbnail?id=153dRKzhIGCaXbPwYDKyQgTN0CeB5oXUk&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"2358","datum":"2026-06-19","imageUrl":"https://drive.google.com/thumbnail?id=1ADqVfyGvQ-_nFsTQs2ywzdBQs4h56ehz&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"2230","datum":"2026-06-20","imageUrl":"https://drive.google.com/thumbnail?id=1L5uf_rsmIwM5yKCFgu7i_KZdQzrXNpkz&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"2121","datum":"2026-06-19","imageUrl":"https://drive.google.com/thumbnail?id=1rPsdYijdq9ZsD4NUnuIXGAN8sNDNcYrO&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Sarv","vikt":"880","datum":"2026-06-12","imageUrl":"https://drive.google.com/thumbnail?id=1718eY4wN_6ux8aMYJl_idOP3bPnoSaxA&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Sarv","vikt":"300","datum":"2026-06-12","imageUrl":"https://drive.google.com/thumbnail?id=1fH4cVZ86Xrky3h58dJuBLjbsr3s0kUFC&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Sutare","vikt":"1650","datum":"2026-06-12","imageUrl":"https://drive.google.com/thumbnail?id=1W_-qJlY2h3kVeBoc40x28jLWnpXtmxqb&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"2464","datum":"2026-06-23","imageUrl":"https://drive.google.com/thumbnail?id=14-Rs0FX_d97STT-x6pMjtQYeeib3sZNx&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"2691","datum":"2026-06-30","imageUrl":"https://drive.google.com/thumbnail?id=1Qp8xko_SZpJnThebQPGq603kOcjb0fyB&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Bifångst","vikt":"970","datum":"2026-05-24","imageUrl":"https://drive.google.com/thumbnail?id=1alcn0KUCxwsdnLl3DxT1ArAJmRnol_R2&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Bifångst","vikt":"960","datum":"2026-06-30","imageUrl":"https://drive.google.com/thumbnail?id=1YJEwxzqwuEXBib5QQZ_r1n8uNTOK0uhJ&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Sarv","vikt":"402","datum":"2026-06-23","imageUrl":"https://drive.google.com/thumbnail?id=1jnT80_UKMWKlqVUS_EQlh2S1hILDibWh&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"2261","datum":"2026-07-04","imageUrl":"https://drive.google.com/thumbnail?id=1HdTrUififGwv8s-nYWZ72fLnsowHDBkW&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"3348","datum":"2026-07-14","imageUrl":"https://drive.google.com/thumbnail?id=1DzwVYvkV7hm2AfMRe3EtwLxmqo9eEUWQ&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Braxen","vikt":"4678","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1oJjuTPm_wpFt6WzyhHHagGOsdlGOWWrn&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Braxen","vikt":"5222","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=19Qp4nF84fP-gWGSN3EZ4SUMQGtsbGNa7&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Braxen","vikt":"7034","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1gDC6EZ3Eo8hrlDAXW99Gj0E5k7FSJ1Ia&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Braxen","vikt":"7347","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=18zA-IliuS3MkRYZPQEWdIo9_RmHuAJRy&sz=w1000"},{"deltagare":"Mattias Roming","art":"Sarv","vikt":"755","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1-Qi5q8bs7BzzwKlpM4rtCQ8yz9ISBu2u&sz=w1000"},{"deltagare":"Mattias Roming","art":"Sarv","vikt":"855","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1f-OSAdKEOYN0TIE8ht-UpIK2CCjfbyLn&sz=w1000"},{"deltagare":"Lars Boström","art":"Braxen","vikt":"6614","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1HmBvXu4F1APVE0uLZgPx8bXYd8iHPjwj&sz=w1000"},{"deltagare":"Lars Boström","art":"Braxen","vikt":"6692","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1bSEJTSjxiH4F_a2joBplrY-uNOHeRHQf&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"2581","datum":"2026-07-17","imageUrl":"https://drive.google.com/thumbnail?id=1of0P50qQqbJvkZSr60SQDunFkC9NU-9d&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"2851","datum":"2026-07-17","imageUrl":"https://drive.google.com/thumbnail?id=1pUsxg1lpXFYL7n8cXZlkQE6ZF_zOD_Fk&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"3949","datum":"2026-07-17","imageUrl":"https://drive.google.com/thumbnail?id=1uvHJjY5WXEj4KItZXxSRLzLo2oIRJM-k&sz=w1000"},{"deltagare":"Lars Boström","art":"Sutare","vikt":"3388","datum":"2026-07-17","imageUrl":"https://drive.google.com/thumbnail?id=1q3hDAhSMgo4XJBCydpLmCmxbznk9i0oC&sz=w1000"},{"deltagare":"Lars Boström","art":"Braxen","vikt":"7232","datum":"2026-07-18","imageUrl":"https://drive.google.com/thumbnail?id=1H3UmZnd5UzZG6weaatt2PBYgVp0zN0uT&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"3182","datum":"2026-07-19","imageUrl":"https://drive.google.com/thumbnail?id=1MMYvRuJY01BY66Cvz7n_kWXi7pKqjRZR&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Sutare","vikt":"3713","datum":"2026-07-19","imageUrl":"https://drive.google.com/thumbnail?id=1Kvs35ZQxbtVj1Kb42fMkHsryysw7Gvf3&sz=w1000"},{"deltagare":"Lars Boström","art":"Bifångst","vikt":"13200","datum":"2026-07-19","imageUrl":"https://drive.google.com/thumbnail?id=1lepdU_00VffVFpXm2bPzqL3gT_Sp1il0&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Bifångst","vikt":"8700","datum":"2026-07-15","imageUrl":"https://drive.google.com/thumbnail?id=1XhoG8olnmT6MFxDKV6ib69Hi1_2p8eLR&sz=w1000"},{"deltagare":"Mattias Roming","art":"Bifångst","vikt":"855","datum":"2026-07-25","imageUrl":"https://drive.google.com/thumbnail?id=1JabrAcDUa1U09ovYtTQLeuexAnQGoHFE&sz=w1000"},{"deltagare":"Lars Boström","art":"Braxen","vikt":"6935","datum":"2026-08-10","imageUrl":"https://drive.google.com/thumbnail?id=1r0-wtU6kPlqtbSUnsltzKoHnim4qNx5I&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Braxen","vikt":"7185","datum":"2026-08-11","imageUrl":"https://drive.google.com/thumbnail?id=1FDrPn18V-0sDROjeCOFHReliCkT8Ar3Z&sz=w1000"},{"deltagare":"Patrik Byström","art":"Ruda","vikt":"695","datum":"2026-08-02","imageUrl":"https://drive.google.com/thumbnail?id=1dzflKI2wEgsHrqWAnB3D7zIOBzjYfC-0&sz=w1000"},{"deltagare":"Patrik Byström","art":"Ruda","vikt":"840","datum":"2026-08-02","imageUrl":"https://drive.google.com/thumbnail?id=1ACb1hUZ4DFWQP33nyyWtuHnU-5QmH0BT&sz=w1000"},{"deltagare":"Patrik Byström","art":"Ruda","vikt":"865","datum":"2026-08-02","imageUrl":"https://drive.google.com/thumbnail?id=1W2ZF-2wXsQb77BzqkZdfWWh-V3NtviS7&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Ruda","vikt":"1470","datum":"2026-08-14","imageUrl":"https://drive.google.com/thumbnail?id=139hT9iOIHof-inmdHUWNmNfeXWFnoKsW&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Ruda","vikt":"1245","datum":"2026-08-15","imageUrl":"https://drive.google.com/thumbnail?id=1poHUCGWm785WsjL3QzjtFjrxObre94Tp&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Bifångst","vikt":"10661","datum":"2026-08-10","imageUrl":"https://drive.google.com/thumbnail?id=1Hh2tJvBG5fnn3z8DzP3tnN90SWIbSxvn&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Ruda","vikt":"1600","datum":"2026-08-28","imageUrl":"https://drive.google.com/thumbnail?id=1WbCAzEE0Jb6gIYOvl5zO1AoUy6XIK0Sw&sz=w1000"},{"deltagare":"Patrik Byström","art":"Id","vikt":"2260","datum":"2026-08-23","imageUrl":"https://drive.google.com/thumbnail?id=19WKzTCIXghkKXSx9vUXeyNDSt5CYuBi0&sz=w1000"},{"deltagare":"Lars Boström","art":"Björkna","vikt":"706","datum":"2026-09-03","imageUrl":"https://drive.google.com/thumbnail?id=1bmSr40cfRG6ReWNvwbYGMi0GzvUGjrbO&sz=w1000"},{"deltagare":"Lars Boström","art":"Mört","vikt":"549","datum":"2026-09-03","imageUrl":"https://drive.google.com/thumbnail?id=1tqV9Cli2e8h2sNRpbD-LXR1x1S1ptc2z&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Id","vikt":"1970","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1GDZIHMg42gEWFDmfw0hSDT7XHIXYgc5h&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Braxen","vikt":"2170","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1p8rJYrAnhnbq-V8Yo0oxTSGoYRJAGRdN&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Björkna","vikt":"856","datum":"2026-09-03","imageUrl":"https://drive.google.com/thumbnail?id=1jrh5BwAj1ZX7Hooof0cMgExWQ8f64vnW&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Björkna","vikt":"674","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1J4gUJgK2hIxoVHrwum0UuewU96fBtD-b&sz=w1000"},{"deltagare":"Sonny Pettersson","art":"Braxen","vikt":"3657","datum":"2026-08-19","imageUrl":"https://drive.google.com/thumbnail?id=12INpty7hdfWwwwMf_dARimWH5BVSit7C&sz=w1000"},{"deltagare":"Sonny Pettersson","art":"Braxen","vikt":"3504","datum":"2026-08-21","imageUrl":"https://drive.google.com/thumbnail?id=1uJgGX1cqxLUCQW2hYSrJXc1C5HZe_2M_&sz=w1000"},{"deltagare":"Sonny Pettersson","art":"Sutare","vikt":"2715","datum":"2026-08-18","imageUrl":"https://drive.google.com/thumbnail?id=15teNqvq0tDAfRcpZQvst0in6lzxh_AUA&sz=w1000"},{"deltagare":"Sonny Pettersson","art":"Sutare","vikt":"2706","datum":"2026-08-20","imageUrl":"https://drive.google.com/thumbnail?id=1Nl3lHqYWjIHU18ap-hLpyGi3NYHRaCCw&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Braxen","vikt":"2530","datum":"2026-09-06","imageUrl":"https://drive.google.com/thumbnail?id=1qFBwQC9WigBV2e5NMTHe6oyo8C8GX3uy&sz=w1000"},{"deltagare":"Lars Boström","art":"Björkna","vikt":"802","datum":"2026-09-07","imageUrl":"https://drive.google.com/thumbnail?id=1osT1uG-O6s6JRHBmPoTITE9swpvxFEeK&sz=w1000"},{"deltagare":"Lars Boström","art":"Björkna","vikt":"812","datum":"2026-09-07","imageUrl":"https://drive.google.com/thumbnail?id=1f_L2fZxQf7XqFqyJ-oYXVbUkUmMpttwo&sz=w1000"},{"deltagare":"Lars Boström","art":"Mört","vikt":"683","datum":"2026-09-07","imageUrl":"https://drive.google.com/thumbnail?id=1AnP6qSbJryt7FAA5EhZAONnGX4wXLZQ8&sz=w1000"},{"deltagare":"Patrik Byström","art":"Björkna","vikt":"905","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1zHWOgwn6HqTz808Z5TkcuZi0qBqfSG3_&sz=w1000"},{"deltagare":"Patrik Byström","art":"Björkna","vikt":"860","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1V0JufcIN0MWlZE-CJLhUgXmgfvxXawFZ&sz=w1000"},{"deltagare":"Anders Wimmerstedt","art":"Björkna","vikt":"1045","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1NQgWpBvjG6aA5kr6atGQ2kWrBd5GPDbz&sz=w1000"},{"deltagare":"Anders Wimmerstedt","art":"Björkna","vikt":"820","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1e572LjzKb0Mu0KNGwN55vHp1VZC7bvyG&sz=w1000"},{"deltagare":"Patrik Byström","art":"Braxen","vikt":"2190","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1HzNXP8ZGEGbB3yPk4bGNDx2z0g2L3Jtp&sz=w1000"},{"deltagare":"Patrik Byström","art":"Id","vikt":"2040","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1wZLosQ3HDvQDiL8ZdgtSjN32PFn6fr0l&sz=w1000"},{"deltagare":"Patrik Byström","art":"Vimma","vikt":"1010","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1YoA2jhiCrsy19eAZu6cKN-988JsQZowW&sz=w1000"},{"deltagare":"Anders Wimmerstedt","art":"Mört","vikt":"600","datum":"2026-09-01","imageUrl":"https://drive.google.com/thumbnail?id=1C2dwwLT-mN2ybXu7eC9DglKHeLd2Bd7k&sz=w1000"},{"deltagare":"Anders Wimmerstedt","art":"Mört","vikt":"740","datum":"2026-09-02","imageUrl":"https://drive.google.com/thumbnail?id=1urKEmRqPIa2SdwtKrI0q-nWz6VOZO9IP&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Björkna","vikt":"624","datum":"2026-09-07","imageUrl":"https://drive.google.com/thumbnail?id=106gGbJfIsNxVyv-IOfncRzJK2z8eawGa&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sutare","vikt":"3560","datum":"2026-09-09","imageUrl":"https://drive.google.com/thumbnail?id=1zVcirJRbseTkNH37CvYVH9Rnwi19e0NS&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Sutare","vikt":"3330","datum":"2026-09-10","imageUrl":"https://drive.google.com/thumbnail?id=1SYIn2HD-HrEND6lPRewih3wJtKbH0tw9&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Braxen","vikt":"3900","datum":"2026-09-10","imageUrl":"https://drive.google.com/thumbnail?id=1MzgYKNV1JLU50by59_y8VkRVbcCgKOQJ&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Braxen","vikt":"3850","datum":"2026-09-10","imageUrl":"https://drive.google.com/thumbnail?id=172o6XCMp_ZfF8LZrCPmjaiZnPL5-hOlj&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Id","vikt":"1885","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=1RNY8HM9RZG1x4m4723lLO29DpkRO0A51&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Vimma","vikt":"1060","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=168BYW9yn78U0oCweoomxJu9G3sr30nOM&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Vimma","vikt":"1120","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=1NDbDR8McYfsUg0yVoP-bbuJe-hPhwu8G&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Vimma","vikt":"940","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=1HHgD_j8Mizy7XsW3NRqlsMKMMD9xATOA&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Vimma","vikt":"1055","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=1wrqE4NDJJ5Z9vPcrSgg2IB1m78lH917P&sz=w1000"},{"deltagare":"Charlotte Lund","art":"Björkna","vikt":"730","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=15xIrOFceOFpdRXUNamBsQeoKgGfNt4GS&sz=w1000"},{"deltagare":"Lars Boström","art":"Mört","vikt":"740","datum":"2026-09-11","imageUrl":"https://drive.google.com/thumbnail?id=1DqPU_NHHWHLq15MbNiZQ6vVqpm5PASml&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Vimma","vikt":"1085","datum":"2026-09-12","imageUrl":"https://drive.google.com/thumbnail?id=1vGIzCa7Qe10vFV2rYaaMCI6NQznuqgoy&sz=w1000"},{"deltagare":"Edvin Johansson","art":"Id","vikt":"1880","datum":"2026-09-12","imageUrl":"https://drive.google.com/thumbnail?id=1u6A7Gy_93FA6GuWEShjVG5V0cpjTwINu&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Mört","vikt":"540","datum":"2026-09-15","imageUrl":"https://drive.google.com/thumbnail?id=1UdI-AyHtc-cdXTyIeU_6WvUVkWrosaKC&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"1855","datum":"2026-09-15","imageUrl":"https://drive.google.com/thumbnail?id=1hLJtIN953qw5-6TdbLRnombfLcoxE-l5&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"1844","datum":"2026-09-15","imageUrl":"https://drive.google.com/thumbnail?id=1qifPY_j2BtzfpQHMXFO0sIJFiXOnSvRg&sz=w1000"},{"deltagare":"Anders Boström","art":"Björkna","vikt":"792","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=1wmCbd4awTh41maA1MXxR_r7vyjYkjUM2&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Id","vikt":"2650","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=1TGYBzPNufDhaPOHDZa7ht6DYImM9-nA_&sz=w1000"},{"deltagare":"Anders Boström","art":"Björkna","vikt":"812","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=1tivCm75oW3XFbXaEes36x5GNttGQkWXa&sz=w1000"},{"deltagare":"Anders Boström","art":"Mört","vikt":"440","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=1h-ti9XagUQyAzwY1S5WtcEXqJRZ_H4i5&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Björkna","vikt":"755","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=11BLB_1Q-x5kyjOkc2YFaGWlNH1eyqcwI&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Id","vikt":"1860","datum":"2026-09-15","imageUrl":"https://drive.google.com/thumbnail?id=1QDRyzRrZr_QkYHQt2NekK-pr2wJW8q9L&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Id","vikt":"1975","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=1t87XBqBpLmfHSTHbsSMoIgSIs7zCQ0AC&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Vimma","vikt":"922","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=1JzcBO9y_nNlcohAYlgrDfEfeqfHpDGxQ&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Vimma","vikt":"865","datum":"2026-09-16","imageUrl":"https://drive.google.com/thumbnail?id=17SKoWo1QcgetazGd2PrE12nnsve5eFDW&sz=w1000"},{"deltagare":"Anders Wimmerstedt","art":"Björkna","vikt":"880","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=1ASU-hU0Z94Dfm8FD5ufwrG2kLIUXVX3V&sz=w1000"},{"deltagare":"Patrik Byström","art":"Mört","vikt":"640","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=1mGIcb3lmWwhJL4GVmlDpHNHBvuPArx-z&sz=w1000"},{"deltagare":"Patrik Byström","art":"Vimma","vikt":"980","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=16A32BydJThuwkbmQhSXoQXbHEIlwi9_u&sz=w1000"},{"deltagare":"Lars Boström","art":"Björkna","vikt":"705","datum":"2026-09-03","imageUrl":"https://drive.google.com/thumbnail?id=1bmSr40cfRG6ReWNvwbYGMi0GzvUGjrbO&sz=w1000"},{"deltagare":"Roger Norling","art":"Vimma","vikt":"847","datum":"2026-09-20","imageUrl":"https://drive.google.com/thumbnail?id=17q9ndhWZOxZMGigJMDPaqO103kmeHgdl&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Id","vikt":"2463","datum":"2026-09-17","imageUrl":"https://drive.google.com/thumbnail?id=1kEXERqYHIeEQTKLTFlbbwL52AhOZDtgj&sz=w1000"},{"deltagare":"Lars Boström","art":"Mört","vikt":"818","datum":"2026-09-24","imageUrl":"https://drive.google.com/thumbnail?id=1iY18pYg6e9h2eqMjxwb1H61rD8XD84qa&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"2108","datum":"2026-09-24","imageUrl":"https://drive.google.com/thumbnail?id=11o43Yk0mhQbFJPcy0NKh7XsPkNQVGNGE&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"2000","datum":"2026-09-24","imageUrl":"https://drive.google.com/thumbnail?id=1U72qh6vI3c4WWJjGl6-aLasyIfcAgTpd&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Björkna","vikt":"747","datum":"2026-09-24","imageUrl":"https://drive.google.com/thumbnail?id=1eJipuTAuR_nn_aSdtYtR_Kh1vpL8kf6C&sz=w1000"},{"deltagare":"Jonatan Boström","art":"Björkna","vikt":"714","datum":"2026-09-24","imageUrl":"https://drive.google.com/thumbnail?id=1ezYY5wZsyK_PPCaDoTz_t5c6cNpPbUFU&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Mört","vikt":"575","datum":"2026-09-27","imageUrl":"https://drive.google.com/thumbnail?id=1oEU8c01QCr7EX86azwyFgJ_siG-fdXBN&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Id","vikt":"2185","datum":"2026-09-27","imageUrl":"https://drive.google.com/thumbnail?id=1mTIO8v3zdxtnM6XHeQbIZptbkRaC1qTV&sz=w1000"},{"deltagare":"Oliver Jansson","art":"Vimma","vikt":"945","datum":"2026-09-27","imageUrl":"https://drive.google.com/thumbnail?id=1GKaolFxPC8TkkAE5lHVOWTgCUVzpsJot&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Id","vikt":"2070","datum":"2026-09-29","imageUrl":"https://drive.google.com/thumbnail?id=1CMkOjo27k_5aKBaeveqW06Ru2f7fJqEi&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Mört","vikt":"513","datum":"2026-09-29","imageUrl":"https://drive.google.com/thumbnail?id=1jc4LC8KVRNaQnwBGUeEDy88Wv1yAAuqM&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Mört","vikt":"894","datum":"2026-09-29","imageUrl":"https://drive.google.com/thumbnail?id=1xGfmYvj79Js39csBFp3CAj9UJC2pvxKe&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Mört","vikt":"658","datum":"2026-09-29","imageUrl":"https://drive.google.com/thumbnail?id=18H1cVkNIDy5j6V22TqbC3PFYMvCjOaUL&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Id","vikt":"1993","datum":"2026-09-30","imageUrl":"https://drive.google.com/thumbnail?id=1u1rTkIJGy5dJ53ILiSWK05nIf4qRIVqz&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Id","vikt":"2097","datum":"2026-09-30","imageUrl":"https://drive.google.com/thumbnail?id=1pwLGF3DBENMe7kWM9lw_nkfmWCVj2gvn&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"2161","datum":"2026-09-30","imageUrl":"https://drive.google.com/thumbnail?id=1etwuTWeffji2koEvouJxBLyZJfFwsEVi&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Björkna","vikt":"980","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1mYds7ZuUx6o5QQFCZSYozhccutm1h2M6&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Björkna","vikt":"800","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1StIh88PranPNgLX9TsGGW6UL4FHlN_tD&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Id","vikt":"2140","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1OIkAPl7ounlw1bdShqN8uqrAlu5t7r9x&sz=w1000"},{"deltagare":"Kristian Johansson","art":"Id","vikt":"2080","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1Kh_T3dpUK1wkgFwhHBtexU7i_oxx8nTW&sz=w1000"},{"deltagare":"Lars Boström","art":"Id","vikt":"2652","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1hcHQWcyVpLSYU0ja6HBzEORcseRqJkbl&sz=w1000"},{"deltagare":"Mirja Mertala","art":"Mört","vikt":"760","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1XDHyENG8KF2ChL3eNSWbEc_Qkd4jD7YC&sz=w1000"},{"deltagare":"Micke Karlsson","art":"Mört","vikt":"571","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1Es8ew8tf2b6LoDDbaAfhMxgyAQEsDRk5&sz=w1000"},{"deltagare":"Kent Boström","art":"Id","vikt":"2175","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1rkWgzFUvp3XDOB9AXm5E9vVNEBU9hvFV&sz=w1000"},{"deltagare":"Kent Boström","art":"Mört","vikt":"525","datum":"2026-10-01","imageUrl":"https://drive.google.com/thumbnail?id=1oNtALD0r34wFyE1sUhHK0rIVeV4-lnDg&sz=w1000"}]};
+  const yearSelect = document.getElementById("year");
+  const yearDisplay = document.getElementById("yearDisplay");
+  const yearField = document.querySelector(".history-year-field");
+  const viewBtn = document.getElementById("viewBtn");
+  const excelBtn = document.getElementById("excelBtn");
   const excelLinks = {
     "2026": "https://drive.google.com/file/d/1IgiPU3CEyMACMxDfZ-7nqyxCiLqTO1bG/view",
     "2027": "",
@@ -974,21 +1067,77 @@ input[type=number]::-webkit-outer-spin-button{
     "2029": "",
     "2030": ""
   };
+  const galleryWrap = document.getElementById("historyGalleryWrap");
+  const galleryEl = document.getElementById("historyGallery");
+  const galleryHeading = document.getElementById("historyGalleryHeading");
+  const galleryCount = document.getElementById("historyGalleryCount");
+  const lightbox = document.getElementById("historyLightbox");
+  const lightboxImg = document.getElementById("historyLightboxImg");
+  const lightboxClose = document.getElementById("historyLightboxClose");
 
-  const yearSelect = document.getElementById("year");
-  const viewBtn = document.getElementById("viewBtn");
-
-  function updateHistoryButton(){
-    const year = yearSelect.value;
-    viewBtn.disabled = !year || !excelLinks[year];
+  function escapeHtml(value) {
+    return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-
-  yearSelect.addEventListener("change", updateHistoryButton);
-
-  viewBtn.addEventListener("click", () => {
+  function updateHistoryButton() {
+    const year = yearSelect.value;
+    yearDisplay.textContent = yearSelect.options[yearSelect.selectedIndex].text;
+    viewBtn.disabled = !year;
+    excelBtn.disabled = !year || !excelLinks[year];
+  }
+  excelBtn.addEventListener("click", () => {
     const url = excelLinks[yearSelect.value];
-    if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  });
+  yearField.addEventListener("click", () => yearSelect.focus());
+  yearSelect.addEventListener("change", () => {
+    updateHistoryButton();
+    galleryWrap.classList.remove("show");
+    document.querySelector(".history-hint").style.display = "";
+    galleryEl.innerHTML = "";
+  });
+  function openLightbox(url, alt) { lightboxImg.src = url; lightboxImg.alt = alt || "Fångstbild"; lightbox.classList.add("show"); }
+  function closeLightbox() { lightbox.classList.remove("show"); lightboxImg.src = ""; }
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", event => { if(event.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", event => { if(event.key === "Escape") closeLightbox(); });
+
+  function renderGallery(year) {
+    const items = galleryDataByYear[year];
+    galleryWrap.classList.add("show");
+    document.querySelector(".history-hint").style.display = "none";
+    galleryHeading.textContent = `Fångstgalleri ${year}`;
+    if (!items) {
+      galleryCount.textContent = "";
+      galleryEl.innerHTML = '<div class="history-gallery-message">Det finns ännu ingen Excel-data inlagd för detta år!</div>';
+      return;
+    }
+    const visibleItems = items.filter(item => item.imageUrl);
+    galleryCount.textContent = `${visibleItems.length} fångster med bild`;
+    if (!visibleItems.length) {
+      galleryEl.innerHTML = '<div class="history-gallery-message">Inga fångster med bild hittades för detta år.</div>';
+      return;
+    }
+    galleryEl.innerHTML = visibleItems.map((item,index) => `
+      <article class="card">
+        <div class="image-wrap" data-index="${index}">
+          <img loading="lazy" src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.art || "Fångstbild")}">
+        </div>
+        <div class="card-caption">
+          <div class="name">${escapeHtml(item.deltagare || "Okänd deltagare")}</div>
+          <div class="meta"><strong>${escapeHtml(item.art || "Okänd art")}</strong> • ${escapeHtml(item.vikt || "")} g<br>${escapeHtml(item.datum || "")}</div>
+        </div>
+      </article>`).join("");
+    galleryEl.querySelectorAll(".image-wrap").forEach(element => element.addEventListener("click", () => {
+      const item = visibleItems[Number(element.dataset.index)];
+      if (item && item.imageUrl) openLightbox(item.imageUrl, item.art);
+    }));
+  }
+  updateHistoryButton();
+  viewBtn.addEventListener("click", () => {
+    if (!yearSelect.value) return;
+    renderGallery(yearSelect.value);
+    galleryWrap.scrollIntoView({behavior:"smooth",block:"start"});
   });
 </script>
 </body>
