@@ -773,6 +773,25 @@ input[type=number]::-webkit-outer-spin-button{
   }
 
 }
+
+/* Historikens galleri – samma upplägg som Specimen Trophy, med Tvåmanna-färger */
+.history-gallery-wrap{display:none;margin-top:18px;position:relative;z-index:1;animation:softFadeUp .28s ease both}
+.history-gallery-wrap.show{display:block}
+.history-gallery-wrap.show ~ .history-hint{display:none}
+.history-gallery-heading{text-align:center;margin:0 0 12px;font-size:18px;font-weight:900}
+.history-gallery-count{text-align:center;color:var(--muted);font-size:12px;margin:-5px 0 13px}
+.history-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.history-gallery-card{overflow:hidden;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(51,181,255,.12);cursor:pointer}
+.history-gallery-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#07101b}
+.history-gallery-card-info{padding:10px;font-size:12px;line-height:1.45;color:#f3f4f6}
+.history-gallery-card-info strong{display:block;font-size:13px;margin-bottom:3px}
+.history-gallery-empty{text-align:center;padding:18px 12px;color:var(--muted);font-size:13px;line-height:1.5;border:1px solid rgba(51,181,255,.12);border-radius:14px;background:rgba(255,255,255,.025)}
+.history-lightbox{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.history-lightbox.show{display:flex;animation:modalFade .18s ease both}
+.history-lightbox-inner{width:100%;max-width:720px;position:relative}
+.history-lightbox-close{position:absolute;top:-44px;right:0;width:36px;height:36px;border-radius:999px;border:1px solid rgba(51,181,255,.34);background:#07101b;color:#fff;font-size:26px;cursor:pointer}
+.history-lightbox img{display:block;width:100%;max-height:80vh;object-fit:contain;border-radius:12px}
+@media(max-width:520px){.history-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.history-gallery-card-info{padding:8px;font-size:11px}}
 </style>
 
 <style>
@@ -821,8 +840,12 @@ input[type=number]::-webkit-outer-spin-button{
 }
 
 .history-view-btn{
-  width:100%;
-  margin-top:0;
+  width:min(220px, 100%);
+  align-self:center;
+  margin:0 auto;
+  display:block;
+  background:linear-gradient(180deg, #22c55e, #15803d);
+  box-shadow:0 0 16px rgba(34,197,94,.24);
 }
 
 .history-view-btn:disabled{
@@ -835,8 +858,16 @@ input[type=number]::-webkit-outer-spin-button{
     0 6px 14px rgba(0,0,0,.16);
 }
 
+.history-excel-btn{
+  width:100%;
+  min-height:46px;
+  margin-top:10px;
+  padding:10px 14px;
+  font-size:14px;
+}
+.history-excel-btn:disabled{opacity:.42;cursor:not-allowed;filter:none;box-shadow:none}
 .history-hint{
-  margin:1px 4px 0;
+  margin:8px 4px 0;
   text-align:center;
   color:var(--muted);
   font-size:11px;
@@ -959,54 +990,104 @@ input[type=number]::-webkit-outer-spin-button{
           </div>
         </div>
 
-        <button id="viewBtn" class="submit-btn history-view-btn" type="button" disabled>
-          VISA
-        </button>
+        <button id="viewBtn" class="submit-btn history-view-btn" type="button" disabled>VISA</button>
+        <button id="excelBtn" class="submit-btn history-excel-btn" type="button" disabled>Öppna Excel – resultat och sammanställning</button>
 
         <div class="history-hint">
-          Välj ett tävlingsår och tryck på VISA för att öppna årets sparade Excel-dokument.
+          Välj ett tävlingsår och tryck på VISA för att visa årets fångstgalleri här nedanför. Excel-dokumentet öppnas med den separata knappen.
         </div>
 
       </div>
+
+      <section id="historyGalleryWrap" class="history-gallery-wrap" aria-live="polite">
+        <h2 id="historyGalleryHeading" class="history-gallery-heading">Fångstgalleri</h2>
+        <p id="historyGalleryCount" class="history-gallery-count"></p>
+        <div id="historyGallery" class="history-gallery"></div>
+      </section>
 
     </div>
   </div>
 </div>
 
+<div class="history-lightbox" id="historyLightbox" aria-label="Förstorad fångstbild">
+  <div class="history-lightbox-inner">
+    <button class="history-lightbox-close" id="historyLightboxClose" type="button" aria-label="Stäng">×</button>
+    <img id="historyLightboxImg" src="" alt="Förstorad fångstbild">
+  </div>
+</div>
+
 <script>
-  // Google Drive-länkar till respektive avslutad tävling.
-  // Läggs in när respektive år är klart.
+  // Lägg in Tvåmanna-specifika fångstposter här när bilddata finns tillgänglig.
+  // Avsiktligt inga Specimen Trophy-bilder används i Tvåmanna-historiken.
+  const galleryDataByYear = {"2026": [], "2027": [], "2028": [], "2029": [], "2030": []};
   const excelLinks = {
     "2026": "https://drive.google.com/file/d/1IgiPU3CEyMACMxDfZ-7nqyxCiLqTO1bG/view",
-    "2027": "",
-    "2028": "",
-    "2029": "",
-    "2030": ""
+    "2027": "", "2028": "", "2029": "", "2030": ""
   };
-
   const yearSelect = document.getElementById("year");
   const yearDisplay = document.getElementById("yearDisplay");
   const yearField = document.querySelector(".history-year-field");
   const viewBtn = document.getElementById("viewBtn");
+  const excelBtn = document.getElementById("excelBtn");
+  const galleryWrap = document.getElementById("historyGalleryWrap");
+  const galleryEl = document.getElementById("historyGallery");
+  const galleryHeading = document.getElementById("historyGalleryHeading");
+  const galleryCount = document.getElementById("historyGalleryCount");
+  const lightbox = document.getElementById("historyLightbox");
+  const lightboxImg = document.getElementById("historyLightboxImg");
+  const lightboxClose = document.getElementById("historyLightboxClose");
 
-  function updateHistoryButton(){
+  function updateHistoryButtons(){
     const year = yearSelect.value;
     yearDisplay.textContent = yearSelect.options[yearSelect.selectedIndex].text;
-    viewBtn.disabled = !year || !excelLinks[year];
+    viewBtn.disabled = !year;
+    excelBtn.disabled = !year || !excelLinks[year];
   }
-
-  // Extra fallback för klick på hela fältet; select ligger även som transparent lager ovanpå.
-  yearField.addEventListener("click", () => {
-    yearSelect.focus();
+  yearField.addEventListener("click", () => yearSelect.focus());
+  yearSelect.addEventListener("change", () => {
+    updateHistoryButtons();
+    galleryWrap.classList.remove("show");
   });
-  yearSelect.addEventListener("change", updateHistoryButton);
-  updateHistoryButton();
+  updateHistoryButtons();
 
-  viewBtn.addEventListener("click", () => {
+  function escapeHtml(value){
+    return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+  function renderGallery(year){
+    const items = galleryDataByYear[year] || [];
+    galleryHeading.textContent = "Fångstgalleri – tävling " + year;
+    galleryCount.textContent = items.length ? items.length + " fångster" : "";
+    if(!items.length){
+      galleryEl.innerHTML = '<div class="history-gallery-empty">Fångstbilder för Tvåmanna är inte inlagda ännu. Excel-dokumentet för 2026 finns via knappen ovan.</div>';
+    } else {
+      galleryEl.innerHTML = items.map((item,index) => `
+        <article class="history-gallery-card" data-index="${index}">
+          <img src="${escapeHtml(item.imageUrl)}" loading="lazy" alt="${escapeHtml(item.art || 'Fångstbild')}" />
+          <div class="history-gallery-card-info"><strong>${escapeHtml(item.art || 'Fångst')}</strong>
+            ${item.deltagare ? escapeHtml(item.deltagare) + '<br>' : ''}
+            ${item.vikt ? escapeHtml(item.vikt) + ' g<br>' : ''}
+            ${item.datum ? escapeHtml(item.datum) : ''}
+          </div>
+        </article>`).join('');
+      galleryEl.querySelectorAll('.history-gallery-card').forEach(card => card.addEventListener('click', () => {
+        const item = items[Number(card.dataset.index)];
+        if(!item || !item.imageUrl) return;
+        lightboxImg.src = item.imageUrl;
+        lightbox.classList.add('show');
+      }));
+    }
+    galleryWrap.classList.add("show");
+    galleryWrap.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  viewBtn.addEventListener("click", () => { if(yearSelect.value) renderGallery(yearSelect.value); });
+  excelBtn.addEventListener("click", () => {
     const url = excelLinks[yearSelect.value];
-    if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
+    if(url) window.open(url,"_blank","noopener,noreferrer");
   });
+  function closeLightbox(){ lightbox.classList.remove("show"); lightboxImg.src=""; }
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", event => { if(event.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", event => { if(event.key === "Escape") closeLightbox(); });
 </script>
 </body>
 
