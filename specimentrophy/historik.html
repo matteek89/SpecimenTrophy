@@ -9,7 +9,7 @@
 <style>
 :root{
   --text:#f3f4f6;
-  --muted:rgba(255,255,255,.58);
+  --muted:rgba(255,255,255,.68);
   --accent:#33b5ff;
   --accent-2:#0a84ff;
   --green:#19d458;
@@ -46,9 +46,7 @@ body::before{
   z-index:0;
   background:
     radial-gradient(circle at 50% 0%, rgba(51,181,255,.06), transparent 24%),
-    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%),
-    radial-gradient(circle at 20% 20%, rgba(120,210,255,.03), transparent 24%),
-    linear-gradient(to bottom, rgba(10,132,255,.01), transparent 25%);
+    radial-gradient(circle at 80% 25%, rgba(10,132,255,.04), transparent 18%);
 }
 
 .page{
@@ -106,24 +104,10 @@ body::before{
   border:1px solid rgba(51,181,255,.14);
   border-radius:22px;
   padding:12px 10px 14px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.04),
-    0 8px 20px rgba(0,0,0,.20);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
   position:relative;
   overflow:visible;
 }
 
-.panel::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  border-radius:22px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.04), transparent 18%, transparent 82%, rgba(51,181,255,.03));
-}
 
 .logo-wrap{
   display:flex;
@@ -165,7 +149,7 @@ body::before{
 }
 
 .title p{
-  margin-top:5px;
+  margin-top:4px;
   font-size:13px;
   color:var(--muted);
 }
@@ -765,15 +749,12 @@ input[type=number]::-webkit-outer-spin-button{
 }
   @media (min-width:768px){
 
-  .frame,
-  .app-shell,
-  .shell{
-    max-width:450px;
+  .frame{
+    max-width:430px;
   }
 
-  .page,
-  .page-wrap{
-    max-width:520px;
+  .page{
+    max-width:430px;
   }
 
 }
@@ -866,19 +847,45 @@ input[type=number]::-webkit-outer-spin-button{
   animation:softFadeUp .3s ease both;
 }
 
-/* Navigeringens placering. Själva knappstilen hämtas från ../css/global.css
-   så textstorlek, vikt och knapputseende matchar övriga sidor. */
+/*
+  Samma knappositioner som originalets Start / Regler / Topplistor.
+  De tre knapparna är medvetet inte ett nytt grid-system.
+*/
 .btn{
   position:absolute;
-  top:10px;
+  top:12px;
+  min-height:32px;
+  padding:7px 12px;
+  border:1px solid rgba(51,181,255,.28);
+  border-radius:12px;
+  color:#fff;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:800;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(180deg,rgba(4,25,47,.96),rgba(2,14,29,.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 5px 12px rgba(0,0,0,.18);
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
   z-index:1000;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(51,181,255,.52);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 7px 16px rgba(0,0,0,.22),
+    0 0 12px rgba(51,181,255,.10);
 }
 
 .btn-left{left:10px}
 .btn-right{right:10px}
 .btn-center{
-  position:absolute;
-  top:10px;
   left:50%;
   transform:translateX(-50%);
 }
@@ -889,6 +896,12 @@ input[type=number]::-webkit-outer-spin-button{
 @media (max-width:420px){
   .panel{
     padding:12px 10px 14px;
+  }
+
+  .btn{
+    min-height:32px;
+    padding:7px 11px;
+    font-size:12px;
   }
 
   .history-year-field select{
@@ -1098,4 +1111,5 @@ input[type=number]::-webkit-outer-spin-button{
 </body>
 
 </html>
+
 
