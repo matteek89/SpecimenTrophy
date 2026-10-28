@@ -866,45 +866,19 @@ input[type=number]::-webkit-outer-spin-button{
   animation:softFadeUp .3s ease both;
 }
 
-/*
-  Samma knappositioner som originalets Start / Regler / Topplistor.
-  De tre knapparna är medvetet inte ett nytt grid-system.
-*/
+/* Navigeringens placering. Själva knappstilen hämtas från ../css/global.css
+   så textstorlek, vikt och knapputseende matchar övriga sidor. */
 .btn{
   position:absolute;
-  top:12px;
-  min-height:32px;
-  padding:7px 12px;
-  border:1px solid rgba(51,181,255,.28);
-  border-radius:12px;
-  color:#fff;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:800;
-  line-height:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(180deg,rgba(4,25,47,.96),rgba(2,14,29,.96));
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.05),
-    0 5px 12px rgba(0,0,0,.18);
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  top:10px;
   z-index:1000;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-  border-color:rgba(51,181,255,.52);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.06),
-    0 7px 16px rgba(0,0,0,.22),
-    0 0 12px rgba(51,181,255,.10);
 }
 
 .btn-left{left:10px}
 .btn-right{right:10px}
 .btn-center{
+  position:absolute;
+  top:10px;
   left:50%;
   transform:translateX(-50%);
 }
@@ -915,12 +889,6 @@ input[type=number]::-webkit-outer-spin-button{
 @media (max-width:420px){
   .panel{
     padding:12px 10px 14px;
-  }
-
-  .btn{
-    min-height:32px;
-    padding:7px 11px;
-    font-size:12px;
   }
 
   .history-year-field select{
